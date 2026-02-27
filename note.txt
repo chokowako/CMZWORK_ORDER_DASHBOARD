@@ -1,0 +1,136 @@
+https://console.twilio.com/
+Recovery code: 35XWF2FDNBCGDQYAJTTJDJDT
+
+
+
+Form1.vb
+
+mports System.Data.SqlClient
+Imports System.Net.Http
+Imports System.Net.NetworkInformation
+Imports System.Configuration
+
+Public Class Form1
+
+    Private smsGatewayUrl As String = ConfigurationManager.AppSettings("SmsGatewayUrl")
+    Private connStr As String = ConfigurationManager.AppSettings("ConnectionString")
+
+    Friend WithEvents smsTimer As New Timer()
+    Private WithEvents pingTimer As New Timer()
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        smsTimer.Interval = 60000 ' 60 seconds
+        pingTimer.Interval = 5000  ' 5 seconds
+
+        smsTimer.Start()
+        pingTimer.Start()
+
+        LoadWorkOrders()
+    End Sub
+
+    Private Sub LoadWorkOrders()
+        Try
+            Using conn As New SqlConnection(connStr)
+                conn.Open()
+                Dim cmd As New SqlCommand("SELECT * FROM WorkOrders", conn)
+                Dim da As New SqlDataAdapter(cmd)
+                Dim dt As New DataTable()
+                da.Fill(dt)
+                DataGridView1.DataSource = dt
+            End Using
+        Catch ex As Exception
+            ' Log or handle errors silently
+        End Try
+    End Sub
+
+    Private Sub pingTimer_Tick(sender As Object, e As EventArgs) Handles pingTimer.Tick
+        Dim isOnline = CanPingGateway(GetGatewayIP())
+        UpdatePingStatusIndicator(isOnline)
+    End Sub
+
+    Private Async Sub smsTimer_Tick(sender As Object, e As EventArgs) Handles smsTimer.Tick
+        Try
+            If Not CanPingGateway(GetGatewayIP()) Then Exit Sub
+
+            Using conn As New SqlConnection(connStr)
+                conn.Open()
+                Dim cmd As New SqlCommand("SELECT WorkOrderID, PhoneNumber, Description FROM WorkOrders WHERE Notified = 0", conn)
+                Dim reader = cmd.ExecuteReader()
+                Dim pendingOrders As New List(Of (Integer, String, String))()
+
+                While reader.Read()
+                    pendingOrders.Add((
+                        Convert.ToInt32(reader("WorkOrderID")),
+                        reader("PhoneNumber").ToString(),
+                        $"New Work Order: {reader("Description")}"
+                    ))
+                End While
+                reader.Close()
+
+                For Each order In pendingOrders
+                    If Not CanPingGateway(GetGatewayIP()) Then
+                        UpdatePingStatusIndicator(False)
+                        Exit For
+                    End If
+
+                    If Await SendSmsViaHttp(order.Item2, order.Item3) Then
+                        Dim updateCmd = New SqlCommand("UPDATE WorkOrders SET Notified = 1 WHERE WorkOrderID = @id", conn)
+                        updateCmd.Parameters.AddWithValue("@id", order.Item1)
+                        updateCmd.ExecuteNonQuery()
+                    End If
+                Next
+            End Using
+
+            LoadWorkOrders()
+        Catch
+            ' Fail silently
+        End Try
+    End Sub
+
+    Private Async Function SendSmsViaHttp(phone As String, message As String) As Task(Of Boolean)
+        Try
+            Using client As New HttpClient()
+                Dim requestUri = $"{smsGatewayUrl}?phone={phone}&message={Uri.EscapeDataString(message)}"
+                Dim response = Await client.GetAsync(requestUri)
+                Return response.IsSuccessStatusCode
+            End Using
+        Catch
+            Return False
+        End Try
+    End Function
+
+    Private Function CanPingGateway(ipAddress As String) As Boolean
+        Try
+            Using ping As New Ping()
+                Dim reply = ping.Send(ipAddress, 1000)
+                Return reply.Status = IPStatus.Success
+            End Using
+        Catch
+            Return False
+        End Try
+    End Function
+
+    Private Function GetGatewayIP() As String
+        Try
+            Return (New Uri(smsGatewayUrl)).Host
+        Catch
+            Return ""
+        End Try
+    End Function
+
+    Private Sub UpdatePingStatusIndicator(isOnline As Boolean)
+        panelPingIndicator.BackColor = If(isOnline, Color.Green, Color.Red)
+        lblPingStatus.Text = $"Gateway Status: {(If(isOnline, "Online", "Offline"))}"
+    End Sub
+
+End Class
+
+------------------------------------------------
+App.config
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="SmsGatewayUrl" value="http://192.168.1.100:8080/sms/send" />
+    <add key="ConnectionString" value="Server=YOUR_SQL_SERVER;Database=YOUR_DB;Trusted_Connection=True;" />
+  </appSettings>
+</configuration>

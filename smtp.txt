@@ -1,0 +1,9 @@
+smtp server : smtp.gamil.com
+smtp port : 587
+smtp sender / Email: workordermanagementsystem@gmail.com
+smtp Name : WOMS
+smtp pass: woms2025
+
+
+app name: woms
+passkey: nart gusr iqnm ixkh
