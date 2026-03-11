@@ -94,9 +94,9 @@ Partial Class ConnectionSetup
         Me.BtnReset.ForeColor = System.Drawing.Color.Black
         Me.BtnReset.ImageKey = "reset.png"
         Me.BtnReset.ImageList = Me.ImageList1
-        Me.BtnReset.Location = New System.Drawing.Point(119, 423)
+        Me.BtnReset.Location = New System.Drawing.Point(96, 73)
         Me.BtnReset.Name = "BtnReset"
-        Me.BtnReset.Size = New System.Drawing.Size(79, 44)
+        Me.BtnReset.Size = New System.Drawing.Size(79, 34)
         Me.BtnReset.TabIndex = 185
         Me.BtnReset.Text = "Reset"
         Me.BtnReset.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -108,9 +108,9 @@ Partial Class ConnectionSetup
         Me.BtnConfigSmtp.ForeColor = System.Drawing.Color.Black
         Me.BtnConfigSmtp.ImageKey = "email.png"
         Me.BtnConfigSmtp.ImageList = Me.ImageList1
-        Me.BtnConfigSmtp.Location = New System.Drawing.Point(320, 423)
+        Me.BtnConfigSmtp.Location = New System.Drawing.Point(296, 73)
         Me.BtnConfigSmtp.Name = "BtnConfigSmtp"
-        Me.BtnConfigSmtp.Size = New System.Drawing.Size(111, 44)
+        Me.BtnConfigSmtp.Size = New System.Drawing.Size(111, 34)
         Me.BtnConfigSmtp.TabIndex = 158
         Me.BtnConfigSmtp.Text = "Config SMTP"
         Me.BtnConfigSmtp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -122,9 +122,9 @@ Partial Class ConnectionSetup
         Me.BtnConfigSms.ForeColor = System.Drawing.Color.Black
         Me.BtnConfigSms.ImageKey = "sms.png"
         Me.BtnConfigSms.ImageList = Me.ImageList1
-        Me.BtnConfigSms.Location = New System.Drawing.Point(204, 423)
+        Me.BtnConfigSms.Location = New System.Drawing.Point(181, 73)
         Me.BtnConfigSms.Name = "BtnConfigSms"
-        Me.BtnConfigSms.Size = New System.Drawing.Size(109, 44)
+        Me.BtnConfigSms.Size = New System.Drawing.Size(109, 34)
         Me.BtnConfigSms.TabIndex = 157
         Me.BtnConfigSms.Text = "Config SMS"
         Me.BtnConfigSms.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -145,7 +145,9 @@ Partial Class ConnectionSetup
         Me.Panel1.BackColor = System.Drawing.Color.White
         Me.Panel1.Controls.Add(Me.btnConnect)
         Me.Panel1.Controls.Add(Me.btnTestConnection)
-        Me.Panel1.Controls.Add(Me.BtnExit)
+        Me.Panel1.Controls.Add(Me.BtnReset)
+        Me.Panel1.Controls.Add(Me.BtnConfigSms)
+        Me.Panel1.Controls.Add(Me.BtnConfigSmtp)
         Me.Panel1.ForeColor = System.Drawing.Color.White
         Me.Panel1.Location = New System.Drawing.Point(14, 172)
         Me.Panel1.Name = "Panel1"
@@ -174,8 +176,9 @@ Partial Class ConnectionSetup
         '
         'BtnExit
         '
+        Me.BtnExit.BackColor = System.Drawing.Color.Transparent
         Me.BtnExit.ForeColor = System.Drawing.Color.Black
-        Me.BtnExit.Location = New System.Drawing.Point(10, 74)
+        Me.BtnExit.Location = New System.Drawing.Point(20, 438)
         Me.BtnExit.Name = "BtnExit"
         Me.BtnExit.Size = New System.Drawing.Size(397, 29)
         Me.BtnExit.TabIndex = 128
@@ -378,6 +381,7 @@ Partial Class ConnectionSetup
         Me.ClientSize = New System.Drawing.Size(445, 478)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.Panel5)
+        Me.Controls.Add(Me.BtnExit)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.txtServername)
         Me.Controls.Add(Me.lblServerName)
@@ -388,9 +392,6 @@ Partial Class ConnectionSetup
         Me.Controls.Add(Me.txtDbUsername)
         Me.Controls.Add(Me.txtDbpassword)
         Me.Controls.Add(Me.progressBar)
-        Me.Controls.Add(Me.BtnReset)
-        Me.Controls.Add(Me.BtnConfigSmtp)
-        Me.Controls.Add(Me.BtnConfigSms)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.pictureHeader)
         Me.ForeColor = System.Drawing.SystemColors.ControlText

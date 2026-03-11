@@ -120,41 +120,83 @@ Public Class DashBoard
         Try
             Using conn As New SqlConnection(connStr)
                 conn.Open()
-                Dim query As String = "SELECT pk, RecPhoneNo, Message FROM SmsCatcher WHERE smsflag = 1 ORDER BY pk ASC"
+                Dim query As String = "SELECT pk,Receiver, RecPhoneNo, Message FROM SmsCatcher WHERE smsflag = 1 ORDER BY pk ASC"
                 Dim adapter As New SqlDataAdapter(query, conn)
                 Dim table As New DataTable()
                 adapter.Fill(table)
 
-                ' Optional: Prevent flicker by re-binding only if changed
-                If dgvPendingSMS.DataSource Is Nothing OrElse CType(dgvPendingSMS.DataSource, DataTable).Rows.Count <> table.Rows.Count Then
-                    dgvPendingSMS.DataSource = table
-                Else
-                    ' Efficient update (optional)
-                    CType(dgvPendingSMS.DataSource, DataTable).Clear()
-                    For Each row As DataRow In table.Rows
-                        CType(dgvPendingSMS.DataSource, DataTable).ImportRow(row)
-                    Next
-                End If
+                'Bind data first
+                dgvPendingSMS.DataSource = table
+
+                dgvPendingSMS.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+
+                dgvPendingSMS.Columns("pk").FillWeight = 10
+                dgvPendingSMS.Columns("Receiver").FillWeight = 10
+                dgvPendingSMS.Columns("RecPhoneNo").FillWeight = 10
+                dgvPendingSMS.Columns("Message").FillWeight = 70
+
+                'Wrap message text
+                dgvPendingSMS.Columns("Message").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+
+                'Auto expand rows for wrapped text
+                dgvPendingSMS.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+
             End Using
         Catch ex As Exception
             MessageBox.Show("Failed to load pending SMS: " & ex.Message)
         End Try
+
+
     End Sub
 
     ' Load pending Emails into DataGridView
     Private Sub LoadPendingEmails()
+        'Try
+        '    Using conn As New SqlConnection(connStr)
+        '        conn.Open()
+        '        Dim cmd As New SqlCommand("SELECT Pk_WorkOderNo as [ WOMS No.], Email as [Email Address], EmailSubject  as [Email Subject] FROM SmsCatcher WHERE emailflag = 1", conn)
+        '        Dim adapter As New SqlDataAdapter(cmd)
+        '        Dim table As New DataTable()
+        '        adapter.Fill(table)
+        '        dgvPendingEmail.DataSource = table
+        '    End Using
+        'Catch ex As Exception
+        '    lblEmailStatus.Text = "❌ Failed to load pending emails: " & ex.Message
+        'End Try
+
+
+
+
         Try
             Using conn As New SqlConnection(connStr)
                 conn.Open()
-                Dim cmd As New SqlCommand("SELECT Pk_WorkOderNo as [ WOMS No.], Email as [Email Address], EmailSubject  as [Email Subject] FROM SmsCatcher WHERE emailflag = 1", conn)
-                Dim adapter As New SqlDataAdapter(cmd)
+                Dim query As String = "SELECT Pk_WorkOderNo as [WOMS No.], Email as [Email Address], EmailSubject  as [Email Subject] FROM SmsCatcher WHERE emailflag = 1"
+                Dim adapter As New SqlDataAdapter(query, conn)
                 Dim table As New DataTable()
                 adapter.Fill(table)
+
+                'Bind data first
                 dgvPendingEmail.DataSource = table
+
+                dgvPendingEmail.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+
+                dgvPendingEmail.Columns("WOMS No.").FillWeight = 10
+                dgvPendingEmail.Columns("Email Address").FillWeight = 20
+                dgvPendingEmail.Columns("Email Subject").FillWeight = 70
+
+                'Wrap message text
+                dgvPendingEmail.Columns("Email Subject").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+
+                'Auto expand rows for wrapped text
+                dgvPendingEmail.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+
             End Using
         Catch ex As Exception
-            lblEmailStatus.Text = "❌ Failed to load pending emails: " & ex.Message
+            MessageBox.Show("Failed to load pending SMS: " & ex.Message)
         End Try
+
+
+
     End Sub
 
     ' Timer tick event to send pending SMS
