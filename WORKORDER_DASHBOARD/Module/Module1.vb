@@ -116,6 +116,13 @@ Module Module1
                         DashBoard.DataGridView.DataSource = ds.Tables(0)
 
 
+                        '✅ REMOVE DEFAULT SELECTION
+                        If DashBoard.DataGridView.Rows.Count > 0 Then
+                            DashBoard.DataGridView.ClearSelection()
+                            DashBoard.DataGridView.CurrentCell = Nothing
+                        End If
+
+
 
                     End Using
                 End Using

@@ -118,6 +118,10 @@ Public Class DashBoard
     ' Load pending SMS into DataGridView
     Private Sub LoadPendingSMS()
         Try
+            dgvPendingSMS.DataSource = Nothing
+            dgvPendingSMS.Refresh()
+            dgvPendingSMS.Columns.Clear()
+
             Using conn As New SqlConnection(connStr)
                 conn.Open()
                 Dim query As String = "SELECT pk,Receiver, RecPhoneNo, Message FROM SmsCatcher WHERE smsflag = 1 ORDER BY pk ASC"
@@ -141,7 +145,14 @@ Public Class DashBoard
                 'Auto expand rows for wrapped text
                 dgvPendingSMS.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
 
+                '✅ REMOVE DEFAULT SELECTION
+                If dgvPendingSMS.Rows.Count > 0 Then
+                    dgvPendingSMS.ClearSelection()
+                    dgvPendingSMS.CurrentCell = Nothing
+                End If
+
             End Using
+
         Catch ex As Exception
             MessageBox.Show("Failed to load pending SMS: " & ex.Message)
         End Try
@@ -166,11 +177,14 @@ Public Class DashBoard
 
 
 
-
         Try
+            dgvPendingEmail.DataSource = Nothing
+            dgvPendingEmail.Refresh()
+            dgvPendingEmail.Columns.Clear()
+
             Using conn As New SqlConnection(connStr)
                 conn.Open()
-                Dim query As String = "SELECT Pk_WorkOderNo as [WOMS No.], Email as [Email Address], EmailSubject  as [Email Subject] FROM SmsCatcher WHERE emailflag = 1"
+                Dim query As String = "SELECT Pk_WorkOderNo as [WOMS No.], Email as [Email Address], EmailSubject as [Email Subject] FROM SmsCatcher WHERE emailflag = 1"
                 Dim adapter As New SqlDataAdapter(query, conn)
                 Dim table As New DataTable()
                 adapter.Fill(table)
@@ -190,9 +204,16 @@ Public Class DashBoard
                 'Auto expand rows for wrapped text
                 dgvPendingEmail.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
 
+                '✅ REMOVE DEFAULT SELECTION
+                If dgvPendingEmail.Rows.Count > 0 Then
+                    dgvPendingEmail.ClearSelection()
+                    dgvPendingEmail.CurrentCell = Nothing
+                End If
+
             End Using
+
         Catch ex As Exception
-            MessageBox.Show("Failed to load pending SMS: " & ex.Message)
+            MessageBox.Show("Failed to load pending Email: " & ex.Message)
         End Try
 
 
