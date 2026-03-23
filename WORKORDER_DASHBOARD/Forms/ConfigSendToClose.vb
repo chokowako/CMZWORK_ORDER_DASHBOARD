@@ -16,28 +16,27 @@ Public Class ConfigSendToClose
         roundCornes(Me)
 
         TxtInsertNotifyToClose_Hours.Text = My.Settings.SmsInterval_Hour
-        TxtinsertNotifyToClose_Mins.Text = My.Settings.SmsInterval_Mins
-        TxtinsertNotifyToClose_Sec.Text = My.Settings.SmsInterval_sec
-        TxtinsertNotifyToClose_Milli.Text = My.Settings.SmsInterval_milli
+        TxtinsertNotifyToClose_Mins.Text = My.Settings.insertNotifyToClose_Mins
+        TxtinsertNotifyToClose_Sec.Text = My.Settings.insertNotifyToClose_Sec
+        TxtinsertNotifyToClose_Milli.Text = My.Settings.insertNotifyToClose_Milli
 
-        NotifyToClose_Hours.Text = My.Settings.GatewayInterval_Hour
-        TxtNotifyToClose_Mins.Text = My.Settings.GatewayInterval_Mins
-        TxtNotifyToClose_Sec.Text = My.Settings.GatewayInterval_Sec
-        TxtNotifyToClose_Milli.Text = My.Settings.GatewayInterval_Milli
+        TxtNotifyToClose_Hours.Text = My.Settings.NotifyToClose_Hours
+        TxtNotifyToClose_Mins.Text = My.Settings.NotifyToClose_Mins
+        TxtNotifyToClose_Sec.Text = My.Settings.NotifyToClose_Sec
+        TxtNotifyToClose_Milli.Text = My.Settings.NotifyToClose_Milli
     End Sub
 
     Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles BtnSave.Click
 
+        My.Settings.InsertNotifyToClose_Hours = TxtInsertNotifyToClose_Hours.Text
+        My.Settings.insertNotifyToClose_Mins = TxtinsertNotifyToClose_Mins.Text
+        My.Settings.insertNotifyToClose_Sec = TxtinsertNotifyToClose_Sec.Text
+        My.Settings.insertNotifyToClose_Milli = TxtinsertNotifyToClose_Milli.Text
 
-        My.Settings.SmsInterval_Hour = TxtInsertNotifyToClose_Hours.Text
-        My.Settings.SmsInterval_Mins = TxtinsertNotifyToClose_Mins.Text
-        My.Settings.SmsInterval_sec = TxtinsertNotifyToClose_Sec.Text
-        My.Settings.SmsInterval_milli = TxtinsertNotifyToClose_Milli.Text
-
-        My.Settings.GatewayInterval_Hour = NotifyToClose_Hours.Text
-        My.Settings.GatewayInterval_Mins = TxtNotifyToClose_Mins.Text
-        My.Settings.GatewayInterval_Sec = TxtNotifyToClose_Sec.Text
-        My.Settings.GatewayInterval_Milli = TxtNotifyToClose_Milli.Text
+        My.Settings.NotifyToClose_Hours = TxtNotifyToClose_Hours.Text
+        My.Settings.NotifyToClose_Mins = TxtNotifyToClose_Mins.Text
+        My.Settings.NotifyToClose_Sec = TxtNotifyToClose_Sec.Text
+        My.Settings.NotifyToClose_Milli = TxtNotifyToClose_Milli.Text
 
         My.Settings.Save()
         MsgBox("Your Gateway configuration has saved!", MsgBoxStyle.Information, MsgBoxResult.Ok)
@@ -88,7 +87,7 @@ Public Class ConfigSendToClose
             TxtinsertNotifyToClose_Sec.Text = ""
             TxtinsertNotifyToClose_Milli.Text = ""
 
-            NotifyToClose_Hours.Text = ""
+            TxtNotifyToClose_Hours.Text = ""
             TxtNotifyToClose_Mins.Text = ""
             TxtNotifyToClose_Sec.Text = ""
             TxtNotifyToClose_Milli.Text = ""
@@ -153,8 +152,8 @@ Public Class ConfigSendToClose
         Dim Gateway_milliseconds As Integer
 
         ' Check if txtSmsInterval_Hour is not empty
-        If Not String.IsNullOrEmpty(NotifyToClose_Hours.Text) Then
-            If Integer.TryParse(NotifyToClose_Hours.Text, hours) = False Then
+        If Not String.IsNullOrEmpty(TxtNotifyToClose_Hours.Text) Then
+            If Integer.TryParse(TxtNotifyToClose_Hours.Text, hours) = False Then
                 MessageBox.Show("Invalid input for hours.")
                 Return
             End If
@@ -178,7 +177,7 @@ Public Class ConfigSendToClose
 
 
         ' If all fields are empty, show an error message
-        If String.IsNullOrEmpty(NotifyToClose_Hours.Text) AndAlso
+        If String.IsNullOrEmpty(TxtNotifyToClose_Hours.Text) AndAlso
            String.IsNullOrEmpty(TxtNotifyToClose_Mins.Text) AndAlso
            String.IsNullOrEmpty(TxtNotifyToClose_Sec.Text) Then
             TxtNotifyToClose_Milli.Text = "" ' Clear the output if no input
@@ -206,7 +205,7 @@ Public Class ConfigSendToClose
         SMS_milliseconds_for_Check_for_Closing_Insert_Record()
     End Sub
 
-    Private Sub NotifyToClose_Hours_TextChanged(sender As Object, e As EventArgs) Handles NotifyToClose_Hours.TextChanged
+    Private Sub NotifyToClose_Hours_TextChanged(sender As Object, e As EventArgs) Handles TxtNotifyToClose_Hours.TextChanged
         Recalculate_sms_milliseconds_Interval_for_Sending_Sms_Notification()
     End Sub
 
@@ -216,5 +215,9 @@ Public Class ConfigSendToClose
 
     Private Sub TxtNotifyToClose_Sec_TextChanged(sender As Object, e As EventArgs) Handles TxtNotifyToClose_Sec.TextChanged
         Recalculate_sms_milliseconds_Interval_for_Sending_Sms_Notification()
+    End Sub
+
+    Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
+        Me.Hide()
     End Sub
 End Class

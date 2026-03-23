@@ -42,7 +42,7 @@ Partial Class ConfigSendToClose
         Me.Label15 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.TxtNotifyToClose_Sec = New System.Windows.Forms.TextBox()
-        Me.NotifyToClose_Hours = New System.Windows.Forms.TextBox()
+        Me.TxtNotifyToClose_Hours = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
@@ -197,7 +197,7 @@ Partial Class ConfigSendToClose
         Me.Panel5.Controls.Add(Me.Label15)
         Me.Panel5.Controls.Add(Me.Label16)
         Me.Panel5.Controls.Add(Me.TxtNotifyToClose_Sec)
-        Me.Panel5.Controls.Add(Me.NotifyToClose_Hours)
+        Me.Panel5.Controls.Add(Me.TxtNotifyToClose_Hours)
         Me.Panel5.Controls.Add(Me.Label17)
         Me.Panel5.Controls.Add(Me.Label18)
         Me.Panel5.Controls.Add(Me.Label14)
@@ -256,13 +256,13 @@ Partial Class ConfigSendToClose
         Me.TxtNotifyToClose_Sec.Size = New System.Drawing.Size(44, 20)
         Me.TxtNotifyToClose_Sec.TabIndex = 198
         '
-        'NotifyToClose_Hours
+        'TxtNotifyToClose_Hours
         '
-        Me.NotifyToClose_Hours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NotifyToClose_Hours.Location = New System.Drawing.Point(118, 47)
-        Me.NotifyToClose_Hours.Name = "NotifyToClose_Hours"
-        Me.NotifyToClose_Hours.Size = New System.Drawing.Size(44, 20)
-        Me.NotifyToClose_Hours.TabIndex = 199
+        Me.TxtNotifyToClose_Hours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToClose_Hours.Location = New System.Drawing.Point(118, 47)
+        Me.TxtNotifyToClose_Hours.Name = "TxtNotifyToClose_Hours"
+        Me.TxtNotifyToClose_Hours.Size = New System.Drawing.Size(44, 20)
+        Me.TxtNotifyToClose_Hours.TabIndex = 199
         '
         'Label17
         '
@@ -449,6 +449,7 @@ Partial Class ConfigSendToClose
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Label2)
         Me.Name = "ConfigSendToClose"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ConfigSendToClose"
         Me.Panel2.ResumeLayout(False)
         Me.Panel5.ResumeLayout(False)
@@ -479,7 +480,7 @@ Partial Class ConfigSendToClose
     Friend WithEvents Label15 As Label
     Friend WithEvents Label16 As Label
     Friend WithEvents TxtNotifyToClose_Sec As TextBox
-    Friend WithEvents NotifyToClose_Hours As TextBox
+    Friend WithEvents TxtNotifyToClose_Hours As TextBox
     Friend WithEvents Label17 As Label
     Friend WithEvents Label18 As Label
     Friend WithEvents Label14 As Label
