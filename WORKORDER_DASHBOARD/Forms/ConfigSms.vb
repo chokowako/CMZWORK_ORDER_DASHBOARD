@@ -173,7 +173,6 @@ Public Class ConfigSms
 
     Private Sub txtSmsInterval_Hour_TextChanged(sender As Object, e As EventArgs) Handles txtSmsInterval_Hour.TextChanged
         Recalculate_SMS_Milliseconds()
-
     End Sub
     Private Sub txtSmsInterval_Mins_TextChanged(sender As Object, e As EventArgs) Handles txtSmsInterval_Mins.TextChanged
         Recalculate_SMS_Milliseconds()
@@ -182,6 +181,18 @@ Public Class ConfigSms
     ' Event handler for when the text changes in txtSmsInterval_Sec
     Private Sub txtSmsInterval_Sec_TextChanged(sender As Object, e As EventArgs) Handles txtSmsInterval_Sec.TextChanged
         Recalculate_SMS_Milliseconds()
+    End Sub
+
+    Private Sub txtGatewayInterval_Hour_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Hour.TextChanged
+        Recalculate_GAteway_Milliseconds()
+    End Sub
+
+    Private Sub txtGatewyInterval_Mins_TextChanged(sender As Object, e As EventArgs) Handles txtGatewyInterval_Mins.TextChanged
+        Recalculate_GAteway_Milliseconds()
+    End Sub
+
+    Private Sub txtGatewayInterval_Sec_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Sec.TextChanged
+        Recalculate_GAteway_Milliseconds()
     End Sub
 
     ' Method to recalculate the SMS milliseconds
@@ -278,16 +289,6 @@ Public Class ConfigSms
         txtGatewayInterval_Milli.Text = Gateway_milliseconds.ToString()
     End Sub
 
-    Private Sub txtGatewayInterval_Hour_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Hour.TextChanged
-        Recalculate_GAteway_Milliseconds()
-    End Sub
 
-    Private Sub txtGatewyInterval_Mins_TextChanged(sender As Object, e As EventArgs) Handles txtGatewyInterval_Mins.TextChanged
-        Recalculate_GAteway_Milliseconds()
-    End Sub
-
-    Private Sub txtGatewayInterval_Sec_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Sec.TextChanged
-        Recalculate_GAteway_Milliseconds()
-    End Sub
 
 End Class

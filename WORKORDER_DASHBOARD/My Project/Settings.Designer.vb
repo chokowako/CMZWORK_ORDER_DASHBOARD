@@ -389,6 +389,102 @@ Namespace My
                 Me("WomsInterval_Mlli") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToClose_Hours() As Integer
+            Get
+                Return CType(Me("NotifyToClose_Hours"),Integer)
+            End Get
+            Set
+                Me("NotifyToClose_Hours") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToClose_Mins() As Integer
+            Get
+                Return CType(Me("NotifyToClose_Mins"),Integer)
+            End Get
+            Set
+                Me("NotifyToClose_Mins") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToClose_Sec() As Integer
+            Get
+                Return CType(Me("NotifyToClose_Sec"),Integer)
+            End Get
+            Set
+                Me("NotifyToClose_Sec") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToClose_Milli() As Integer
+            Get
+                Return CType(Me("NotifyToClose_Milli"),Integer)
+            End Get
+            Set
+                Me("NotifyToClose_Milli") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property InsertNotifyToClose_Hours() As Integer
+            Get
+                Return CType(Me("InsertNotifyToClose_Hours"),Integer)
+            End Get
+            Set
+                Me("InsertNotifyToClose_Hours") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property insertNotifyToClose_Mins() As Integer
+            Get
+                Return CType(Me("insertNotifyToClose_Mins"),Integer)
+            End Get
+            Set
+                Me("insertNotifyToClose_Mins") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property insertNotifyToClose_Sec() As Integer
+            Get
+                Return CType(Me("insertNotifyToClose_Sec"),Integer)
+            End Get
+            Set
+                Me("insertNotifyToClose_Sec") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property insertNotifyToClose_Milli() As Integer
+            Get
+                Return CType(Me("insertNotifyToClose_Milli"),Integer)
+            End Get
+            Set
+                Me("insertNotifyToClose_Milli") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

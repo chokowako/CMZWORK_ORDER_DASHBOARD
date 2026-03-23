@@ -24,28 +24,29 @@ Partial Class ConfigSendToClose
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConfigSendToClose))
-        Me.txtSmsInterval_Mil = New System.Windows.Forms.TextBox()
+        Me.TxtinsertNotifyToClose_Milli = New System.Windows.Forms.TextBox()
         Me.BtnClose = New System.Windows.Forms.Button()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.BtnSave = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.BtnReset = New System.Windows.Forms.Button()
-        Me.txtSmsInterval_Mins = New System.Windows.Forms.TextBox()
+        Me.TxtinsertNotifyToClose_Mins = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
-        Me.txtSmsInterval_Sec = New System.Windows.Forms.TextBox()
-        Me.txtSmsInterval_Hour = New System.Windows.Forms.TextBox()
+        Me.TxtinsertNotifyToClose_Sec = New System.Windows.Forms.TextBox()
+        Me.TxtInsertNotifyToClose_Hours = New System.Windows.Forms.TextBox()
         Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.txtGatewyInterval_Mins = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.TxtNotifyToClose_Mins = New System.Windows.Forms.TextBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
-        Me.txtGatewayInterval_Sec = New System.Windows.Forms.TextBox()
-        Me.txtGatewayInterval_Hour = New System.Windows.Forms.TextBox()
+        Me.TxtNotifyToClose_Sec = New System.Windows.Forms.TextBox()
+        Me.NotifyToClose_Hours = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
-        Me.txtGatewayInterval_Milli = New System.Windows.Forms.TextBox()
+        Me.TxtNotifyToClose_Milli = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -57,22 +58,21 @@ Partial Class ConfigSendToClose
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel2.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
-        'txtSmsInterval_Mil
+        'TxtinsertNotifyToClose_Milli
         '
-        Me.txtSmsInterval_Mil.Enabled = False
-        Me.txtSmsInterval_Mil.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSmsInterval_Mil.Location = New System.Drawing.Point(186, 6)
-        Me.txtSmsInterval_Mil.Name = "txtSmsInterval_Mil"
-        Me.txtSmsInterval_Mil.ReadOnly = True
-        Me.txtSmsInterval_Mil.Size = New System.Drawing.Size(107, 20)
-        Me.txtSmsInterval_Mil.TabIndex = 184
+        Me.TxtinsertNotifyToClose_Milli.Enabled = False
+        Me.TxtinsertNotifyToClose_Milli.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtinsertNotifyToClose_Milli.Location = New System.Drawing.Point(186, 6)
+        Me.TxtinsertNotifyToClose_Milli.Name = "TxtinsertNotifyToClose_Milli"
+        Me.TxtinsertNotifyToClose_Milli.ReadOnly = True
+        Me.TxtinsertNotifyToClose_Milli.Size = New System.Drawing.Size(107, 20)
+        Me.TxtinsertNotifyToClose_Milli.TabIndex = 184
         '
         'BtnClose
         '
@@ -80,7 +80,7 @@ Partial Class ConfigSendToClose
         Me.BtnClose.ForeColor = System.Drawing.Color.Black
         Me.BtnClose.ImageKey = "close.png"
         Me.BtnClose.ImageList = Me.ImageList1
-        Me.BtnClose.Location = New System.Drawing.Point(355, 492)
+        Me.BtnClose.Location = New System.Drawing.Point(355, 378)
         Me.BtnClose.Name = "BtnClose"
         Me.BtnClose.Size = New System.Drawing.Size(76, 29)
         Me.BtnClose.TabIndex = 128
@@ -102,7 +102,7 @@ Partial Class ConfigSendToClose
         Me.Panel2.BackColor = System.Drawing.Color.White
         Me.Panel2.Controls.Add(Me.BtnSave)
         Me.Panel2.ForeColor = System.Drawing.Color.White
-        Me.Panel2.Location = New System.Drawing.Point(10, 371)
+        Me.Panel2.Location = New System.Drawing.Point(14, 310)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(417, 46)
         Me.Panel2.TabIndex = 177
@@ -135,7 +135,7 @@ Partial Class ConfigSendToClose
         Me.BtnReset.ForeColor = System.Drawing.Color.Black
         Me.BtnReset.ImageKey = "reset.png"
         Me.BtnReset.ImageList = Me.ImageList1
-        Me.BtnReset.Location = New System.Drawing.Point(10, 492)
+        Me.BtnReset.Location = New System.Drawing.Point(10, 378)
         Me.BtnReset.Name = "BtnReset"
         Me.BtnReset.Size = New System.Drawing.Size(76, 29)
         Me.BtnReset.TabIndex = 186
@@ -143,13 +143,13 @@ Partial Class ConfigSendToClose
         Me.BtnReset.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.BtnReset.UseVisualStyleBackColor = False
         '
-        'txtSmsInterval_Mins
+        'TxtinsertNotifyToClose_Mins
         '
-        Me.txtSmsInterval_Mins.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSmsInterval_Mins.Location = New System.Drawing.Point(213, 43)
-        Me.txtSmsInterval_Mins.Name = "txtSmsInterval_Mins"
-        Me.txtSmsInterval_Mins.Size = New System.Drawing.Size(44, 20)
-        Me.txtSmsInterval_Mins.TabIndex = 189
+        Me.TxtinsertNotifyToClose_Mins.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtinsertNotifyToClose_Mins.Location = New System.Drawing.Point(213, 43)
+        Me.TxtinsertNotifyToClose_Mins.Name = "TxtinsertNotifyToClose_Mins"
+        Me.TxtinsertNotifyToClose_Mins.Size = New System.Drawing.Size(44, 20)
+        Me.TxtinsertNotifyToClose_Mins.TabIndex = 189
         '
         'Label13
         '
@@ -173,47 +173,58 @@ Partial Class ConfigSendToClose
         Me.Label12.TabIndex = 194
         Me.Label12.Text = "Minutes"
         '
-        'txtSmsInterval_Sec
+        'TxtinsertNotifyToClose_Sec
         '
-        Me.txtSmsInterval_Sec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSmsInterval_Sec.Location = New System.Drawing.Point(307, 43)
-        Me.txtSmsInterval_Sec.Name = "txtSmsInterval_Sec"
-        Me.txtSmsInterval_Sec.Size = New System.Drawing.Size(44, 20)
-        Me.txtSmsInterval_Sec.TabIndex = 182
+        Me.TxtinsertNotifyToClose_Sec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtinsertNotifyToClose_Sec.Location = New System.Drawing.Point(307, 43)
+        Me.TxtinsertNotifyToClose_Sec.Name = "TxtinsertNotifyToClose_Sec"
+        Me.TxtinsertNotifyToClose_Sec.Size = New System.Drawing.Size(44, 20)
+        Me.TxtinsertNotifyToClose_Sec.TabIndex = 182
         '
-        'txtSmsInterval_Hour
+        'TxtInsertNotifyToClose_Hours
         '
-        Me.txtSmsInterval_Hour.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSmsInterval_Hour.Location = New System.Drawing.Point(115, 43)
-        Me.txtSmsInterval_Hour.Name = "txtSmsInterval_Hour"
-        Me.txtSmsInterval_Hour.Size = New System.Drawing.Size(44, 20)
-        Me.txtSmsInterval_Hour.TabIndex = 187
+        Me.TxtInsertNotifyToClose_Hours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtInsertNotifyToClose_Hours.Location = New System.Drawing.Point(115, 43)
+        Me.TxtInsertNotifyToClose_Hours.Name = "TxtInsertNotifyToClose_Hours"
+        Me.TxtInsertNotifyToClose_Hours.Size = New System.Drawing.Size(44, 20)
+        Me.TxtInsertNotifyToClose_Hours.TabIndex = 187
         '
         'Panel5
         '
         Me.Panel5.BackColor = System.Drawing.Color.Silver
         Me.Panel5.Controls.Add(Me.Label7)
-        Me.Panel5.Controls.Add(Me.txtGatewyInterval_Mins)
+        Me.Panel5.Controls.Add(Me.TxtNotifyToClose_Mins)
         Me.Panel5.Controls.Add(Me.Label15)
         Me.Panel5.Controls.Add(Me.Label16)
-        Me.Panel5.Controls.Add(Me.txtGatewayInterval_Sec)
-        Me.Panel5.Controls.Add(Me.txtGatewayInterval_Hour)
+        Me.Panel5.Controls.Add(Me.TxtNotifyToClose_Sec)
+        Me.Panel5.Controls.Add(Me.NotifyToClose_Hours)
         Me.Panel5.Controls.Add(Me.Label17)
         Me.Panel5.Controls.Add(Me.Label18)
         Me.Panel5.Controls.Add(Me.Label14)
-        Me.Panel5.Controls.Add(Me.txtGatewayInterval_Milli)
-        Me.Panel5.Location = New System.Drawing.Point(10, 280)
+        Me.Panel5.Controls.Add(Me.TxtNotifyToClose_Milli)
+        Me.Panel5.Location = New System.Drawing.Point(14, 219)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(417, 74)
         Me.Panel5.TabIndex = 192
         '
-        'txtGatewyInterval_Mins
+        'Label7
         '
-        Me.txtGatewyInterval_Mins.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewyInterval_Mins.Location = New System.Drawing.Point(217, 47)
-        Me.txtGatewyInterval_Mins.Name = "txtGatewyInterval_Mins"
-        Me.txtGatewyInterval_Mins.Size = New System.Drawing.Size(44, 20)
-        Me.txtGatewyInterval_Mins.TabIndex = 200
+        Me.Label7.AutoSize = True
+        Me.Label7.BackColor = System.Drawing.Color.Transparent
+        Me.Label7.ForeColor = System.Drawing.Color.Black
+        Me.Label7.Location = New System.Drawing.Point(302, 10)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(63, 13)
+        Me.Label7.TabIndex = 205
+        Me.Label7.Text = "milliseconds"
+        '
+        'TxtNotifyToClose_Mins
+        '
+        Me.TxtNotifyToClose_Mins.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToClose_Mins.Location = New System.Drawing.Point(217, 47)
+        Me.TxtNotifyToClose_Mins.Name = "TxtNotifyToClose_Mins"
+        Me.TxtNotifyToClose_Mins.Size = New System.Drawing.Size(44, 20)
+        Me.TxtNotifyToClose_Mins.TabIndex = 200
         '
         'Label15
         '
@@ -237,21 +248,21 @@ Partial Class ConfigSendToClose
         Me.Label16.TabIndex = 203
         Me.Label16.Text = "Minutes"
         '
-        'txtGatewayInterval_Sec
+        'TxtNotifyToClose_Sec
         '
-        Me.txtGatewayInterval_Sec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayInterval_Sec.Location = New System.Drawing.Point(311, 47)
-        Me.txtGatewayInterval_Sec.Name = "txtGatewayInterval_Sec"
-        Me.txtGatewayInterval_Sec.Size = New System.Drawing.Size(44, 20)
-        Me.txtGatewayInterval_Sec.TabIndex = 198
+        Me.TxtNotifyToClose_Sec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToClose_Sec.Location = New System.Drawing.Point(311, 47)
+        Me.TxtNotifyToClose_Sec.Name = "TxtNotifyToClose_Sec"
+        Me.TxtNotifyToClose_Sec.Size = New System.Drawing.Size(44, 20)
+        Me.TxtNotifyToClose_Sec.TabIndex = 198
         '
-        'txtGatewayInterval_Hour
+        'NotifyToClose_Hours
         '
-        Me.txtGatewayInterval_Hour.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayInterval_Hour.Location = New System.Drawing.Point(119, 43)
-        Me.txtGatewayInterval_Hour.Name = "txtGatewayInterval_Hour"
-        Me.txtGatewayInterval_Hour.Size = New System.Drawing.Size(44, 20)
-        Me.txtGatewayInterval_Hour.TabIndex = 199
+        Me.NotifyToClose_Hours.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NotifyToClose_Hours.Location = New System.Drawing.Point(118, 47)
+        Me.NotifyToClose_Hours.Name = "NotifyToClose_Hours"
+        Me.NotifyToClose_Hours.Size = New System.Drawing.Size(44, 20)
+        Me.NotifyToClose_Hours.TabIndex = 199
         '
         'Label17
         '
@@ -286,14 +297,14 @@ Partial Class ConfigSendToClose
         Me.Label14.TabIndex = 196
         Me.Label14.Text = "Interval for Sending Sms Notification "
         '
-        'txtGatewayInterval_Milli
+        'TxtNotifyToClose_Milli
         '
-        Me.txtGatewayInterval_Milli.Enabled = False
-        Me.txtGatewayInterval_Milli.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayInterval_Milli.Location = New System.Drawing.Point(190, 7)
-        Me.txtGatewayInterval_Milli.Name = "txtGatewayInterval_Milli"
-        Me.txtGatewayInterval_Milli.Size = New System.Drawing.Size(107, 20)
-        Me.txtGatewayInterval_Milli.TabIndex = 197
+        Me.TxtNotifyToClose_Milli.Enabled = False
+        Me.TxtNotifyToClose_Milli.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToClose_Milli.Location = New System.Drawing.Point(190, 7)
+        Me.TxtNotifyToClose_Milli.Name = "TxtNotifyToClose_Milli"
+        Me.TxtNotifyToClose_Milli.Size = New System.Drawing.Size(107, 20)
+        Me.TxtNotifyToClose_Milli.TabIndex = 197
         '
         'Label11
         '
@@ -333,7 +344,7 @@ Partial Class ConfigSendToClose
         Me.Label8.AutoSize = True
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.ForeColor = System.Drawing.Color.Black
-        Me.Label8.Location = New System.Drawing.Point(-1, 13)
+        Me.Label8.Location = New System.Drawing.Point(6, 9)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(165, 13)
         Me.Label8.TabIndex = 182
@@ -405,18 +416,18 @@ Partial Class ConfigSendToClose
         'Panel3
         '
         Me.Panel3.BackColor = System.Drawing.Color.Silver
-        Me.Panel3.Controls.Add(Me.txtSmsInterval_Mins)
+        Me.Panel3.Controls.Add(Me.TxtinsertNotifyToClose_Mins)
         Me.Panel3.Controls.Add(Me.Label13)
-        Me.Panel3.Controls.Add(Me.txtSmsInterval_Mil)
+        Me.Panel3.Controls.Add(Me.TxtinsertNotifyToClose_Milli)
         Me.Panel3.Controls.Add(Me.Label12)
-        Me.Panel3.Controls.Add(Me.txtSmsInterval_Sec)
-        Me.Panel3.Controls.Add(Me.txtSmsInterval_Hour)
+        Me.Panel3.Controls.Add(Me.TxtinsertNotifyToClose_Sec)
+        Me.Panel3.Controls.Add(Me.TxtInsertNotifyToClose_Hours)
         Me.Panel3.Controls.Add(Me.Label11)
         Me.Panel3.Controls.Add(Me.Label10)
         Me.Panel3.Controls.Add(Me.Label9)
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.ForeColor = System.Drawing.Color.White
-        Me.Panel3.Location = New System.Drawing.Point(14, 145)
+        Me.Panel3.Location = New System.Drawing.Point(14, 120)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(417, 74)
         Me.Panel3.TabIndex = 191
@@ -430,22 +441,11 @@ Partial Class ConfigSendToClose
         Me.Label2.TabIndex = 165
         Me.Label2.Text = "Mobile Number"
         '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.BackColor = System.Drawing.Color.Transparent
-        Me.Label7.ForeColor = System.Drawing.Color.Black
-        Me.Label7.Location = New System.Drawing.Point(302, 10)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(63, 13)
-        Me.Label7.TabIndex = 205
-        Me.Label7.Text = "milliseconds"
-        '
         'ConfigSendToClose
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(445, 531)
+        Me.ClientSize = New System.Drawing.Size(445, 443)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Label2)
         Me.Name = "ConfigSendToClose"
@@ -462,28 +462,28 @@ Partial Class ConfigSendToClose
 
     End Sub
 
-    Friend WithEvents txtSmsInterval_Mil As TextBox
+    Friend WithEvents TxtinsertNotifyToClose_Milli As TextBox
     Friend WithEvents BtnClose As Button
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents Panel2 As Panel
     Friend WithEvents BtnSave As Button
     Friend WithEvents Label4 As Label
     Friend WithEvents BtnReset As Button
-    Friend WithEvents txtSmsInterval_Mins As TextBox
+    Friend WithEvents TxtinsertNotifyToClose_Mins As TextBox
     Friend WithEvents Label13 As Label
     Friend WithEvents Label12 As Label
-    Friend WithEvents txtSmsInterval_Sec As TextBox
-    Friend WithEvents txtSmsInterval_Hour As TextBox
+    Friend WithEvents TxtinsertNotifyToClose_Sec As TextBox
+    Friend WithEvents TxtInsertNotifyToClose_Hours As TextBox
     Friend WithEvents Panel5 As Panel
-    Friend WithEvents txtGatewyInterval_Mins As TextBox
+    Friend WithEvents TxtNotifyToClose_Mins As TextBox
     Friend WithEvents Label15 As Label
     Friend WithEvents Label16 As Label
-    Friend WithEvents txtGatewayInterval_Sec As TextBox
-    Friend WithEvents txtGatewayInterval_Hour As TextBox
+    Friend WithEvents TxtNotifyToClose_Sec As TextBox
+    Friend WithEvents NotifyToClose_Hours As TextBox
     Friend WithEvents Label17 As Label
     Friend WithEvents Label18 As Label
     Friend WithEvents Label14 As Label
-    Friend WithEvents txtGatewayInterval_Milli As TextBox
+    Friend WithEvents TxtNotifyToClose_Milli As TextBox
     Friend WithEvents Label11 As Label
     Friend WithEvents Label10 As Label
     Friend WithEvents Label9 As Label
