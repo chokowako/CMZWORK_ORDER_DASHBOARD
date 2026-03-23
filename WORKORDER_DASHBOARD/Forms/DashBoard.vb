@@ -24,11 +24,11 @@ Public Class DashBoard
 
     Private sendingSMSInProgress As Boolean = False
     Private sendingEmailInProgress As Boolean = False
-
-
+    Private isInserting As Boolean = False
 
     Private WithEvents DashboardTimer As New Timer()
     Private DashboardLoading As Boolean = False
+
 
 
 
@@ -108,6 +108,16 @@ Public Class DashBoard
             lblConnection.Text = "Live Database"
             lblConnection.ForeColor = Color.Black
         End If
+
+
+        TimerNotify_close.Interval = 60000 ' 1 minute
+        TimerNotify_close.Stop()
+
+        TimerWorkOrderNotify_Close.Interval = 10000  ' 10 seconds
+        TimerWorkOrderNotify_Close.Stop()
+
+
+
     End Sub
 
     Private Sub BtnSetupAndOption_Click(sender As Object, e As EventArgs) Handles BtnSetupAndOption.Click
@@ -285,85 +295,6 @@ Public Class DashBoard
     End Function
 
     Private Async Function ProcessPendingSMSAsync() As Task
-        'Try
-        '    ShowSMSProgress(True)
-
-
-        '    lblStatus.Text = "🔄 Checking SMS gateway URL..."
-
-        '    Dim smsGatewayUrl As String = "http://" + My.Settings.GatewayIp + ":" + My.Settings.GatewayPort ' Replace with your phone IP/port
-        '    Dim testUrl As String = $"{smsGatewayUrl}/sendsms?phone=test&text=test&password=" + My.Settings.GatewayPassword
-
-        '    If Not Await IsSmsGatewayAccessibleAsync(testUrl) Then
-        '        lblConnectionStatus.Text = "📶❌ SMS Gateway not reachable"
-        '        lblConnectionStatus.BackColor = Color.Red
-        '        lblStatus.Text = "⚠ Cannot send SMS. Gateway URL is not responding."
-        '        ShowSMSProgress(False)
-        '        Exit Function
-        '    End If
-
-        '    lblConnectionStatus.Text = "📶 SMS Gateway reachable"
-        '    lblConnectionStatus.BackColor = Color.Green
-        '    lblStatus.Text = "📨 Checking for pending SMS..."
-
-        '    Using conn As New SqlConnection(connStr)
-        '        Await conn.OpenAsync()
-
-        '        Dim cmd As New SqlCommand("SELECT TOP 1 pk, RecPhoneNo, Message FROM SmsCatcher WHERE smsflag = 1", conn)
-        '        Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
-
-        '        If Not Await reader.ReadAsync() Then
-        '            reader.Close()
-        '            lblStatus.Text = "📭 No pending SMS to send."
-        '            ShowSMSProgress(False)
-        '            Exit Function
-        '        End If
-
-        '        Dim pk As Integer = reader.GetInt32(0)
-        '        Dim phone As String = reader.GetString(1)
-        '        Dim msg As String = reader.GetString(2)
-
-        '        reader.Close()
-
-        '        ' Recheck gateway before each message
-        '        If Not Await IsSmsGatewayAccessibleAsync(testUrl) Then
-        '            lblStatus.Text = "⚠ SMS Gateway lost connection during batch."
-        '            lblConnectionStatus.Text = "📴 SMS Gateway not reachable"
-        '            lblConnectionStatus.BackColor = Color.Red
-        '            Exit Function
-        '        End If
-
-
-        '        lblStatus.Text = $"📤 Sending SMS to {phone}..."
-
-        '        Dim encodedPhone As String = Uri.EscapeDataString(phone)
-        '        Dim encodedMsg As String = Uri.EscapeDataString(msg)
-        '        Dim smsSendUrl As String = $"{smsGatewayUrl}/sendsms?phone={encodedPhone}&text={encodedMsg}&password=" + My.Settings.GatewayPassword
-
-        '        Using httpClient As New HttpClient()
-        '            Dim response As HttpResponseMessage = Await httpClient.GetAsync(smsSendUrl)
-        '            Dim responseBody As String = Await response.Content.ReadAsStringAsync()
-
-        '            If response.IsSuccessStatusCode Then
-        '                Dim updateCmd As New SqlCommand("UPDATE SmsCatcher SET smsflag = 0, smsDateSend = @smsDateSend WHERE pk = @pk", conn)
-        '                updateCmd.Parameters.AddWithValue("@pk", pk)
-        '                updateCmd.Parameters.AddWithValue("@smsDateSend", Format(Date.Now, "MM/dd/yyyy hh:mm :ss tt"))
-        '                Await updateCmd.ExecuteNonQueryAsync()
-
-        '                lblStatus.Text = $"✅ SMS sent to {phone}"
-        '            Else
-        '                lblStatus.Text = $"❌ Failed to send SMS to {phone}. Status: {response.StatusCode}, Body: {responseBody}"
-        '            End If
-        '        End Using
-        '    End Using
-
-
-        'Catch ex As Exception
-        '    lblStatus.Text = "❌ Error while sending SMS: " & ex.Message
-        'Finally
-        '    ShowSMSProgress(False)
-        'End Try
-
 
         Try
             ShowSMSprogressSMS(True)
@@ -693,6 +624,249 @@ Public Class DashBoard
         End Try
     End Function
 
+
+    Private Async Function InsertReminderSMSAsync() As Task
+        If isInserting Then Exit Function
+        isInserting = True
+
+        Try
+            Using conn As New SqlConnection(connStr)
+                Await conn.OpenAsync()
+
+                Dim query As String = "
+            SELECT 
+                Pk_WorkOrderNo,
+                RequestedBy,
+                RequesterContactNo,
+                Unit_Section
+            FROM WorkOrderForm
+            WHERE Pk_WorkOrderNo IN ('NO:000606')
+            "
+
+                Dim cmd As New SqlCommand(query, conn)
+                Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+
+                    Dim woNo As String = reader("Pk_WorkOrderNo").ToString()
+                    Dim requesterName As String = reader("RequestedBy").ToString()
+                    Dim department As String = reader("Unit_Section").ToString()
+                    Dim mobile As String = reader("RequesterContactNo").ToString()
+
+                    ' 🔹 CHECK LAST NOTIFICATION DATE
+                    Dim lastDateObj As Object = Nothing
+
+                    Using checkCmd As New SqlCommand("
+                    SELECT TOP 1 CreatedDate 
+                    FROM WorkOrderNotifications 
+                    WHERE WorkOrderNo = @WO 
+                    ORDER BY CreatedDate DESC
+                ", conn)
+
+                        checkCmd.Parameters.AddWithValue("@WO", woNo)
+                        lastDateObj = Await checkCmd.ExecuteScalarAsync()
+                    End Using
+
+                    ' 🔹 APPLY 3-HOUR RULE
+                    If lastDateObj IsNot Nothing AndAlso Not IsDBNull(lastDateObj) Then
+                        Dim lastDate As DateTime = CDate(lastDateObj)
+
+                        If DateDiff(DateInterval.Hour, lastDate, Now) < 3 Then
+                            Continue While
+                        End If
+                    End If
+
+                    ' 🔹 BUILD MESSAGE
+                    Dim message As String =
+                    "Good Day! " & requesterName & " from " & department &
+                    ". This is to notify you that Maintenance/Engineering Department tagged your Work Order No: " &
+                    woNo & ". Please verify the work order and update/tag this as CLOSED. Thank you."
+
+                    ' 🔹 INSERT
+                    Using insertCmd As New SqlCommand("
+                    INSERT INTO WorkOrderNotifications  
+                    (WorkOrderNo, RecipientName, PhoneNumber, Message, Status)
+                    VALUES 
+                    (@WO, @RecipientName, @Phone, @Message, 1)
+                ", conn)
+
+                        insertCmd.Parameters.AddWithValue("@WO", woNo)
+                        insertCmd.Parameters.AddWithValue("@RecipientName", requesterName)
+                        insertCmd.Parameters.AddWithValue("@Phone", mobile)
+                        insertCmd.Parameters.AddWithValue("@Message", message)
+
+                        Await insertCmd.ExecuteNonQueryAsync()
+                    End Using
+
+                End While
+
+                reader.Close()
+
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show("Insert SMS Error: " & ex.Message)
+        Finally
+            isInserting = False
+        End Try
+
+    End Function
+
+    Private Sub chkAllowToNotify_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowToNotify.CheckedChanged
+        If chkAllowToNotify.Checked Then
+            TimerNotify_close.Start()
+            TimerWorkOrderNotify_Close.Start()
+        Else
+            TimerNotify_close.Stop()
+            Stop
+        End If
+    End Sub
+
+
+    Private Async Function ProcessWorkOrderNotificationsAsync() As Task
+
+        Try
+            ShowSMSprogressSMS(True)
+            lblStatus.Text = "🔄 Checking SMS gateway URL..."
+
+            Dim smsGatewayUrl As String = "http://" & My.Settings.GatewayIp & ":" & My.Settings.GatewayPort
+            Dim testUrl As String = $"{smsGatewayUrl}/sendsms?phone=test&text=test&password=" & My.Settings.GatewayPassword
+
+            Dim isGatewayReachable As Boolean = Await IsSmsGatewayAccessibleAsync(testUrl)
+
+            If Not isGatewayReachable Then
+                Label1.Text = "⚠ Cannot send SMS. Gateway not responding."
+                Label4.Text = "📶❌ SMS Gateway not reachable"
+                Label4.BackColor = Color.Red
+                ShowSMSprogressSMS(False)
+                Exit Function
+            End If
+
+            Label1.Text = "📨 Checking WorkOrder notifications..."
+            Label4.Text = "📶 SMS Gateway reachable"
+            Label4.BackColor = Color.Green
+
+            Using conn As New SqlConnection(connStr)
+                Await conn.OpenAsync()
+
+                Dim cmd As New SqlCommand("
+                SELECT Id, PhoneNumber, Message 
+                FROM WorkOrderNotifications 
+                WHERE Status = 1 
+                ORDER BY Id ASC
+            ", conn)
+
+                Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+
+                Dim list As New List(Of (Integer, String, String))()
+
+                While Await reader.ReadAsync()
+                    list.Add((
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetString(2)
+                    ))
+                End While
+
+                reader.Close()
+
+                If list.Count = 0 Then
+                    lblStatus.Text = "📭 No WorkOrder notifications to send."
+                    ShowSMSprogressSMS(False)
+                    Exit Function
+                End If
+
+                'progressSMS.Visible = True
+                'progressSMS.Minimum = 0
+                'progressSMS.Maximum = list.Count
+                'progressSMS.Value = 0
+
+                Dim sentCount As Integer = 0
+
+                For Each item In list
+
+                    Dim id = item.Item1
+                    Dim phone = item.Item2
+                    Dim msg = item.Item3
+
+                    If Not Await IsSmsGatewayAccessibleAsync(testUrl) Then
+                        Label1.Text = "⚠ Gateway lost connection during sending."
+                        Label4.Text = "📴 SMS Gateway not reachable"
+                        Label4.BackColor = Color.Red
+                        Exit For
+                    End If
+
+                    lblStatus.Text = $"📤 Sending SMS to {phone}..."
+
+                    msg = msg.Replace(vbCrLf, vbLf)
+
+                    Dim encodedPhone = Uri.EscapeDataString(phone)
+                    Dim encodedMsg = Uri.EscapeDataString(msg)
+
+                    Dim smsSendUrl = $"{smsGatewayUrl}/sendsms?phone={encodedPhone}&text={encodedMsg}&password=" & My.Settings.GatewayPassword
+
+                    Using httpClient As New HttpClient()
+                        Dim response = Await httpClient.GetAsync(smsSendUrl)
+
+                        If response.IsSuccessStatusCode Then
+
+                            ' ✅ Mark as sent
+                            Dim updateCmd As New SqlCommand("
+                            UPDATE WorkOrderNotifications 
+                            SET Status = 0, SentDate = @SentDate 
+                            WHERE Id = @Id
+                        ", conn)
+
+                            updateCmd.Parameters.AddWithValue("@Id", id)
+                            updateCmd.Parameters.AddWithValue("@SentDate", Date.Now)
+
+                            Await updateCmd.ExecuteNonQueryAsync()
+
+                            lblStatus.Text = $"✅ SMS sent to {phone}"
+                        Else
+                            lblStatus.Text = $"❌ Failed to send SMS to {phone}"
+                        End If
+                    End Using
+
+                    'sentCount += 1
+                    'progressSMS.Value = sentCount
+                    'lblProgress.Text = $"Progress: {sentCount}/{list.Count}"
+
+                    Await Task.Delay(1000)
+
+                Next
+
+                'lblProgress.Text = "✅ All WorkOrder SMS sent!"
+                'Await Task.Delay(3000)
+                'progressSMS.Visible = False
+
+            End Using
+
+        Catch ex As Exception
+            lblStatus.Text = "❌ Error: " & ex.Message
+        Finally
+            ShowSMSprogressSMS(False)
+        End Try
+
+    End Function
+
+
+    Private Async Sub TimerNotify_close_Tick(sender As Object, e As EventArgs) Handles TimerNotify_close.Tick
+        Try
+            Await InsertReminderSMSAsync()
+        Catch ex As Exception
+            MessageBox.Show("Notify Error: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Async Sub TimerWorkOrderNotify_Close_Tick(sender As Object, e As EventArgs) Handles TimerWorkOrderNotify_Close.Tick
+        Try
+            Await ProcessWorkOrderNotificationsAsync()
+        Catch ex As Exception
+            MessageBox.Show("WorkOrder SMS Send Error: " & ex.Message)
+        End Try
+
+    End Sub
 End Class
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3
 '"http://" + MobileReader!gateway + ":" & MobileReader!port & "/sendsms?phone=" & RecPhoneNo & "&text=" & Recmessage & "&password=" & MobileReader!password

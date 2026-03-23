@@ -289,4 +289,5 @@ Public Class ConfigSms
     Private Sub txtGatewayInterval_Sec_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Sec.TextChanged
         Recalculate_GAteway_Milliseconds()
     End Sub
+
 End Class

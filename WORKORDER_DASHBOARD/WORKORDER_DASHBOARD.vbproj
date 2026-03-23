@@ -110,6 +110,12 @@
     <Compile Include="Forms\changeDatabaseCommection.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\ConfigSendToClose.Designer.vb">
+      <DependentUpon>ConfigSendToClose.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ConfigSendToClose.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ConnectionSetup.Designer.vb">
       <DependentUpon>ConnectionSetup.vb</DependentUpon>
     </Compile>
@@ -157,6 +163,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\changeDatabaseCommection.resx">
       <DependentUpon>changeDatabaseCommection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConfigSendToClose.resx">
+      <DependentUpon>ConfigSendToClose.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConfigSmtp.resx">
       <DependentUpon>ConfigSmtp.vb</DependentUpon>

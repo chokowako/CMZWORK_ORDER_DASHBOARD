@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ConnectionSetup
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class ConnectionSetup
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConnectionSetup))
@@ -178,11 +178,15 @@ Partial Class ConnectionSetup
         '
         Me.BtnExit.BackColor = System.Drawing.Color.Transparent
         Me.BtnExit.ForeColor = System.Drawing.Color.Black
-        Me.BtnExit.Location = New System.Drawing.Point(20, 438)
+        Me.BtnExit.ImageKey = "closeRed.png"
+        Me.BtnExit.ImageList = Me.ImageList1
+        Me.BtnExit.Location = New System.Drawing.Point(347, 437)
         Me.BtnExit.Name = "BtnExit"
-        Me.BtnExit.Size = New System.Drawing.Size(397, 29)
+        Me.BtnExit.Size = New System.Drawing.Size(84, 29)
         Me.BtnExit.TabIndex = 128
         Me.BtnExit.Text = "Exit"
+        Me.BtnExit.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.BtnExit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.BtnExit.UseVisualStyleBackColor = False
         '
         'txtServername
