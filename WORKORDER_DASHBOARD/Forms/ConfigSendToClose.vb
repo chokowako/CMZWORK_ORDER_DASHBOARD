@@ -6,7 +6,7 @@ Imports System.Threading
 Imports System.Net.NetworkInformation.Ping
 Imports System.Net.NetworkInformation
 Imports System.Net.Http
-Imports System.Net.Mail\
+Imports System.Net.Mail
 Public Class ConfigSendToClose
     Dim hours As Integer
     Dim minutes As Integer
