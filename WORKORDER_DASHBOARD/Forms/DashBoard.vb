@@ -29,8 +29,6 @@ Public Class DashBoard
     Private WithEvents DashboardTimer As New Timer()
     Private DashboardLoading As Boolean = False
 
-    Private blinkState As Boolean = False
-    Private currentSendingPhone As String = ""
 
 
     Private Sub DateAndTime_Tick(sender As Object, e As EventArgs) Handles DateAndTime.Tick
@@ -110,9 +108,6 @@ Public Class DashBoard
             lblConnection.ForeColor = Color.Black
         End If
 
-
-        TimerBlinkSMS.Interval = 700
-        TimerBlinkSMS.Stop()
 
 
     End Sub
@@ -752,10 +747,11 @@ Public Class DashBoard
 
 
     Private Async Function ProcessWorkOrderNotificationsAsync() As Task
-
         Try
             ShowSMSprogressSMS(True)
-            Label4.Text = "🔄 Checking SMS gateway URL..."
+
+            ' 🔹 Step 1: Checking gateway
+            Label1.Text = "🔄 Checking SMS gateway URL..."
 
             Dim smsGatewayUrl As String = "http://" & My.Settings.GatewayIp & ":" & My.Settings.GatewayPort
             Dim testUrl As String = $"{smsGatewayUrl}/sendsms?phone=test&text=test&password=" & My.Settings.GatewayPassword
@@ -763,13 +759,14 @@ Public Class DashBoard
             Dim isGatewayReachable As Boolean = Await IsSmsGatewayAccessibleAsync(testUrl)
 
             If Not isGatewayReachable Then
-                Label4.Text = "⚠ Cannot send SMS. Gateway not responding."
+                Label1.Text = "⚠ Cannot send SMS. Gateway not responding."
                 Exit Function
             End If
 
             Using conn As New SqlConnection(connStr)
                 Await conn.OpenAsync()
 
+                ' 🔹 Step 2: Get pending notifications
                 Dim cmd As New SqlCommand("
                 SELECT Id, PhoneNumber, Message 
                 FROM WorkOrderNotifications 
@@ -791,32 +788,32 @@ Public Class DashBoard
 
                 reader.Close()
 
+                ' 🔹 Step 3: No records
                 If list.Count = 0 Then
-                    Label4.Text = "📭 No WorkOrder notifications to send."
+                    Label1.Text = "📭 No WorkOrder notifications to send."
                     ShowSMSprogressSMS(False)
                     Exit Function
                 End If
 
-                ' 🟢 START BLINKING HERE
-                TimerBlinkSMS.Start()
-                Label1.Visible = True
-
                 Dim sentCount As Integer = 0
 
+                ' 🔹 Step 4: Send SMS loop
                 For Each item In list
 
                     Dim id = item.Item1
                     Dim phone = item.Item2
                     Dim msg = item.Item3
 
-                    ' 🔹 Store current phone for blinking display
-                    currentSendingPhone = phone
+                    ' Update UI
+                    Label1.Text = $"📤 Sending SMS to {phone}..."
 
+                    ' Check gateway again before sending
                     If Not Await IsSmsGatewayAccessibleAsync(testUrl) Then
-                        Label4.Text = "⚠ Gateway lost connection during sending."
+                        Label1.Text = "⚠ Gateway lost connection during sending."
                         Exit For
                     End If
 
+                    ' Normalize message
                     msg = msg.Replace(vbCrLf, vbLf)
 
                     Dim encodedPhone = Uri.EscapeDataString(phone)
@@ -829,7 +826,7 @@ Public Class DashBoard
 
                         If response.IsSuccessStatusCode Then
 
-                            ' ✅ Mark as sent
+                            ' ✅ Update database as sent
                             Dim updateCmd As New SqlCommand("
                             UPDATE WorkOrderNotifications 
                             SET Status = 0, SentDate = @SentDate 
@@ -841,26 +838,29 @@ Public Class DashBoard
 
                             Await updateCmd.ExecuteNonQueryAsync()
 
-                            Label4.Text = $"✅ SMS sent to {phone}"
+                            Label1.Text = $"✅ SMS sent to {phone}"
+
                         Else
-                            Label4.Text = $"❌ Failed to send SMS to {phone}"
+                            Label1.Text = $"❌ Failed to send SMS to {phone}"
                         End If
                     End Using
 
-                    Await Task.Delay(1000)
+                    sentCount += 1
+
+                    ' Small delay to avoid flooding gateway
+                    Await Task.Delay(500)
 
                 Next
+
+                Label1.Text = "✅ All SMS notifications processed."
 
             End Using
 
         Catch ex As Exception
-            Label4.Text = "❌ Error: " & ex.Message
+            Label1.Text = "❌ Error: " & ex.Message
 
         Finally
-            ' 🟢 STOP BLINKING HERE
-            TimerBlinkSMS.Stop()
-            Label1.Visible = False
-            currentSendingPhone = ""
+            ShowSMSprogressSMS(False)
         End Try
 
     End Function
@@ -883,18 +883,6 @@ Public Class DashBoard
 
     End Sub
 
-
-    Private Sub TimerBlinkSMS_Tick(sender As Object, e As EventArgs) Handles TimerBlinkSMS.Tick
-        blinkState = Not blinkState
-
-        If blinkState Then
-            Label1.ForeColor = Color.LimeGreen
-        Else
-            Label1.ForeColor = Color.Gray
-        End If
-
-        Label1.Text = $"📤 Sending SMS to {currentSendingPhone}..."
-    End Sub
 End Class
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3
 '"http://" + MobileReader!gateway + ":" & MobileReader!port & "/sendsms?phone=" & RecPhoneNo & "&text=" & Recmessage & "&password=" & MobileReader!password
