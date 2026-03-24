@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.WORKORDER_DASHBOARD.ConfigSendToClose
+            Me.MainForm = Global.WORKORDER_DASHBOARD.DashBoard
         End Sub
     End Class
 End Namespace

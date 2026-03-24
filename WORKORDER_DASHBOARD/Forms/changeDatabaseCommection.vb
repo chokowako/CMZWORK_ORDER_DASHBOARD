@@ -75,13 +75,8 @@ Public Class changeDatabaseCommection
         End Try
     End Function
 
-    Private Sub BtnConfigSmtp_Click_1(sender As Object, e As EventArgs) Handles BtnConfigSmtp.Click
-        ConfigSmtp.ShowDialog()
-    End Sub
 
-    Private Sub BtnConfigSms_Click(sender As Object, e As EventArgs) Handles BtnConfigSms.Click
-        ConfigSms.ShowDialog()
-    End Sub
+
 
     Private Sub BtnReset_Click_1(sender As Object, e As EventArgs) Handles BtnReset.Click
         Dim result As DialogResult = MessageBox.Show("are you want to reset the Database Connection Server connection?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -207,11 +202,14 @@ Public Class changeDatabaseCommection
         txtWomsInterval_Milli.Text = Gateway_milliseconds.ToString()
     End Sub
 
-    Private Sub BtnExit_Click_1(sender As Object, e As EventArgs) Handles BtnExit.Click
+
+
+    Private Sub BtnExit_Click(sender As Object, e As EventArgs) Handles BtnExit.Click
         If BtnExit.Text = "Exit" Then
             End
         ElseIf BtnExit.Text = "Close" Then
             Me.Hide()
+
         End If
     End Sub
 End Class

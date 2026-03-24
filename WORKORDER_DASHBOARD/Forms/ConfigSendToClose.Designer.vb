@@ -58,10 +58,22 @@ Partial Class ConfigSendToClose
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.TxtNotifyToCloseRecurring_Hour = New System.Windows.Forms.TextBox()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.TxtNotifyToCloseRecurring_Milli = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.TxtNotifyToCloseRecurring_Min = New System.Windows.Forms.TextBox()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.TxtNotifyToCloseRecurring_Sec = New System.Windows.Forms.TextBox()
         Me.Panel2.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.Panel3.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TxtinsertNotifyToClose_Milli
@@ -80,7 +92,7 @@ Partial Class ConfigSendToClose
         Me.BtnClose.ForeColor = System.Drawing.Color.Black
         Me.BtnClose.ImageKey = "close.png"
         Me.BtnClose.ImageList = Me.ImageList1
-        Me.BtnClose.Location = New System.Drawing.Point(355, 378)
+        Me.BtnClose.Location = New System.Drawing.Point(355, 402)
         Me.BtnClose.Name = "BtnClose"
         Me.BtnClose.Size = New System.Drawing.Size(76, 29)
         Me.BtnClose.TabIndex = 128
@@ -102,7 +114,7 @@ Partial Class ConfigSendToClose
         Me.Panel2.BackColor = System.Drawing.Color.White
         Me.Panel2.Controls.Add(Me.BtnSave)
         Me.Panel2.ForeColor = System.Drawing.Color.White
-        Me.Panel2.Location = New System.Drawing.Point(14, 310)
+        Me.Panel2.Location = New System.Drawing.Point(14, 350)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(417, 46)
         Me.Panel2.TabIndex = 177
@@ -135,7 +147,7 @@ Partial Class ConfigSendToClose
         Me.BtnReset.ForeColor = System.Drawing.Color.Black
         Me.BtnReset.ImageKey = "reset.png"
         Me.BtnReset.ImageList = Me.ImageList1
-        Me.BtnReset.Location = New System.Drawing.Point(10, 378)
+        Me.BtnReset.Location = New System.Drawing.Point(12, 402)
         Me.BtnReset.Name = "BtnReset"
         Me.BtnReset.Size = New System.Drawing.Size(76, 29)
         Me.BtnReset.TabIndex = 186
@@ -202,7 +214,7 @@ Partial Class ConfigSendToClose
         Me.Panel5.Controls.Add(Me.Label18)
         Me.Panel5.Controls.Add(Me.Label14)
         Me.Panel5.Controls.Add(Me.TxtNotifyToClose_Milli)
-        Me.Panel5.Location = New System.Drawing.Point(14, 219)
+        Me.Panel5.Location = New System.Drawing.Point(14, 186)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(417, 74)
         Me.Panel5.TabIndex = 192
@@ -353,6 +365,7 @@ Partial Class ConfigSendToClose
         'Panel4
         '
         Me.Panel4.BackColor = System.Drawing.Color.FromArgb(CType(CType(37, Byte), Integer), CType(CType(46, Byte), Integer), CType(CType(59, Byte), Integer))
+        Me.Panel4.Controls.Add(Me.Panel1)
         Me.Panel4.Controls.Add(Me.Label6)
         Me.Panel4.Controls.Add(Me.Label5)
         Me.Panel4.Controls.Add(Me.Label3)
@@ -374,7 +387,7 @@ Partial Class ConfigSendToClose
         Me.Label6.AutoSize = True
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.ForeColor = System.Drawing.Color.White
-        Me.Label6.Location = New System.Drawing.Point(284, 83)
+        Me.Label6.Location = New System.Drawing.Point(284, 76)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(67, 13)
         Me.Label6.TabIndex = 196
@@ -385,7 +398,7 @@ Partial Class ConfigSendToClose
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.ForeColor = System.Drawing.Color.White
-        Me.Label5.Location = New System.Drawing.Point(171, 83)
+        Me.Label5.Location = New System.Drawing.Point(171, 76)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(62, 13)
         Me.Label5.TabIndex = 195
@@ -396,7 +409,7 @@ Partial Class ConfigSendToClose
         Me.Label3.AutoSize = True
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.ForeColor = System.Drawing.Color.White
-        Me.Label3.Location = New System.Drawing.Point(65, 83)
+        Me.Label3.Location = New System.Drawing.Point(65, 76)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(48, 13)
         Me.Label3.TabIndex = 194
@@ -427,7 +440,7 @@ Partial Class ConfigSendToClose
         Me.Panel3.Controls.Add(Me.Label9)
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.ForeColor = System.Drawing.Color.White
-        Me.Panel3.Location = New System.Drawing.Point(14, 120)
+        Me.Panel3.Location = New System.Drawing.Point(14, 100)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(417, 74)
         Me.Panel3.TabIndex = 191
@@ -440,6 +453,123 @@ Partial Class ConfigSendToClose
         Me.Label2.Size = New System.Drawing.Size(78, 13)
         Me.Label2.TabIndex = 165
         Me.Label2.Text = "Mobile Number"
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.Silver
+        Me.Panel1.Controls.Add(Me.Label19)
+        Me.Panel1.Controls.Add(Me.TxtNotifyToCloseRecurring_Min)
+        Me.Panel1.Controls.Add(Me.Label20)
+        Me.Panel1.Controls.Add(Me.Label21)
+        Me.Panel1.Controls.Add(Me.TxtNotifyToCloseRecurring_Sec)
+        Me.Panel1.Controls.Add(Me.TxtNotifyToCloseRecurring_Hour)
+        Me.Panel1.Controls.Add(Me.Label22)
+        Me.Panel1.Controls.Add(Me.Label23)
+        Me.Panel1.Controls.Add(Me.Label24)
+        Me.Panel1.Controls.Add(Me.TxtNotifyToCloseRecurring_Milli)
+        Me.Panel1.Location = New System.Drawing.Point(14, 266)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(417, 74)
+        Me.Panel1.TabIndex = 197
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.BackColor = System.Drawing.Color.Transparent
+        Me.Label19.ForeColor = System.Drawing.Color.Black
+        Me.Label19.Location = New System.Drawing.Point(302, 10)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(63, 13)
+        Me.Label19.TabIndex = 205
+        Me.Label19.Text = "milliseconds"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.BackColor = System.Drawing.Color.Transparent
+        Me.Label20.ForeColor = System.Drawing.Color.Black
+        Me.Label20.Location = New System.Drawing.Point(6, 50)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(106, 13)
+        Me.Label20.TabIndex = 204
+        Me.Label20.Text = "Input                        :"
+        '
+        'TxtNotifyToCloseRecurring_Hour
+        '
+        Me.TxtNotifyToCloseRecurring_Hour.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToCloseRecurring_Hour.Location = New System.Drawing.Point(118, 47)
+        Me.TxtNotifyToCloseRecurring_Hour.Name = "TxtNotifyToCloseRecurring_Hour"
+        Me.TxtNotifyToCloseRecurring_Hour.Size = New System.Drawing.Size(44, 20)
+        Me.TxtNotifyToCloseRecurring_Hour.TabIndex = 199
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.BackColor = System.Drawing.Color.Transparent
+        Me.Label22.ForeColor = System.Drawing.Color.Black
+        Me.Label22.Location = New System.Drawing.Point(165, 50)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(35, 13)
+        Me.Label22.TabIndex = 202
+        Me.Label22.Text = "Hours"
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.BackColor = System.Drawing.Color.Transparent
+        Me.Label24.ForeColor = System.Drawing.Color.Black
+        Me.Label24.Location = New System.Drawing.Point(3, 10)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(91, 13)
+        Me.Label24.TabIndex = 196
+        Me.Label24.Text = "Recurring Interval"
+        '
+        'TxtNotifyToCloseRecurring_Milli
+        '
+        Me.TxtNotifyToCloseRecurring_Milli.Enabled = False
+        Me.TxtNotifyToCloseRecurring_Milli.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToCloseRecurring_Milli.Location = New System.Drawing.Point(190, 7)
+        Me.TxtNotifyToCloseRecurring_Milli.Name = "TxtNotifyToCloseRecurring_Milli"
+        Me.TxtNotifyToCloseRecurring_Milli.Size = New System.Drawing.Size(107, 20)
+        Me.TxtNotifyToCloseRecurring_Milli.TabIndex = 197
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.BackColor = System.Drawing.Color.Transparent
+        Me.Label21.ForeColor = System.Drawing.Color.Black
+        Me.Label21.Location = New System.Drawing.Point(261, 50)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(44, 13)
+        Me.Label21.TabIndex = 203
+        Me.Label21.Text = "Minutes"
+        '
+        'TxtNotifyToCloseRecurring_Min
+        '
+        Me.TxtNotifyToCloseRecurring_Min.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToCloseRecurring_Min.Location = New System.Drawing.Point(217, 47)
+        Me.TxtNotifyToCloseRecurring_Min.Name = "TxtNotifyToCloseRecurring_Min"
+        Me.TxtNotifyToCloseRecurring_Min.Size = New System.Drawing.Size(44, 20)
+        Me.TxtNotifyToCloseRecurring_Min.TabIndex = 200
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = True
+        Me.Label23.BackColor = System.Drawing.Color.Transparent
+        Me.Label23.ForeColor = System.Drawing.Color.Black
+        Me.Label23.Location = New System.Drawing.Point(363, 50)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(49, 13)
+        Me.Label23.TabIndex = 201
+        Me.Label23.Text = "Seconds"
+        '
+        'TxtNotifyToCloseRecurring_Sec
+        '
+        Me.TxtNotifyToCloseRecurring_Sec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TxtNotifyToCloseRecurring_Sec.Location = New System.Drawing.Point(311, 47)
+        Me.TxtNotifyToCloseRecurring_Sec.Name = "TxtNotifyToCloseRecurring_Sec"
+        Me.TxtNotifyToCloseRecurring_Sec.Size = New System.Drawing.Size(44, 20)
+        Me.TxtNotifyToCloseRecurring_Sec.TabIndex = 198
         '
         'ConfigSendToClose
         '
@@ -458,6 +588,8 @@ Partial Class ConfigSendToClose
         Me.Panel4.PerformLayout()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -497,4 +629,15 @@ Partial Class ConfigSendToClose
     Friend WithEvents Label6 As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents Label7 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label19 As Label
+    Friend WithEvents Label20 As Label
+    Friend WithEvents TxtNotifyToCloseRecurring_Hour As TextBox
+    Friend WithEvents Label22 As Label
+    Friend WithEvents Label24 As Label
+    Friend WithEvents TxtNotifyToCloseRecurring_Milli As TextBox
+    Friend WithEvents TxtNotifyToCloseRecurring_Min As TextBox
+    Friend WithEvents Label21 As Label
+    Friend WithEvents TxtNotifyToCloseRecurring_Sec As TextBox
+    Friend WithEvents Label23 As Label
 End Class

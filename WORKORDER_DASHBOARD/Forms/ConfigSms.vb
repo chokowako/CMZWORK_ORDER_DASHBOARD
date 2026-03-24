@@ -68,6 +68,7 @@ Public Class ConfigSms
 
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
         Me.Hide()
+
     End Sub
     Private Function IsMobileReachable() As Boolean
         Try

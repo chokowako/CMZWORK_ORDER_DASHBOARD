@@ -31,9 +31,7 @@ Partial Class changeDatabaseCommection
         Me.txtDbpassword = New System.Windows.Forms.TextBox()
         Me.BtnReset = New System.Windows.Forms.Button()
         Me.txtDbUsername = New System.Windows.Forms.TextBox()
-        Me.BtnConfigSmtp = New System.Windows.Forms.Button()
         Me.txtDbName = New System.Windows.Forms.TextBox()
-        Me.BtnConfigSms = New System.Windows.Forms.Button()
         Me.txtServername = New System.Windows.Forms.TextBox()
         Me.DbPassword = New System.Windows.Forms.Label()
         Me.DbUsername = New System.Windows.Forms.Label()
@@ -42,7 +40,6 @@ Partial Class changeDatabaseCommection
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnConnect = New System.Windows.Forms.Button()
         Me.btnTestConnection = New System.Windows.Forms.Button()
-        Me.BtnExit = New System.Windows.Forms.Button()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.txtWomsInterval_Mins = New System.Windows.Forms.TextBox()
         Me.Label15 = New System.Windows.Forms.Label()
@@ -54,6 +51,7 @@ Partial Class changeDatabaseCommection
         Me.Label14 = New System.Windows.Forms.Label()
         Me.txtWomsInterval_Milli = New System.Windows.Forms.TextBox()
         Me.btnSave = New System.Windows.Forms.Button()
+        Me.BtnExit = New System.Windows.Forms.Button()
         CType(Me.pictureHeader, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel5.SuspendLayout()
@@ -115,9 +113,9 @@ Partial Class changeDatabaseCommection
         Me.BtnReset.ForeColor = System.Drawing.Color.Black
         Me.BtnReset.ImageKey = "reset.png"
         Me.BtnReset.ImageList = Me.ImageList1
-        Me.BtnReset.Location = New System.Drawing.Point(14, 423)
+        Me.BtnReset.Location = New System.Drawing.Point(14, 437)
         Me.BtnReset.Name = "BtnReset"
-        Me.BtnReset.Size = New System.Drawing.Size(79, 44)
+        Me.BtnReset.Size = New System.Drawing.Size(79, 30)
         Me.BtnReset.TabIndex = 211
         Me.BtnReset.Text = "Reset"
         Me.BtnReset.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -132,20 +130,6 @@ Partial Class changeDatabaseCommection
         Me.txtDbUsername.TabIndex = 202
         Me.txtDbUsername.Text = Global.WORKORDER_DASHBOARD.My.MySettings.Default.DBUsername
         '
-        'BtnConfigSmtp
-        '
-        Me.BtnConfigSmtp.BackColor = System.Drawing.Color.White
-        Me.BtnConfigSmtp.ForeColor = System.Drawing.Color.Black
-        Me.BtnConfigSmtp.ImageKey = "email.png"
-        Me.BtnConfigSmtp.ImageList = Me.ImageList1
-        Me.BtnConfigSmtp.Location = New System.Drawing.Point(320, 423)
-        Me.BtnConfigSmtp.Name = "BtnConfigSmtp"
-        Me.BtnConfigSmtp.Size = New System.Drawing.Size(111, 44)
-        Me.BtnConfigSmtp.TabIndex = 203
-        Me.BtnConfigSmtp.Text = "Config SMTP"
-        Me.BtnConfigSmtp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.BtnConfigSmtp.UseVisualStyleBackColor = False
-        '
         'txtDbName
         '
         Me.txtDbName.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.WORKORDER_DASHBOARD.My.MySettings.Default, "DBName", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
@@ -154,20 +138,6 @@ Partial Class changeDatabaseCommection
         Me.txtDbName.Size = New System.Drawing.Size(288, 20)
         Me.txtDbName.TabIndex = 200
         Me.txtDbName.Text = Global.WORKORDER_DASHBOARD.My.MySettings.Default.DBName
-        '
-        'BtnConfigSms
-        '
-        Me.BtnConfigSms.BackColor = System.Drawing.Color.White
-        Me.BtnConfigSms.ForeColor = System.Drawing.Color.Black
-        Me.BtnConfigSms.ImageKey = "sms.png"
-        Me.BtnConfigSms.ImageList = Me.ImageList1
-        Me.BtnConfigSms.Location = New System.Drawing.Point(204, 423)
-        Me.BtnConfigSms.Name = "BtnConfigSms"
-        Me.BtnConfigSms.Size = New System.Drawing.Size(109, 44)
-        Me.BtnConfigSms.TabIndex = 201
-        Me.BtnConfigSms.Text = "Config SMS"
-        Me.BtnConfigSms.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.BtnConfigSms.UseVisualStyleBackColor = False
         '
         'txtServername
         '
@@ -227,11 +197,10 @@ Partial Class changeDatabaseCommection
         Me.Panel1.BackColor = System.Drawing.Color.White
         Me.Panel1.Controls.Add(Me.btnConnect)
         Me.Panel1.Controls.Add(Me.btnTestConnection)
-        Me.Panel1.Controls.Add(Me.BtnExit)
         Me.Panel1.ForeColor = System.Drawing.Color.White
-        Me.Panel1.Location = New System.Drawing.Point(14, 172)
+        Me.Panel1.Location = New System.Drawing.Point(14, 189)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(417, 110)
+        Me.Panel1.Size = New System.Drawing.Size(417, 80)
         Me.Panel1.TabIndex = 209
         '
         'btnConnect
@@ -253,17 +222,6 @@ Partial Class changeDatabaseCommection
         Me.btnTestConnection.TabIndex = 127
         Me.btnTestConnection.Text = "Test Connection"
         Me.btnTestConnection.UseVisualStyleBackColor = False
-        '
-        'BtnExit
-        '
-        Me.BtnExit.ForeColor = System.Drawing.Color.Black
-        Me.BtnExit.ImageList = Me.ImageList1
-        Me.BtnExit.Location = New System.Drawing.Point(10, 74)
-        Me.BtnExit.Name = "BtnExit"
-        Me.BtnExit.Size = New System.Drawing.Size(397, 29)
-        Me.BtnExit.TabIndex = 128
-        Me.BtnExit.Text = "Exit"
-        Me.BtnExit.UseVisualStyleBackColor = False
         '
         'Panel5
         '
@@ -381,20 +339,33 @@ Partial Class changeDatabaseCommection
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = False
         '
+        'BtnExit
+        '
+        Me.BtnExit.BackColor = System.Drawing.Color.White
+        Me.BtnExit.ForeColor = System.Drawing.Color.Black
+        Me.BtnExit.ImageKey = "closeRed.png"
+        Me.BtnExit.ImageList = Me.ImageList1
+        Me.BtnExit.Location = New System.Drawing.Point(355, 437)
+        Me.BtnExit.Name = "BtnExit"
+        Me.BtnExit.Size = New System.Drawing.Size(76, 29)
+        Me.BtnExit.TabIndex = 214
+        Me.BtnExit.Text = "Close"
+        Me.BtnExit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.BtnExit.UseVisualStyleBackColor = False
+        '
         'changeDatabaseCommection
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(37, Byte), Integer), CType(CType(46, Byte), Integer), CType(CType(59, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(445, 478)
+        Me.Controls.Add(Me.BtnExit)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.progressBar)
         Me.Controls.Add(Me.txtDbpassword)
         Me.Controls.Add(Me.BtnReset)
         Me.Controls.Add(Me.txtDbUsername)
-        Me.Controls.Add(Me.BtnConfigSmtp)
         Me.Controls.Add(Me.txtDbName)
-        Me.Controls.Add(Me.BtnConfigSms)
         Me.Controls.Add(Me.txtServername)
         Me.Controls.Add(Me.DbPassword)
         Me.Controls.Add(Me.DbUsername)
@@ -424,9 +395,7 @@ Partial Class changeDatabaseCommection
     Friend WithEvents txtDbpassword As TextBox
     Friend WithEvents BtnReset As Button
     Friend WithEvents txtDbUsername As TextBox
-    Friend WithEvents BtnConfigSmtp As Button
     Friend WithEvents txtDbName As TextBox
-    Friend WithEvents BtnConfigSms As Button
     Friend WithEvents txtServername As TextBox
     Friend WithEvents DbPassword As Label
     Friend WithEvents DbUsername As Label
@@ -435,7 +404,6 @@ Partial Class changeDatabaseCommection
     Friend WithEvents Panel1 As Panel
     Friend WithEvents btnConnect As Button
     Friend WithEvents btnTestConnection As Button
-    Friend WithEvents BtnExit As Button
     Friend WithEvents Panel5 As Panel
     Friend WithEvents txtWomsInterval_Mins As TextBox
     Friend WithEvents Label15 As Label
@@ -447,4 +415,5 @@ Partial Class changeDatabaseCommection
     Friend WithEvents Label14 As Label
     Friend WithEvents txtWomsInterval_Milli As TextBox
     Friend WithEvents btnSave As Button
+    Friend WithEvents BtnExit As Button
 End Class

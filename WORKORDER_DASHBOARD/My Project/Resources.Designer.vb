@@ -83,6 +83,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property database_storage() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("database_storage", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property email() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("email", resourceCulture)
@@ -113,6 +123,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property notification() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("notification", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property reset() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("reset", resourceCulture)
@@ -136,6 +156,16 @@ Namespace My.Resources
         Friend ReadOnly Property sms() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("sms", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property wifi_router() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("wifi_router", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

@@ -141,6 +141,12 @@
     <Compile Include="Forms\ConfigSmtp.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\SetupAndOption.Designer.vb">
+      <DependentUpon>SetupAndOption.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetupAndOption.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Module\CheckAndSendModule.vb" />
     <Compile Include="Module\Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -178,6 +184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConfigSms.resx">
       <DependentUpon>ConfigSms.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetupAndOption.resx">
+      <DependentUpon>SetupAndOption.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

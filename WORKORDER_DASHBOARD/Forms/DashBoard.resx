@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>602, 17</value>
+    <value>568, 17</value>
   </metadata>
   <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADM
-        FQAAAk1TRnQBSQFMAgEBBQEAAcgBBgHIAQYBIAEAASABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        FQAAAk1TRnQBSQFMAgEBBQEAAfgBBgH4AQYBIAEAASABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABgAMAAUADAAEBAQABCAYAASAYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -222,27 +222,30 @@
 </value>
   </data>
   <metadata name="DateAndTime.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>240, 17</value>
-  </metadata>
-  <metadata name="TimerBlinkin.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>483, 17</value>
+    <value>325, 17</value>
   </metadata>
   <metadata name="TimerSMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>106, 17</value>
   </metadata>
   <metadata name="TimerWoms.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>366, 17</value>
+    <value>451, 17</value>
   </metadata>
   <metadata name="TimerEmail.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>124, 17</value>
+    <value>213, 17</value>
   </metadata>
   <metadata name="TimerCheckGateway.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>712, 17</value>
+    <value>678, 17</value>
   </metadata>
-  <metadata name="TimerNotify_close.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>874, 17</value>
+  <metadata name="for_Check_for_Closing_Insert_Record.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>840, 17</value>
   </metadata>
-  <metadata name="TimerWorkOrderNotify_Close.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1023, 17</value>
+  <metadata name="Interval_for_Sending_Sms_Notification_Close.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1090, 17</value>
+  </metadata>
+  <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="TimerBlinkSMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1384, 17</value>
   </metadata>
 </root>

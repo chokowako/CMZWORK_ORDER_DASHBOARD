@@ -29,7 +29,8 @@ Public Class DashBoard
     Private WithEvents DashboardTimer As New Timer()
     Private DashboardLoading As Boolean = False
 
-
+    Private blinkState As Boolean = False
+    Private currentSendingPhone As String = ""
 
 
     Private Sub DateAndTime_Tick(sender As Object, e As EventArgs) Handles DateAndTime.Tick
@@ -39,7 +40,6 @@ Public Class DashBoard
         End
     End Sub
     Private Sub BtsStart_Click(sender As Object, e As EventArgs) Handles BtsStart.Click
-
         Try
             If BtsStart.ImageIndex = 0 Then
                 BtsStart.ImageIndex = 3
@@ -100,6 +100,7 @@ Public Class DashBoard
     End Sub
 
     Private Sub DashBoard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         lblConnection.Text = My.Settings.DBName
         If lblConnection.Text = "CMZWORK_ORDER_Training" Then
             lblConnection.Text = "Training Database"
@@ -110,19 +111,16 @@ Public Class DashBoard
         End If
 
 
-        TimerNotify_close.Interval = 60000 ' 1 minute
-        TimerNotify_close.Stop()
-
-        TimerWorkOrderNotify_Close.Interval = 10000  ' 10 seconds
-        TimerWorkOrderNotify_Close.Stop()
-
+        TimerBlinkSMS.Interval = 700
+        TimerBlinkSMS.Stop()
 
 
     End Sub
 
     Private Sub BtnSetupAndOption_Click(sender As Object, e As EventArgs) Handles BtnSetupAndOption.Click
-        changeDatabaseCommection.BtnExit.Text = "Close"
-        changeDatabaseCommection.ShowDialog()
+        'changeDatabaseCommection.BtnExit.Text = "Close"
+        'changeDatabaseCommection.ShowDialog()
+        SetupAndOption.ShowDialog()
     End Sub
 
     ' Load pending SMS into DataGridView
@@ -640,8 +638,7 @@ Public Class DashBoard
                 RequesterContactNo,
                 Unit_Section
             FROM WorkOrderForm
-            WHERE Pk_WorkOrderNo IN ('NO:000606')
-            "
+               WHERE Pk_WorkOrderNo = 'NO:000606'"
 
                 Dim cmd As New SqlCommand(query, conn)
                 Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
@@ -671,7 +668,7 @@ Public Class DashBoard
                     If lastDateObj IsNot Nothing AndAlso Not IsDBNull(lastDateObj) Then
                         Dim lastDate As DateTime = CDate(lastDateObj)
 
-                        If DateDiff(DateInterval.Hour, lastDate, Now) < 3 Then
+                        If DateDiff(DateInterval.Hour, lastDate, Now) < My.Settings.NotifyToCloseRecurring_Hour Then
                             Continue While
                         End If
                     End If
@@ -714,11 +711,42 @@ Public Class DashBoard
 
     Private Sub chkAllowToNotify_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowToNotify.CheckedChanged
         If chkAllowToNotify.Checked Then
-            TimerNotify_close.Start()
-            TimerWorkOrderNotify_Close.Start()
+
+            ' 🔹 Get values from settings
+            Dim insertInterval As Integer = My.Settings.insertNotifyToClose_Milli
+            Dim sendInterval As Integer = My.Settings.NotifyToClose_Milli
+
+            ' 🔹 VALIDATE SETTINGS
+            If insertInterval <= 0 Or sendInterval <= 0 Then
+                MessageBox.Show("⚠ Please configure notification settings first.", "Invalid Settings", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+
+                ' Reset checkbox safely
+                chkAllowToNotify.Checked = False
+                Exit Sub
+            End If
+
+            ' 🔹 Apply intervals
+            for_Check_for_Closing_Insert_Record.Interval = insertInterval
+            Interval_for_Sending_Sms_Notification_Close.Interval = sendInterval
+
+            ' 🔹 Start timers
+            for_Check_for_Closing_Insert_Record.Start()
+            Interval_for_Sending_Sms_Notification_Close.Start()
+
+            ' 🔹 UI update
+            chkAllowToNotify.Text = "🟢 Auto Notify to Close the WOMS: ON"
+            chkAllowToNotify.ForeColor = Color.Green
+
         Else
-            TimerNotify_close.Stop()
-            Stop
+
+            ' 🔹 Stop timers
+            for_Check_for_Closing_Insert_Record.Stop()
+            Interval_for_Sending_Sms_Notification_Close.Stop()
+
+            ' 🔹 UI update
+            chkAllowToNotify.Text = "🔴 Auto Notify to Close the WOMS: OFF"
+            chkAllowToNotify.ForeColor = Color.Red
+
         End If
     End Sub
 
@@ -727,7 +755,7 @@ Public Class DashBoard
 
         Try
             ShowSMSprogressSMS(True)
-            lblStatus.Text = "🔄 Checking SMS gateway URL..."
+            Label4.Text = "🔄 Checking SMS gateway URL..."
 
             Dim smsGatewayUrl As String = "http://" & My.Settings.GatewayIp & ":" & My.Settings.GatewayPort
             Dim testUrl As String = $"{smsGatewayUrl}/sendsms?phone=test&text=test&password=" & My.Settings.GatewayPassword
@@ -735,16 +763,9 @@ Public Class DashBoard
             Dim isGatewayReachable As Boolean = Await IsSmsGatewayAccessibleAsync(testUrl)
 
             If Not isGatewayReachable Then
-                Label1.Text = "⚠ Cannot send SMS. Gateway not responding."
-                Label4.Text = "📶❌ SMS Gateway not reachable"
-                Label4.BackColor = Color.Red
-                ShowSMSprogressSMS(False)
+                Label4.Text = "⚠ Cannot send SMS. Gateway not responding."
                 Exit Function
             End If
-
-            Label1.Text = "📨 Checking WorkOrder notifications..."
-            Label4.Text = "📶 SMS Gateway reachable"
-            Label4.BackColor = Color.Green
 
             Using conn As New SqlConnection(connStr)
                 Await conn.OpenAsync()
@@ -762,24 +783,23 @@ Public Class DashBoard
 
                 While Await reader.ReadAsync()
                     list.Add((
-                        reader.GetInt32(0),
-                        reader.GetString(1),
-                        reader.GetString(2)
-                    ))
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2)
+                ))
                 End While
 
                 reader.Close()
 
                 If list.Count = 0 Then
-                    lblStatus.Text = "📭 No WorkOrder notifications to send."
+                    Label4.Text = "📭 No WorkOrder notifications to send."
                     ShowSMSprogressSMS(False)
                     Exit Function
                 End If
 
-                'progressSMS.Visible = True
-                'progressSMS.Minimum = 0
-                'progressSMS.Maximum = list.Count
-                'progressSMS.Value = 0
+                ' 🟢 START BLINKING HERE
+                TimerBlinkSMS.Start()
+                Label1.Visible = True
 
                 Dim sentCount As Integer = 0
 
@@ -789,14 +809,13 @@ Public Class DashBoard
                     Dim phone = item.Item2
                     Dim msg = item.Item3
 
+                    ' 🔹 Store current phone for blinking display
+                    currentSendingPhone = phone
+
                     If Not Await IsSmsGatewayAccessibleAsync(testUrl) Then
-                        Label1.Text = "⚠ Gateway lost connection during sending."
-                        Label4.Text = "📴 SMS Gateway not reachable"
-                        Label4.BackColor = Color.Red
+                        Label4.Text = "⚠ Gateway lost connection during sending."
                         Exit For
                     End If
-
-                    lblStatus.Text = $"📤 Sending SMS to {phone}..."
 
                     msg = msg.Replace(vbCrLf, vbLf)
 
@@ -822,36 +841,32 @@ Public Class DashBoard
 
                             Await updateCmd.ExecuteNonQueryAsync()
 
-                            lblStatus.Text = $"✅ SMS sent to {phone}"
+                            Label4.Text = $"✅ SMS sent to {phone}"
                         Else
-                            lblStatus.Text = $"❌ Failed to send SMS to {phone}"
+                            Label4.Text = $"❌ Failed to send SMS to {phone}"
                         End If
                     End Using
-
-                    'sentCount += 1
-                    'progressSMS.Value = sentCount
-                    'lblProgress.Text = $"Progress: {sentCount}/{list.Count}"
 
                     Await Task.Delay(1000)
 
                 Next
 
-                'lblProgress.Text = "✅ All WorkOrder SMS sent!"
-                'Await Task.Delay(3000)
-                'progressSMS.Visible = False
-
             End Using
 
         Catch ex As Exception
-            lblStatus.Text = "❌ Error: " & ex.Message
+            Label4.Text = "❌ Error: " & ex.Message
+
         Finally
-            ShowSMSprogressSMS(False)
+            ' 🟢 STOP BLINKING HERE
+            TimerBlinkSMS.Stop()
+            Label1.Visible = False
+            currentSendingPhone = ""
         End Try
 
     End Function
 
 
-    Private Async Sub TimerNotify_close_Tick(sender As Object, e As EventArgs) Handles TimerNotify_close.Tick
+    Private Async Sub TimerNotify_close_Tick(sender As Object, e As EventArgs) Handles for_Check_for_Closing_Insert_Record.Tick
         Try
             Await InsertReminderSMSAsync()
         Catch ex As Exception
@@ -859,13 +874,26 @@ Public Class DashBoard
         End Try
     End Sub
 
-    Private Async Sub TimerWorkOrderNotify_Close_Tick(sender As Object, e As EventArgs) Handles TimerWorkOrderNotify_Close.Tick
+    Private Async Sub TimerWorkOrderNotify_Close_Tick(sender As Object, e As EventArgs) Handles Interval_for_Sending_Sms_Notification_Close.Tick
         Try
             Await ProcessWorkOrderNotificationsAsync()
         Catch ex As Exception
             MessageBox.Show("WorkOrder SMS Send Error: " & ex.Message)
         End Try
 
+    End Sub
+
+
+    Private Sub TimerBlinkSMS_Tick(sender As Object, e As EventArgs) Handles TimerBlinkSMS.Tick
+        blinkState = Not blinkState
+
+        If blinkState Then
+            Label1.ForeColor = Color.LimeGreen
+        Else
+            Label1.ForeColor = Color.Gray
+        End If
+
+        Label1.Text = $"📤 Sending SMS to {currentSendingPhone}..."
     End Sub
 End Class
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3

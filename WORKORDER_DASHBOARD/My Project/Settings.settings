@@ -110,5 +110,17 @@
     <Setting Name="insertNotifyToClose_Milli" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="NotifyToCloseRecurring_Hour" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="NotifyToCloseRecurring_Min" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="NotifyToCloseRecurring_Sec" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="NotifyToCloseRecurring_Milli" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

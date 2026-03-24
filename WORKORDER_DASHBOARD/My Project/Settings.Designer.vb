@@ -485,6 +485,54 @@ Namespace My
                 Me("insertNotifyToClose_Milli") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToCloseRecurring_Hour() As Integer
+            Get
+                Return CType(Me("NotifyToCloseRecurring_Hour"),Integer)
+            End Get
+            Set
+                Me("NotifyToCloseRecurring_Hour") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToCloseRecurring_Min() As Integer
+            Get
+                Return CType(Me("NotifyToCloseRecurring_Min"),Integer)
+            End Get
+            Set
+                Me("NotifyToCloseRecurring_Min") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToCloseRecurring_Sec() As Integer
+            Get
+                Return CType(Me("NotifyToCloseRecurring_Sec"),Integer)
+            End Get
+            Set
+                Me("NotifyToCloseRecurring_Sec") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property NotifyToCloseRecurring_Milli() As Integer
+            Get
+                Return CType(Me("NotifyToCloseRecurring_Milli"),Integer)
+            End Get
+            Set
+                Me("NotifyToCloseRecurring_Milli") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

@@ -94,6 +94,7 @@ Public Class ConfigSmtp
 
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
         Me.Hide()
+
     End Sub
     Private Sub btnSend_Click(sender As Object, e As EventArgs) Handles btnSend.Click
         Dim smtpServer As String = TxtSmtpServer.Text.Trim()

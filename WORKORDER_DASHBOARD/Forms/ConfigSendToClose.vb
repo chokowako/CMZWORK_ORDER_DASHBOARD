@@ -8,10 +8,10 @@ Imports System.Net.NetworkInformation
 Imports System.Net.Http
 Imports System.Net.Mail
 Public Class ConfigSendToClose
-    Dim hours As Integer
-    Dim minutes As Integer
-    Dim seconds As Integer
-    Dim milliseconds As Integer
+    'Dim hours As Integer
+    'Dim minutes As Integer
+    'Dim seconds As Integer
+    'Dim milliseconds As Integer
     Private Sub ConfigSendToClose_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         roundCornes(Me)
 
@@ -24,6 +24,13 @@ Public Class ConfigSendToClose
         TxtNotifyToClose_Mins.Text = My.Settings.NotifyToClose_Mins
         TxtNotifyToClose_Sec.Text = My.Settings.NotifyToClose_Sec
         TxtNotifyToClose_Milli.Text = My.Settings.NotifyToClose_Milli
+
+        TxtNotifyToCloseRecurring_Milli.Text = My.Settings.NotifyToCloseRecurring_Milli
+        TxtNotifyToCloseRecurring_Hour.Text = My.Settings.NotifyToCloseRecurring_Hour
+        TxtNotifyToCloseRecurring_Sec.Text = My.Settings.NotifyToCloseRecurring_Sec
+        TxtNotifyToCloseRecurring_Min.Text = My.Settings.NotifyToCloseRecurring_Min
+
+
     End Sub
 
     Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles BtnSave.Click
@@ -38,8 +45,14 @@ Public Class ConfigSendToClose
         My.Settings.NotifyToClose_Sec = TxtNotifyToClose_Sec.Text
         My.Settings.NotifyToClose_Milli = TxtNotifyToClose_Milli.Text
 
+        My.Settings.NotifyToCloseRecurring_Milli = TxtNotifyToCloseRecurring_Milli.Text
+        My.Settings.NotifyToCloseRecurring_Hour = TxtNotifyToCloseRecurring_Hour.Text
+        My.Settings.NotifyToCloseRecurring_Sec = TxtNotifyToCloseRecurring_Sec.Text
+        My.Settings.NotifyToCloseRecurring_Min = TxtNotifyToCloseRecurring_Min.Text
+
         My.Settings.Save()
         MsgBox("Your Gateway configuration has saved!", MsgBoxStyle.Information, MsgBoxResult.Ok)
+
     End Sub
 
     Private Sub roundCornes(obj As Form)
@@ -80,6 +93,11 @@ Public Class ConfigSendToClose
             My.Settings.NotifyToClose_Sec = ""
             My.Settings.NotifyToClose_Milli = ""
 
+            My.Settings.NotifyToCloseRecurring_Milli = ""
+            My.Settings.NotifyToCloseRecurring_Hour = ""
+            My.Settings.NotifyToCloseRecurring_Sec = ""
+            My.Settings.NotifyToCloseRecurring_Min = ""
+
 
 
             TxtInsertNotifyToClose_Hours.Text = ""
@@ -92,6 +110,11 @@ Public Class ConfigSendToClose
             TxtNotifyToClose_Sec.Text = ""
             TxtNotifyToClose_Milli.Text = ""
 
+            TxtNotifyToCloseRecurring_Milli.Text = ""
+            TxtNotifyToCloseRecurring_Hour.Text = ""
+            TxtNotifyToCloseRecurring_Sec.Text = ""
+            TxtNotifyToCloseRecurring_Min.Text = ""
+
             My.Settings.Save()
         End If
     End Sub
@@ -99,14 +122,14 @@ Public Class ConfigSendToClose
 
     ' Method to recalculate the SMS milliseconds for Check for Closing / Insert Record
     Private Sub SMS_milliseconds_for_Check_for_Closing_Insert_Record()
-        Dim hours As Integer = 0
-        Dim minutes As Integer = 0
-        Dim seconds As Integer = 0
-        Dim Sms_milliseconds As Integer
+        Dim Insert_Record_hours As Integer = 0
+        Dim Insert_Record_minutes As Integer = 0
+        Dim Insert_Record_seconds As Integer = 0
+        Dim Insert_Record_Sms_milliseconds As Integer
 
         ' Check if txtSmsInterval_Hour is not empty
         If Not String.IsNullOrEmpty(TxtInsertNotifyToClose_Hours.Text) Then
-            If Integer.TryParse(TxtInsertNotifyToClose_Hours.Text, hours) = False Then
+            If Integer.TryParse(TxtInsertNotifyToClose_Hours.Text, Insert_Record_hours) = False Then
                 MessageBox.Show("Invalid input for hours.")
                 Return
             End If
@@ -114,7 +137,7 @@ Public Class ConfigSendToClose
 
         ' Check if txtSmsInterval_Mins is not empty
         If Not String.IsNullOrEmpty(TxtinsertNotifyToClose_Mins.Text) Then
-            If Integer.TryParse(TxtinsertNotifyToClose_Mins.Text, minutes) = False Then
+            If Integer.TryParse(TxtinsertNotifyToClose_Mins.Text, Insert_Record_minutes) = False Then
                 MessageBox.Show("Invalid input for minutes.")
                 Return
             End If
@@ -122,7 +145,7 @@ Public Class ConfigSendToClose
 
         ' Check if txtSmsInterval_Sec is not empty
         If Not String.IsNullOrEmpty(TxtinsertNotifyToClose_Sec.Text) Then
-            If Integer.TryParse(TxtinsertNotifyToClose_Sec.Text, seconds) = False Then
+            If Integer.TryParse(TxtinsertNotifyToClose_Sec.Text, Insert_Record_seconds) = False Then
                 MessageBox.Show("Invalid input for seconds.")
                 Return
             End If
@@ -137,23 +160,23 @@ Public Class ConfigSendToClose
         End If
 
         ' Calculate the total milliseconds based on the entered values
-        Sms_milliseconds = (hours * 3600000) + (minutes * 60000) + (seconds * 1000)
+        Insert_Record_Sms_milliseconds = (Insert_Record_hours * 3600000) + (Insert_Record_minutes * 60000) + (Insert_Record_seconds * 1000)
 
         ' Display the result in txtSmsInterval_Mil
-        TxtinsertNotifyToClose_Milli.Text = Sms_milliseconds.ToString()
+        TxtinsertNotifyToClose_Milli.Text = Insert_Record_Sms_milliseconds.ToString()
     End Sub
 
 
     ' Method to recalculate the sms milliseconds Interval for Sending Sms Notification 
     Private Sub Recalculate_sms_milliseconds_Interval_for_Sending_Sms_Notification()
-        Dim hours As Integer = 0
-        Dim minutes As Integer = 0
-        Dim seconds As Integer = 0
-        Dim Gateway_milliseconds As Integer
+        Dim Sending_Sms_Notification_hours As Integer = 0
+        Dim Sending_Sms_Notification_minutes As Integer = 0
+        Dim Sending_Sms_Notification_seconds As Integer = 0
+        Dim Sending_Sms_Notification_milliseconds As Integer
 
         ' Check if txtSmsInterval_Hour is not empty
         If Not String.IsNullOrEmpty(TxtNotifyToClose_Hours.Text) Then
-            If Integer.TryParse(TxtNotifyToClose_Hours.Text, hours) = False Then
+            If Integer.TryParse(TxtNotifyToClose_Hours.Text, Sending_Sms_Notification_hours) = False Then
                 MessageBox.Show("Invalid input for hours.")
                 Return
             End If
@@ -161,7 +184,7 @@ Public Class ConfigSendToClose
 
         ' Check if txtSmsInterval_Mins is not empty
         If Not String.IsNullOrEmpty(TxtNotifyToClose_Mins.Text) Then
-            If Integer.TryParse(TxtNotifyToClose_Mins.Text, minutes) = False Then
+            If Integer.TryParse(TxtNotifyToClose_Mins.Text, Sending_Sms_Notification_minutes) = False Then
                 MessageBox.Show("Invalid input for minutes.")
                 Return
             End If
@@ -169,7 +192,7 @@ Public Class ConfigSendToClose
 
         ' Check if txtSmsInterval_Sec is not empty
         If Not String.IsNullOrEmpty(TxtNotifyToClose_Sec.Text) Then
-            If Integer.TryParse(TxtNotifyToClose_Sec.Text, seconds) = False Then
+            If Integer.TryParse(TxtNotifyToClose_Sec.Text, Sending_Sms_Notification_seconds) = False Then
                 MessageBox.Show("Invalid input for seconds.")
                 Return
             End If
@@ -185,10 +208,60 @@ Public Class ConfigSendToClose
         End If
 
         ' Calculate the total milliseconds based on the entered values
-        Gateway_milliseconds = (hours * 3600000) + (minutes * 60000) + (seconds * 1000)
+        Sending_Sms_Notification_milliseconds = (Sending_Sms_Notification_hours * 3600000) + (Sending_Sms_Notification_minutes * 60000) + (Sending_Sms_Notification_seconds * 1000)
 
         ' Display the result in txtSmsInterval_Mil
-        TxtNotifyToClose_Milli.Text = Gateway_milliseconds.ToString()
+        TxtNotifyToClose_Milli.Text = Sending_Sms_Notification_milliseconds.ToString()
+    End Sub
+
+
+
+
+    ' Method to recalculate the sms milliseconds Interval for Recurring Notification 
+    Private Sub Recalculate_sms_milliseconds_for_Recurring_Notification()
+        Dim Recurring_Notification_hours As Integer = 0
+        Dim Recurring_Notification_minutes As Integer = 0
+        Dim Recurring_Notification_seconds As Integer = 0
+        Dim Recurring_Notification_milliseconds As Integer
+
+        ' Check if txtSmsInterval_Hour is not empty
+        If Not String.IsNullOrEmpty(TxtNotifyToCloseRecurring_Hour.Text) Then
+            If Integer.TryParse(TxtNotifyToCloseRecurring_Hour.Text, Recurring_Notification_hours) = False Then
+                MessageBox.Show("Invalid input for hours.")
+                Return
+            End If
+        End If
+
+        ' Check if txtSmsInterval_Mins is not empty
+        If Not String.IsNullOrEmpty(TxtNotifyToCloseRecurring_Min.Text) Then
+            If Integer.TryParse(TxtNotifyToCloseRecurring_Min.Text, Recurring_Notification_minutes) = False Then
+                MessageBox.Show("Invalid input for minutes.")
+                Return
+            End If
+        End If
+
+        ' Check if txtSmsInterval_Sec is not empty
+        If Not String.IsNullOrEmpty(TxtNotifyToCloseRecurring_Sec.Text) Then
+            If Integer.TryParse(TxtNotifyToCloseRecurring_Sec.Text, Recurring_Notification_seconds) = False Then
+                MessageBox.Show("Invalid input for seconds.")
+                Return
+            End If
+        End If
+
+
+        ' If all fields are empty, show an error message
+        If String.IsNullOrEmpty(TxtNotifyToCloseRecurring_Hour.Text) AndAlso
+           String.IsNullOrEmpty(TxtNotifyToCloseRecurring_Min.Text) AndAlso
+           String.IsNullOrEmpty(TxtNotifyToCloseRecurring_Sec.Text) Then
+            TxtNotifyToCloseRecurring_Milli.Text = "" ' Clear the output if no input
+            Return
+        End If
+
+        ' Calculate the total milliseconds based on the entered values
+        Recurring_Notification_milliseconds = (Recurring_Notification_hours * 3600000) + (Recurring_Notification_minutes * 60000) + (Recurring_Notification_seconds * 1000)
+
+        ' Display the result in txtSmsInterval_Mil
+        TxtNotifyToCloseRecurring_Milli.Text = Recurring_Notification_milliseconds.ToString()
     End Sub
 
 
@@ -219,5 +292,17 @@ Public Class ConfigSendToClose
 
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
         Me.Hide()
+    End Sub
+
+    Private Sub TxtNotifyToCloseRecurring_Hour_TextChanged(sender As Object, e As EventArgs) Handles TxtNotifyToCloseRecurring_Hour.TextChanged
+        Recalculate_sms_milliseconds_for_Recurring_Notification()
+    End Sub
+
+    Private Sub TxtNotifyToCloseRecurring_Min_TextChanged(sender As Object, e As EventArgs) Handles TxtNotifyToCloseRecurring_Min.TextChanged
+        Recalculate_sms_milliseconds_for_Recurring_Notification()
+    End Sub
+
+    Private Sub TxtNotifyToCloseRecurring_Sec_TextChanged(sender As Object, e As EventArgs) Handles TxtNotifyToCloseRecurring_Sec.TextChanged
+        Recalculate_sms_milliseconds_for_Recurring_Notification()
     End Sub
 End Class
