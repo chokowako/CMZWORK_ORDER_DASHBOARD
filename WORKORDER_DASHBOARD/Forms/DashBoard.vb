@@ -670,9 +670,10 @@ Public Class DashBoard
 
                     ' 🔹 BUILD MESSAGE
                     Dim message As String =
-                     "Good Day! " & requesterName & ". " &
-                    "This is to notify you that the Maintenance/Engineering Department has tagged your Work Order No: " &
-                     woNo & " as CLOSED. Please verify the work order and update/tag this as CLOSED. Thank you."
+                    "Good Day, " & requesterName & ". " &
+                    "This is to inform you that the Maintenance/Engineering Department has tagged your Work Order No: " & woNo & " as CLOSED. " &
+                    "Kindly verify and update the work order status accordingly. Thank you. " &
+                    "This is an automated SMS. Please do not reply."
 
                     ' 🔹 INSERT
                     Using insertCmd As New SqlCommand("
