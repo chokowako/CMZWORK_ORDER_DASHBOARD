@@ -633,7 +633,7 @@ Public Class DashBoard
                 RequesterContactNo,
                 Unit_Section
             FROM WorkOrderForm
-               WHERE Pk_WorkOrderNo = 'NO:000606'"
+                  WHERE ProceedWO_Flag = 2"
 
                 Dim cmd As New SqlCommand(query, conn)
                 Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
@@ -670,9 +670,9 @@ Public Class DashBoard
 
                     ' 🔹 BUILD MESSAGE
                     Dim message As String =
-                    "Good Day! " & requesterName & " from " & department &
-                    ". This is to notify you that Maintenance/Engineering Department tagged your Work Order No: " &
-                    woNo & ". Please verify the work order and update/tag this as CLOSED. Thank you."
+                     "Good Day! " & requesterName & ". " &
+                    "This is to notify you that the Maintenance/Engineering Department has tagged your Work Order No: " &
+                     woNo & " as CLOSED. Please verify the work order and update/tag this as CLOSED. Thank you."
 
                     ' 🔹 INSERT
                     Using insertCmd As New SqlCommand("
