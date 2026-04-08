@@ -85,7 +85,6 @@ Partial Class DashBoard
         Me.chkAllowToNotify = New System.Windows.Forms.CheckBox()
         Me.for_Check_for_Closing_Insert_Record = New System.Windows.Forms.Timer(Me.components)
         Me.Interval_for_Sending_Sms_Notification_Close = New System.Windows.Forms.Timer(Me.components)
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel4.SuspendLayout()
@@ -782,6 +781,5 @@ Partial Class DashBoard
     Friend WithEvents chkAllowToNotify As CheckBox
     Friend WithEvents for_Check_for_Closing_Insert_Record As Timer
     Friend WithEvents Interval_for_Sending_Sms_Notification_Close As Timer
-    Friend WithEvents Timer1 As Timer
     Friend WithEvents Label1 As Label
 End Class

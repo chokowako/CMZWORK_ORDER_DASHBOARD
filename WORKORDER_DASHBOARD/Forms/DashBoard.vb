@@ -29,6 +29,10 @@ Public Class DashBoard
     Private WithEvents DashboardTimer As New Timer()
     Private DashboardLoading As Boolean = False
 
+    Private isSendingWorkOrder As Boolean = False
+    Private isInsertingWorkOrder As Boolean = False
+
+
 
 
     Private Sub DateAndTime_Tick(sender As Object, e As EventArgs) Handles DateAndTime.Tick
@@ -165,21 +169,6 @@ Public Class DashBoard
 
     ' Load pending Emails into DataGridView
     Private Sub LoadPendingEmails()
-        'Try
-        '    Using conn As New SqlConnection(connStr)
-        '        conn.Open()
-        '        Dim cmd As New SqlCommand("SELECT Pk_WorkOderNo as [ WOMS No.], Email as [Email Address], EmailSubject  as [Email Subject] FROM SmsCatcher WHERE emailflag = 1", conn)
-        '        Dim adapter As New SqlDataAdapter(cmd)
-        '        Dim table As New DataTable()
-        '        adapter.Fill(table)
-        '        dgvPendingEmail.DataSource = table
-        '    End Using
-        'Catch ex As Exception
-        '    lblEmailStatus.Text = "❌ Failed to load pending emails: " & ex.Message
-        'End Try
-
-
-
         Try
             dgvPendingEmail.DataSource = Nothing
             dgvPendingEmail.Refresh()
@@ -218,8 +207,6 @@ Public Class DashBoard
         Catch ex As Exception
             MessageBox.Show("Failed to load pending Email: " & ex.Message)
         End Try
-
-
 
     End Sub
 
@@ -365,10 +352,15 @@ Public Class DashBoard
                         Dim responseBody = Await response.Content.ReadAsStringAsync()
 
                         If response.IsSuccessStatusCode Then
-                            Dim updateCmd As New SqlCommand("UPDATE SmsCatcher SET smsflag = 0, smsDateSend = @smsDateSend WHERE pk = @pk", conn)
-                            updateCmd.Parameters.AddWithValue("@pk", pk)
-                            updateCmd.Parameters.AddWithValue("@smsDateSend", Format(Date.Now, "MM/dd/yyyy hh:mm:ss tt"))
-                            Await updateCmd.ExecuteNonQueryAsync()
+                            Using updateConn As New SqlConnection(connStr)
+                                Await updateConn.OpenAsync()
+
+                                Dim updateCmd As New SqlCommand("UPDATE SmsCatcher SET smsflag = 0, smsDateSend = @smsDateSend WHERE pk = @pk", updateConn)
+                                updateCmd.Parameters.AddWithValue("@pk", pk)
+                                updateCmd.Parameters.AddWithValue("@smsDateSend", Format(Date.Now, "MM/dd/yyyy hh:mm:ss tt"))
+
+                                Await updateCmd.ExecuteNonQueryAsync()
+                            End Using
 
                             lblStatus.Text = $"✅ SMS sent to {phone}"
                         Else
@@ -399,74 +391,6 @@ Public Class DashBoard
     End Function
 
     Private Async Function ProcessPendingEmailAsync() As Task
-        'Try
-        '    ShowEmailProgressEmail(True)
-        '    lblEmailStatus.Text = "🔄 Checking internet connection..."
-
-        '    If Not Await IsInternetAvailableAsync() Then
-        '        lblEmailStatus.Text = "🌐❌ No internet connection. Skipping email send."
-        '        ShowEmailProgressEmail(False)
-        '        Exit Function
-        '    End If
-
-        '    Using conn As New SqlConnection(connStr)
-        '        Await conn.OpenAsync()
-
-        '        Dim cmd As New SqlCommand("SELECT TOP 1 pk, Email, EmailSubject, EmailBody FROM SmsCatcher WHERE emailflag = 1", conn)
-        '        Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
-
-        '        If Not Await reader.ReadAsync() Then
-        '            reader.Close()
-        '            lblEmailStatus.Text = "📭 No pending email to send."
-        '            ShowEmailProgressEmail(False)
-        '            Exit Function
-        '        End If
-
-        '        Dim pk As Integer = reader.GetInt32(0)
-        '        Dim toAddress As String = reader.GetString(1)
-        '        Dim subject As String = reader.GetString(2)
-        '        Dim body As String = reader.GetString(3)
-
-        '        reader.Close()
-
-        '        If String.IsNullOrWhiteSpace(toAddress) Then
-        '            lblEmailStatus.Text = "⚠ Cannot send email: recipient address is empty."
-        '            ShowEmailProgressEmail(False)
-        '            Exit Function
-        '        End If
-
-        '        lblEmailStatus.Text = $"📤 Sending email to {toAddress}..."
-
-        '        Try
-        '            Dim smtp As New SmtpClient(My.Settings.smtpServer)
-        '            smtp.Credentials = New NetworkCredential(My.Settings.smtpEmail, My.Settings.smtpPass)
-        '            smtp.Port = My.Settings.smtpPort
-        '            smtp.EnableSsl = True
-
-        '            Dim mail As New MailMessage()
-        '            mail.From = New MailAddress(My.Settings.smtpEmail, My.Settings.smtpName)
-        '            mail.To.Add(toAddress)
-        '            mail.Subject = subject
-        '            mail.Body = body
-
-        '            Await smtp.SendMailAsync(mail)
-
-        '            Dim updateCmd As New SqlCommand("UPDATE SmsCatcher SET emailflag = 0,EmailDateSend = @EmailDateSend WHERE pk = @pk", conn)
-        '            updateCmd.Parameters.AddWithValue("@pk", pk)
-        '            updateCmd.Parameters.AddWithValue("@EmailDateSend", Format(Date.Now, "MM/dd/yyyy hh:mm :ss tt"))
-        '            Await updateCmd.ExecuteNonQueryAsync()
-
-        '            lblEmailStatus.Text = $"✅ Email sent to {toAddress}"
-        '        Catch ex As Exception
-        '            lblEmailStatus.Text = $"❌ Failed to send email to {toAddress}. {ex.Message}"
-        '        End Try
-        '    End Using
-
-        'Catch ex As Exception
-        '    lblEmailStatus.Text = "❌ Error while sending email: " & ex.Message
-        'Finally
-        '    ShowEmailProgressEmail(False)
-        'End Try
 
         Try
             ShowEmailProgressEmail(True)
@@ -605,7 +529,6 @@ Public Class DashBoard
         End If
     End Sub
 
-
     Private Async Function LoadDashboardFromTimer() As Task
         Try
             DashboardLoading = True
@@ -617,7 +540,6 @@ Public Class DashBoard
         End Try
     End Function
 
-
     Private Async Function InsertReminderSMSAsync() As Task
         If isInserting Then Exit Function
         isInserting = True
@@ -627,23 +549,44 @@ Public Class DashBoard
                 Await conn.OpenAsync()
 
                 Dim query As String = "
-            SELECT 
-                Pk_WorkOrderNo,
-                RequestedBy,
-                RequesterContactNo,
-                Unit_Section
-            FROM WorkOrderForm
-                  WHERE ProceedWO_Flag = 2"
+                SELECT 
+                    Pk_WorkOrderNo,
+                    RequestedBy,
+                    RequesterContactNo,
+                    Unit_Section
+                FROM WorkOrderForm
+                WHERE ProceedWO_Flag = 2"
 
                 Dim cmd As New SqlCommand(query, conn)
-                Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+                cmd.CommandTimeout = 30
 
-                While Await reader.ReadAsync()
+                ' ==============================
+                ' STEP 1: READ DATA INTO LIST
+                ' ==============================
+                Dim list As New List(Of (String, String, String, String))
 
-                    Dim woNo As String = reader("Pk_WorkOrderNo").ToString()
-                    Dim requesterName As String = reader("RequestedBy").ToString()
-                    Dim department As String = reader("Unit_Section").ToString()
-                    Dim mobile As String = reader("RequesterContactNo").ToString()
+                Using reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+
+                    While Await reader.ReadAsync()
+                        list.Add((
+                        reader("Pk_WorkOrderNo").ToString(),
+                        reader("RequestedBy").ToString(),
+                        reader("RequesterContactNo").ToString(),
+                        reader("Unit_Section").ToString()
+                    ))
+                    End While
+
+                End Using ' ✅ Reader automatically closed here
+
+                ' ==============================
+                ' STEP 2: PROCESS DATA SAFELY
+                ' ==============================
+                For Each item In list
+
+                    Dim woNo As String = item.Item1
+                    Dim requesterName As String = item.Item2
+                    Dim mobile As String = item.Item3
+                    Dim department As String = item.Item4
 
                     ' 🔹 CHECK LAST NOTIFICATION DATE
                     Dim lastDateObj As Object = Nothing
@@ -655,8 +598,11 @@ Public Class DashBoard
                     ORDER BY CreatedDate DESC
                 ", conn)
 
+                        checkCmd.CommandTimeout = 30
                         checkCmd.Parameters.AddWithValue("@WO", woNo)
+
                         lastDateObj = Await checkCmd.ExecuteScalarAsync()
+
                     End Using
 
                     ' 🔹 APPLY 3-HOUR RULE
@@ -664,7 +610,7 @@ Public Class DashBoard
                         Dim lastDate As DateTime = CDate(lastDateObj)
 
                         If DateDiff(DateInterval.Hour, lastDate, Now) < My.Settings.NotifyToCloseRecurring_Hour Then
-                            Continue While
+                            Continue For
                         End If
                     End If
 
@@ -675,7 +621,7 @@ Public Class DashBoard
                     "Kindly verify and update the work order status accordingly. Thank you. " &
                     "This is an automated SMS. Please do not reply."
 
-                    ' 🔹 INSERT
+                    ' 🔹 INSERT NOTIFICATION
                     Using insertCmd As New SqlCommand("
                     INSERT INTO WorkOrderNotifications  
                     (WorkOrderNo, RecipientName, PhoneNumber, Message, Status)
@@ -683,17 +629,18 @@ Public Class DashBoard
                     (@WO, @RecipientName, @Phone, @Message, 1)
                 ", conn)
 
+                        insertCmd.CommandTimeout = 30
+
                         insertCmd.Parameters.AddWithValue("@WO", woNo)
                         insertCmd.Parameters.AddWithValue("@RecipientName", requesterName)
                         insertCmd.Parameters.AddWithValue("@Phone", mobile)
                         insertCmd.Parameters.AddWithValue("@Message", message)
 
                         Await insertCmd.ExecuteNonQueryAsync()
+
                     End Using
 
-                End While
-
-                reader.Close()
+                Next
 
             End Using
 
@@ -746,7 +693,6 @@ Public Class DashBoard
         End If
     End Sub
 
-
     Private Async Function ProcessWorkOrderNotificationsAsync() As Task
         Try
             ShowSMSprogressSMS(True)
@@ -774,9 +720,9 @@ Public Class DashBoard
                 WHERE Status = 1 
                 ORDER BY Id ASC
             ", conn)
+                cmd.CommandTimeout = 30 ' ✅ ADD HERE
 
                 Dim reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
-
                 Dim list As New List(Of (Integer, String, String))()
 
                 While Await reader.ReadAsync()
@@ -792,7 +738,7 @@ Public Class DashBoard
                 ' 🔹 Step 3: No records
                 If list.Count = 0 Then
                     Label1.Text = "📭 No WorkOrder notifications to send."
-                    ShowSMSprogressSMS(False)
+                    '  ShowSMSprogressSMS(False)
                     Exit Function
                 End If
 
@@ -834,6 +780,8 @@ Public Class DashBoard
                             WHERE Id = @Id
                         ", conn)
 
+                            updateCmd.CommandTimeout = 30 ' ✅ ADD HERE
+
                             updateCmd.Parameters.AddWithValue("@Id", id)
                             updateCmd.Parameters.AddWithValue("@SentDate", Date.Now)
 
@@ -861,28 +809,38 @@ Public Class DashBoard
             Label1.Text = "❌ Error: " & ex.Message
 
         Finally
-            ShowSMSprogressSMS(False)
+           ' ShowSMSprogressSMS(False)
         End Try
 
     End Function
 
 
     Private Async Sub TimerNotify_close_Tick(sender As Object, e As EventArgs) Handles for_Check_for_Closing_Insert_Record.Tick
+        If isInsertingWorkOrder Then Exit Sub
+
+        isInsertingWorkOrder = True
+
         Try
             Await InsertReminderSMSAsync()
-        Catch ex As Exception
-            MessageBox.Show("Notify Error: " & ex.Message)
+        Finally
+            isInsertingWorkOrder = False
         End Try
     End Sub
 
     Private Async Sub TimerWorkOrderNotify_Close_Tick(sender As Object, e As EventArgs) Handles Interval_for_Sending_Sms_Notification_Close.Tick
+        If isSendingWorkOrder Then Exit Sub
+
+        isSendingWorkOrder = True
+
         Try
             Await ProcessWorkOrderNotificationsAsync()
-        Catch ex As Exception
-            MessageBox.Show("WorkOrder SMS Send Error: " & ex.Message)
+        Finally
+            isSendingWorkOrder = False
         End Try
-
     End Sub
+
+    Private isSendingAllSMS As Boolean = False
+
 
 End Class
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3

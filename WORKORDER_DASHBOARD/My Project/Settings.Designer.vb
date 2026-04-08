@@ -533,6 +533,30 @@ Namespace My
                 Me("NotifyToCloseRecurring_Milli") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property AllowSmsCatcherSend() As Boolean
+            Get
+                Return CType(Me("AllowSmsCatcherSend"),Boolean)
+            End Get
+            Set
+                Me("AllowSmsCatcherSend") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property AllowWorkOrderNotifySend() As Boolean
+            Get
+                Return CType(Me("AllowWorkOrderNotifySend"),Boolean)
+            End Get
+            Set
+                Me("AllowWorkOrderNotifySend") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
