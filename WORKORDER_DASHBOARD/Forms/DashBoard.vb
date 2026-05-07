@@ -555,7 +555,14 @@ Public Class DashBoard
                     RequesterContactNo,
                     Unit_Section
                 FROM WorkOrderForm
-                WHERE ProceedWO_Flag = 2"
+               WHERE ProceedWO_Flag = 2
+                AND TagAsClose = 'PENDING'
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM BackJobHistory b
+                    WHERE b.Pk_WorkOrderNo = WorkOrderForm.Pk_WorkOrderNo
+                    AND b.Status NOT IN ('CLOSED', 'CANCELLED')
+                )"
 
                 Dim cmd As New SqlCommand(query, conn)
                 cmd.CommandTimeout = 30
@@ -605,7 +612,7 @@ Public Class DashBoard
 
                     End Using
 
-                    ' 🔹 APPLY 3-HOUR RULE
+                    ' 🔹 APPLY  HOUR RULE
                     If lastDateObj IsNot Nothing AndAlso Not IsDBNull(lastDateObj) Then
                         Dim lastDate As DateTime = CDate(lastDateObj)
 
