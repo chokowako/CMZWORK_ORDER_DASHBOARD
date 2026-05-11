@@ -83,8 +83,8 @@ Partial Class DashBoard
         Me.Panel10 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.chkAllowToNotify = New System.Windows.Forms.CheckBox()
-        Me.for_Check_for_Closing_Insert_Record = New System.Windows.Forms.Timer(Me.components)
         Me.Interval_for_Sending_Sms_Notification_Close = New System.Windows.Forms.Timer(Me.components)
+        Me.TimerReminder_insert = New System.Windows.Forms.Timer(Me.components)
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel4.SuspendLayout()
@@ -684,11 +684,10 @@ Partial Class DashBoard
         Me.chkAllowToNotify.Text = "Allow to Notify end user to close the ticket."
         Me.chkAllowToNotify.UseVisualStyleBackColor = True
         '
-        'for_Check_for_Closing_Insert_Record
-        '
-        Me.for_Check_for_Closing_Insert_Record.Interval = 5000
-        '
         'Interval_for_Sending_Sms_Notification_Close
+        '
+        '
+        'TimerReminder_insert
         '
         '
         'DashBoard
@@ -779,7 +778,7 @@ Partial Class DashBoard
     Friend WithEvents Panel8 As Panel
     Friend WithEvents Panel10 As Panel
     Friend WithEvents chkAllowToNotify As CheckBox
-    Friend WithEvents for_Check_for_Closing_Insert_Record As Timer
     Friend WithEvents Interval_for_Sending_Sms_Notification_Close As Timer
     Friend WithEvents Label1 As Label
+    Friend WithEvents TimerReminder_insert As Timer
 End Class

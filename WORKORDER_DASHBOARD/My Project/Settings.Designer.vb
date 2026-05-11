@@ -393,96 +393,48 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property NotifyToClose_Hours() As Integer
+        Public Property NotifyToClose_InsertRecord_Hours() As Integer
             Get
-                Return CType(Me("NotifyToClose_Hours"),Integer)
+                Return CType(Me("NotifyToClose_InsertRecord_Hours"),Integer)
             End Get
             Set
-                Me("NotifyToClose_Hours") = value
+                Me("NotifyToClose_InsertRecord_Hours") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property NotifyToClose_Mins() As Integer
+        Public Property NotifyToClose_InsertRecord_Mins() As Integer
             Get
-                Return CType(Me("NotifyToClose_Mins"),Integer)
+                Return CType(Me("NotifyToClose_InsertRecord_Mins"),Integer)
             End Get
             Set
-                Me("NotifyToClose_Mins") = value
+                Me("NotifyToClose_InsertRecord_Mins") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property NotifyToClose_Sec() As Integer
+        Public Property NotifyToClose_InsertRecord_Sec() As Integer
             Get
-                Return CType(Me("NotifyToClose_Sec"),Integer)
+                Return CType(Me("NotifyToClose_InsertRecord_Sec"),Integer)
             End Get
             Set
-                Me("NotifyToClose_Sec") = value
+                Me("NotifyToClose_InsertRecord_Sec") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property NotifyToClose_Milli() As Integer
+        Public Property NotifyToClose_InsertRecord_Milli() As Integer
             Get
-                Return CType(Me("NotifyToClose_Milli"),Integer)
+                Return CType(Me("NotifyToClose_InsertRecord_Milli"),Integer)
             End Get
             Set
-                Me("NotifyToClose_Milli") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property InsertNotifyToClose_Hours() As Integer
-            Get
-                Return CType(Me("InsertNotifyToClose_Hours"),Integer)
-            End Get
-            Set
-                Me("InsertNotifyToClose_Hours") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property insertNotifyToClose_Mins() As Integer
-            Get
-                Return CType(Me("insertNotifyToClose_Mins"),Integer)
-            End Get
-            Set
-                Me("insertNotifyToClose_Mins") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property insertNotifyToClose_Sec() As Integer
-            Get
-                Return CType(Me("insertNotifyToClose_Sec"),Integer)
-            End Get
-            Set
-                Me("insertNotifyToClose_Sec") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property insertNotifyToClose_Milli() As Integer
-            Get
-                Return CType(Me("insertNotifyToClose_Milli"),Integer)
-            End Get
-            Set
-                Me("insertNotifyToClose_Milli") = value
+                Me("NotifyToClose_InsertRecord_Milli") = value
             End Set
         End Property
         

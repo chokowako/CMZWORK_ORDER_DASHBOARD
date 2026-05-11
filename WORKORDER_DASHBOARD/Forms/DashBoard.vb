@@ -539,8 +539,8 @@ Public Class DashBoard
             DashboardLoading = False
         End Try
     End Function
-
     Private Async Function InsertReminderSMSAsync() As Task
+
         If isInserting Then Exit Function
         isInserting = True
 
@@ -548,100 +548,139 @@ Public Class DashBoard
             Using conn As New SqlConnection(connStr)
                 Await conn.OpenAsync()
 
-                Dim query As String = "
+                Dim list As New List(Of (String, String, String, String, String))
+
+                ' ======================================================
+                ' STEP 1: BACKJOB REMINDERS
+                ' Only latest BackJobHistory record with ProceedWO_Flag = 2
+                ' ======================================================
+                Dim queryBackJob As String = "
                 SELECT 
-                    Pk_WorkOrderNo,
-                    RequestedBy,
-                    RequesterContactNo,
-                    Unit_Section
-                FROM WorkOrderForm
-               WHERE ProceedWO_Flag = 2
-                AND TagAsClose = 'PENDING'
-                AND NOT EXISTS (
-                    SELECT 1
-                    FROM BackJobHistory b
-                    WHERE b.Pk_WorkOrderNo = WorkOrderForm.Pk_WorkOrderNo
-                    AND b.Status NOT IN ('CLOSED', 'CANCELLED')
-                )"
+                    w.Pk_WorkOrderNo,
+                    w.RequestedBy,
+                    w.RequesterContactNo,
+                    w.Unit_Section,
+                    'BACKJOB' AS ReminderType
+                FROM WorkOrderForm w
+                INNER JOIN BackJobHistory b
+                    ON w.Pk_WorkOrderNo = b.Pk_WorkOrderNo
+                WHERE ISNULL(w.BackJob_Flag,0) = 1
+                  AND UPPER(LTRIM(RTRIM(ISNULL(w.TagAsClose,'')))) = 'PENDING'
+                  AND b.ID = (
+                        SELECT MAX(b2.ID)
+                        FROM BackJobHistory b2
+                        WHERE b2.Pk_WorkOrderNo = w.Pk_WorkOrderNo
+                  )
+                  AND ISNULL(b.ProceedWO_Flag,0) = 2
+            "
 
-                Dim cmd As New SqlCommand(query, conn)
-                cmd.CommandTimeout = 30
+                Using cmd As New SqlCommand(queryBackJob, conn)
+                    Using reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+                        While Await reader.ReadAsync()
+                            list.Add((
+                            reader("Pk_WorkOrderNo").ToString(),
+                            reader("RequestedBy").ToString(),
+                            reader("RequesterContactNo").ToString(),
+                            reader("Unit_Section").ToString(),
+                            "BACKJOB"
+                        ))
+                        End While
+                    End Using
+                End Using
 
-                ' ==============================
-                ' STEP 1: READ DATA INTO LIST
-                ' ==============================
-                Dim list As New List(Of (String, String, String, String))
+                ' ======================================================
+                ' STEP 2: NORMAL REMINDERS
+                ' Only work orders NOT tagged as backjob
+                ' ======================================================
+                Dim queryNormal As String = "
+                SELECT 
+                    w.Pk_WorkOrderNo,
+                    w.RequestedBy,
+                    w.RequesterContactNo,
+                    w.Unit_Section,
+                    'NORMAL' AS ReminderType
+                FROM WorkOrderForm w
+                WHERE ISNULL(w.BackJob_Flag,0) = 0
+                  AND UPPER(LTRIM(RTRIM(ISNULL(w.TagAsClose,'')))) = 'PENDING'
+                  AND ISNULL(w.ProceedWO_Flag,0) = 2
+            "
 
-                Using reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+                Using cmd As New SqlCommand(queryNormal, conn)
+                    Using reader As SqlDataReader = Await cmd.ExecuteReaderAsync()
+                        While Await reader.ReadAsync()
+                            list.Add((
+                            reader("Pk_WorkOrderNo").ToString(),
+                            reader("RequestedBy").ToString(),
+                            reader("RequesterContactNo").ToString(),
+                            reader("Unit_Section").ToString(),
+                            "NORMAL"
+                        ))
+                        End While
+                    End Using
+                End Using
 
-                    While Await reader.ReadAsync()
-                        list.Add((
-                        reader("Pk_WorkOrderNo").ToString(),
-                        reader("RequestedBy").ToString(),
-                        reader("RequesterContactNo").ToString(),
-                        reader("Unit_Section").ToString()
-                    ))
-                    End While
+                If list.Count = 0 Then Exit Function
 
-                End Using ' ✅ Reader automatically closed here
-
-                ' ==============================
-                ' STEP 2: PROCESS DATA SAFELY
-                ' ==============================
+                ' ======================================================
+                ' STEP 3: PROCESS INSERT
+                ' ======================================================
                 For Each item In list
 
                     Dim woNo As String = item.Item1
-                    Dim requesterName As String = item.Item2
-                    Dim mobile As String = item.Item3
-                    Dim department As String = item.Item4
+                    Dim name As String = item.Item2
+                    Dim phone As String = item.Item3
+                    Dim reminderType As String = item.Item5
 
-                    ' 🔹 CHECK LAST NOTIFICATION DATE
-                    Dim lastDateObj As Object = Nothing
-
+                    ' ----------------------------------------------
+                    ' Duplicate active reminder check
+                    ' ----------------------------------------------
                     Using checkCmd As New SqlCommand("
-                    SELECT TOP 1 CreatedDate 
-                    FROM WorkOrderNotifications 
-                    WHERE WorkOrderNo = @WO 
-                    ORDER BY CreatedDate DESC
+                    SELECT COUNT(*)
+                    FROM WorkOrderNotifications
+                    WHERE WorkOrderNo = @WO
+                      AND ReminderType = @Type
+                      AND Status = 1
                 ", conn)
 
-                        checkCmd.CommandTimeout = 30
                         checkCmd.Parameters.AddWithValue("@WO", woNo)
+                        checkCmd.Parameters.AddWithValue("@Type", reminderType)
 
-                        lastDateObj = Await checkCmd.ExecuteScalarAsync()
+                        Dim exists As Integer = Convert.ToInt32(Await checkCmd.ExecuteScalarAsync())
 
+                        If exists > 0 Then Continue For
                     End Using
 
-                    ' 🔹 APPLY  HOUR RULE
-                    If lastDateObj IsNot Nothing AndAlso Not IsDBNull(lastDateObj) Then
-                        Dim lastDate As DateTime = CDate(lastDateObj)
+                    ' ----------------------------------------------
+                    ' Build message
+                    ' ----------------------------------------------
+                    Dim msg As String
 
-                        If DateDiff(DateInterval.Hour, lastDate, Now) < My.Settings.NotifyToCloseRecurring_Hour Then
-                            Continue For
-                        End If
+                    If reminderType = "BACKJOB" Then
+                        msg = "Good Day " & name &
+                          ". Back Job is ready for closure. Work Order No: " &
+                          woNo & ". Kindly review and close the work order. Thank you."
+                    Else
+                        msg = "Good Day " & name &
+                          ". Please close Work Order No: " &
+                          woNo & ". Thank you."
                     End If
 
-                    ' 🔹 BUILD MESSAGE
-                    Dim message As String =
-                    "Good Day, " & requesterName & ". " &
-                    "This is to inform you that the Maintenance/Engineering Department has tagged your Work Order No: " & woNo & " as CLOSED. " &
-                    "Kindly verify and update the work order status accordingly. Thank you. " &
-                    "This is an automated SMS. Please do not reply."
-
-                    ' 🔹 INSERT NOTIFICATION
+                    ' ----------------------------------------------
+                    ' Insert notification
+                    ' ----------------------------------------------
                     Using insertCmd As New SqlCommand("
-                    INSERT INTO WorkOrderNotifications  
-                    (WorkOrderNo, RecipientName, PhoneNumber, Message, Status)
-                    VALUES 
-                    (@WO, @RecipientName, @Phone, @Message, 1)
+                    INSERT INTO WorkOrderNotifications
+                    (WorkOrderNo, RecipientName, PhoneNumber, Message, Status, CreatedDate, ReminderType)
+                    VALUES
+                    (@WO, @Name, @Phone, @Msg, 1, @Date, @Type)
                 ", conn)
 
-                        insertCmd.CommandTimeout = 30
-
                         insertCmd.Parameters.AddWithValue("@WO", woNo)
-                        insertCmd.Parameters.AddWithValue("@RecipientName", requesterName)
-                        insertCmd.Parameters.AddWithValue("@Phone", mobile)
-                        insertCmd.Parameters.AddWithValue("@Message", message)
+                        insertCmd.Parameters.AddWithValue("@Name", name)
+                        insertCmd.Parameters.AddWithValue("@Phone", phone)
+                        insertCmd.Parameters.AddWithValue("@Msg", msg)
+                        insertCmd.Parameters.AddWithValue("@Date", DateTime.Now)
+                        insertCmd.Parameters.AddWithValue("@Type", reminderType)
 
                         Await insertCmd.ExecuteNonQueryAsync()
 
@@ -652,49 +691,35 @@ Public Class DashBoard
             End Using
 
         Catch ex As Exception
-            MessageBox.Show("Insert SMS Error: " & ex.Message)
+            MessageBox.Show("Insert Reminder Error: " & ex.Message)
+
         Finally
             isInserting = False
         End Try
-
     End Function
 
     Private Sub chkAllowToNotify_CheckedChanged(sender As Object, e As EventArgs) Handles chkAllowToNotify.CheckedChanged
+
         If chkAllowToNotify.Checked Then
 
-            ' 🔹 Get values from settings
-            Dim insertInterval As Integer = My.Settings.insertNotifyToClose_Milli
-            Dim sendInterval As Integer = My.Settings.NotifyToClose_Milli
+            ' START INSERT TIMER (scan + insert reminders)
+            TimerReminder_insert.Interval = My.Settings.NotifyToClose_InsertRecord_Milli
+            TimerReminder_insert.Start()
 
-            ' 🔹 VALIDATE SETTINGS
-            If insertInterval <= 0 Or sendInterval <= 0 Then
-                MessageBox.Show("⚠ Please configure notification settings first.", "Invalid Settings", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-
-                ' Reset checkbox safely
-                chkAllowToNotify.Checked = False
-                Exit Sub
-            End If
-
-            ' 🔹 Apply intervals
-            for_Check_for_Closing_Insert_Record.Interval = insertInterval
-            Interval_for_Sending_Sms_Notification_Close.Interval = sendInterval
-
-            ' 🔹 Start timers
-            for_Check_for_Closing_Insert_Record.Start()
+            ' START SMS SENDING TIMER
+            Interval_for_Sending_Sms_Notification_Close.Interval = My.Settings.NotifyToCloseRecurring_Milli
             Interval_for_Sending_Sms_Notification_Close.Start()
 
-            ' 🔹 UI update
-            chkAllowToNotify.Text = "🟢 Auto Notify to Close the WOMS: ON"
+            chkAllowToNotify.Text = "🟢 Auto Notify: ON"
             chkAllowToNotify.ForeColor = Color.Green
 
         Else
 
-            ' 🔹 Stop timers
-            for_Check_for_Closing_Insert_Record.Stop()
+            ' STOP BOTH TIMERS
+            TimerReminder_insert.Stop()
             Interval_for_Sending_Sms_Notification_Close.Stop()
 
-            ' 🔹 UI update
-            chkAllowToNotify.Text = "🔴 Auto Notify to Close the WOMS: OFF"
+            chkAllowToNotify.Text = "🔴 Auto Notify: OFF"
             chkAllowToNotify.ForeColor = Color.Red
 
         End If
@@ -702,7 +727,7 @@ Public Class DashBoard
 
     Private Async Function ProcessWorkOrderNotificationsAsync() As Task
         Try
-            ShowSMSprogressSMS(True)
+            'ShowSMSprogressSMS(True)
 
             ' 🔹 Step 1: Checking gateway
             Label1.Text = "🔄 Checking SMS gateway URL..."
@@ -816,23 +841,11 @@ Public Class DashBoard
             Label1.Text = "❌ Error: " & ex.Message
 
         Finally
-           ' ShowSMSprogressSMS(False)
+            ' ShowSMSprogressSMS(False)
         End Try
 
     End Function
 
-
-    Private Async Sub TimerNotify_close_Tick(sender As Object, e As EventArgs) Handles for_Check_for_Closing_Insert_Record.Tick
-        If isInsertingWorkOrder Then Exit Sub
-
-        isInsertingWorkOrder = True
-
-        Try
-            Await InsertReminderSMSAsync()
-        Finally
-            isInsertingWorkOrder = False
-        End Try
-    End Sub
 
     Private Async Sub TimerWorkOrderNotify_Close_Tick(sender As Object, e As EventArgs) Handles Interval_for_Sending_Sms_Notification_Close.Tick
         If isSendingWorkOrder Then Exit Sub
@@ -848,7 +861,24 @@ Public Class DashBoard
 
     Private isSendingAllSMS As Boolean = False
 
+    Private Async Sub TimerReminder_Tick(sender As Object, e As EventArgs) Handles TimerReminder_insert.Tick
 
+        If isInserting Then Exit Sub
+
+        isInserting = True
+        TimerReminder_insert.Stop()
+
+        Try
+            Await InsertReminderSMSAsync()
+
+        Catch ex As Exception
+            MessageBox.Show("Timer Error: " & ex.Message)
+
+        Finally
+            isInserting = False
+            TimerReminder_insert.Start()
+        End Try
+    End Sub
 End Class
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3
 '"http://" + MobileReader!gateway + ":" & MobileReader!port & "/sendsms?phone=" & RecPhoneNo & "&text=" & Recmessage & "&password=" & MobileReader!password
