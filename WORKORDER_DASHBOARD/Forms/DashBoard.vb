@@ -176,7 +176,7 @@ Public Class DashBoard
 
             Using conn As New SqlConnection(connStr)
                 conn.Open()
-                Dim query As String = "SELECT Pk_WorkOderNo as [WOMS No.], Email as [Email Address], EmailSubject as [Email Subject] FROM SmsCatcher WHERE emailflag = 1"
+                Dim query As String = "SELECT Pk_WorkOderNo as [WOMS No.], Email as [Email Address], Receiver as [Recipient],  EmailSubject as [Email Subject] FROM SmsCatcher WHERE emailflag = 1"
                 Dim adapter As New SqlDataAdapter(query, conn)
                 Dim table As New DataTable()
                 adapter.Fill(table)
@@ -188,6 +188,7 @@ Public Class DashBoard
 
                 dgvPendingEmail.Columns("WOMS No.").FillWeight = 10
                 dgvPendingEmail.Columns("Email Address").FillWeight = 20
+                dgvPendingEmail.Columns("Recipient").FillWeight = 20
                 dgvPendingEmail.Columns("Email Subject").FillWeight = 70
 
                 'Wrap message text
