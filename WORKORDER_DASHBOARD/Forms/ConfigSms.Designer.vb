@@ -28,15 +28,6 @@ Partial Class ConfigSms
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.txtGatewyInterval_Mins = New System.Windows.Forms.TextBox()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.txtGatewayInterval_Sec = New System.Windows.Forms.TextBox()
-        Me.txtGatewayInterval_Hour = New System.Windows.Forms.TextBox()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.txtGatewayInterval_Milli = New System.Windows.Forms.TextBox()
         Me.BtnReset = New System.Windows.Forms.Button()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.txtSmsInterval_Mil = New System.Windows.Forms.TextBox()
@@ -67,7 +58,6 @@ Partial Class ConfigSms
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Panel4.SuspendLayout()
-        Me.Panel5.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -118,107 +108,10 @@ Partial Class ConfigSms
         'Panel5
         '
         Me.Panel5.BackColor = System.Drawing.Color.Silver
-        Me.Panel5.Controls.Add(Me.txtGatewyInterval_Mins)
-        Me.Panel5.Controls.Add(Me.Label15)
-        Me.Panel5.Controls.Add(Me.Label16)
-        Me.Panel5.Controls.Add(Me.txtGatewayInterval_Sec)
-        Me.Panel5.Controls.Add(Me.txtGatewayInterval_Hour)
-        Me.Panel5.Controls.Add(Me.Label17)
-        Me.Panel5.Controls.Add(Me.Label18)
-        Me.Panel5.Controls.Add(Me.Label14)
-        Me.Panel5.Controls.Add(Me.txtGatewayInterval_Milli)
         Me.Panel5.Location = New System.Drawing.Point(14, 225)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(417, 65)
         Me.Panel5.TabIndex = 192
-        '
-        'txtGatewyInterval_Mins
-        '
-        Me.txtGatewyInterval_Mins.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewyInterval_Mins.Location = New System.Drawing.Point(211, 33)
-        Me.txtGatewyInterval_Mins.Name = "txtGatewyInterval_Mins"
-        Me.txtGatewyInterval_Mins.Size = New System.Drawing.Size(44, 20)
-        Me.txtGatewyInterval_Mins.TabIndex = 200
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.BackColor = System.Drawing.Color.Transparent
-        Me.Label15.ForeColor = System.Drawing.Color.Black
-        Me.Label15.Location = New System.Drawing.Point(5, 40)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(106, 13)
-        Me.Label15.TabIndex = 204
-        Me.Label15.Text = "Input                        :"
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.BackColor = System.Drawing.Color.Transparent
-        Me.Label16.ForeColor = System.Drawing.Color.Black
-        Me.Label16.Location = New System.Drawing.Point(255, 40)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(44, 13)
-        Me.Label16.TabIndex = 203
-        Me.Label16.Text = "Minutes"
-        '
-        'txtGatewayInterval_Sec
-        '
-        Me.txtGatewayInterval_Sec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayInterval_Sec.Location = New System.Drawing.Point(305, 33)
-        Me.txtGatewayInterval_Sec.Name = "txtGatewayInterval_Sec"
-        Me.txtGatewayInterval_Sec.Size = New System.Drawing.Size(44, 20)
-        Me.txtGatewayInterval_Sec.TabIndex = 198
-        '
-        'txtGatewayInterval_Hour
-        '
-        Me.txtGatewayInterval_Hour.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayInterval_Hour.Location = New System.Drawing.Point(113, 33)
-        Me.txtGatewayInterval_Hour.Name = "txtGatewayInterval_Hour"
-        Me.txtGatewayInterval_Hour.Size = New System.Drawing.Size(44, 20)
-        Me.txtGatewayInterval_Hour.TabIndex = 199
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.BackColor = System.Drawing.Color.Transparent
-        Me.Label17.ForeColor = System.Drawing.Color.Black
-        Me.Label17.Location = New System.Drawing.Point(159, 40)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(35, 13)
-        Me.Label17.TabIndex = 202
-        Me.Label17.Text = "Hours"
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.BackColor = System.Drawing.Color.Transparent
-        Me.Label18.ForeColor = System.Drawing.Color.Black
-        Me.Label18.Location = New System.Drawing.Point(357, 40)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(49, 13)
-        Me.Label18.TabIndex = 201
-        Me.Label18.Text = "Seconds"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.BackColor = System.Drawing.Color.Transparent
-        Me.Label14.ForeColor = System.Drawing.Color.Black
-        Me.Label14.Location = New System.Drawing.Point(3, 10)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(105, 13)
-        Me.Label14.TabIndex = 196
-        Me.Label14.Text = "Gateway  Interval    :"
-        '
-        'txtGatewayInterval_Milli
-        '
-        Me.txtGatewayInterval_Milli.Enabled = False
-        Me.txtGatewayInterval_Milli.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtGatewayInterval_Milli.Location = New System.Drawing.Point(113, 7)
-        Me.txtGatewayInterval_Milli.Name = "txtGatewayInterval_Milli"
-        Me.txtGatewayInterval_Milli.Size = New System.Drawing.Size(107, 20)
-        Me.txtGatewayInterval_Milli.TabIndex = 197
         '
         'BtnReset
         '
@@ -541,8 +434,6 @@ Partial Class ConfigSms
         Me.Text = "SMS Gateway Configuration"
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
-        Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -584,14 +475,5 @@ Partial Class ConfigSms
     Friend WithEvents Label9 As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents Label13 As Label
-    Friend WithEvents txtGatewayInterval_Milli As TextBox
-    Friend WithEvents Label14 As Label
     Friend WithEvents Panel5 As Panel
-    Friend WithEvents txtGatewyInterval_Mins As TextBox
-    Friend WithEvents Label15 As Label
-    Friend WithEvents Label16 As Label
-    Friend WithEvents txtGatewayInterval_Sec As TextBox
-    Friend WithEvents txtGatewayInterval_Hour As TextBox
-    Friend WithEvents Label17 As Label
-    Friend WithEvents Label18 As Label
 End Class

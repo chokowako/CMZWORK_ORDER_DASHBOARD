@@ -50,18 +50,6 @@
     <Setting Name="SmsInterval_Mins" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="GatewayInterval_Hour" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="GatewayInterval_Mins" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="GatewayInterval_Sec" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="GatewayInterval_Milli" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="EmailInterval_Hour" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>

@@ -62,17 +62,17 @@ Partial Class DashBoard
         Me.DataGridView = New System.Windows.Forms.DataGridView()
         Me.TimerSMS = New System.Windows.Forms.Timer(Me.components)
         Me.TimerWoms = New System.Windows.Forms.Timer(Me.components)
-        Me.lblConnectionStatus = New System.Windows.Forms.Label()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.dgvPendingSMS = New System.Windows.Forms.DataGridView()
-        Me.Panel12 = New System.Windows.Forms.Panel()
+        Me.Panel1Status = New System.Windows.Forms.Panel()
+        Me.lblSMTPConnectionStatus = New System.Windows.Forms.Label()
+        Me.lblSMSConnectionStatus = New System.Windows.Forms.Label()
         Me.TimerEmail = New System.Windows.Forms.Timer(Me.components)
-        Me.TimerCheckGateway = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.PanelSms = New System.Windows.Forms.Panel()
-        Me.progressSMS1 = New System.Windows.Forms.ProgressBar()
         Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.progressSMS1 = New System.Windows.Forms.ProgressBar()
         Me.lblProgress = New System.Windows.Forms.Label()
         Me.Panel1Email = New System.Windows.Forms.Panel()
         Me.dgvPendingEmail = New System.Windows.Forms.DataGridView()
@@ -94,6 +94,7 @@ Partial Class DashBoard
         CType(Me.DataGridView, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel9.SuspendLayout()
         CType(Me.dgvPendingSMS, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1Status.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.PanelSms.SuspendLayout()
         Me.Panel7.SuspendLayout()
@@ -394,7 +395,7 @@ Partial Class DashBoard
         DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.BlanchedAlmond
         Me.DataGridView.RowsDefaultCellStyle = DataGridViewCellStyle4
         Me.DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView.Size = New System.Drawing.Size(1361, 168)
+        Me.DataGridView.Size = New System.Drawing.Size(1361, 181)
         Me.DataGridView.TabIndex = 324
         '
         'TimerSMS
@@ -403,19 +404,6 @@ Partial Class DashBoard
         'TimerWoms
         '
         Me.TimerWoms.Interval = 30000
-        '
-        'lblConnectionStatus
-        '
-        Me.lblConnectionStatus.BackColor = System.Drawing.Color.Red
-        Me.lblConnectionStatus.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.lblConnectionStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblConnectionStatus.ForeColor = System.Drawing.Color.White
-        Me.lblConnectionStatus.Location = New System.Drawing.Point(0, 556)
-        Me.lblConnectionStatus.Name = "lblConnectionStatus"
-        Me.lblConnectionStatus.Size = New System.Drawing.Size(1367, 25)
-        Me.lblConnectionStatus.TabIndex = 340
-        Me.lblConnectionStatus.Text = "Gateway Status: Offline"
-        Me.lblConnectionStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel9
         '
@@ -475,22 +463,47 @@ Partial Class DashBoard
         DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.BlanchedAlmond
         Me.dgvPendingSMS.RowsDefaultCellStyle = DataGridViewCellStyle8
         Me.dgvPendingSMS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvPendingSMS.Size = New System.Drawing.Size(1361, 76)
+        Me.dgvPendingSMS.Size = New System.Drawing.Size(1361, 83)
         Me.dgvPendingSMS.TabIndex = 352
         '
-        'Panel12
+        'Panel1Status
         '
-        Me.Panel12.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
-        Me.Panel12.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel12.Location = New System.Drawing.Point(0, 532)
-        Me.Panel12.Name = "Panel12"
-        Me.Panel12.Size = New System.Drawing.Size(1367, 24)
-        Me.Panel12.TabIndex = 353
+        Me.Panel1Status.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.Panel1Status.Controls.Add(Me.lblSMTPConnectionStatus)
+        Me.Panel1Status.Controls.Add(Me.lblSMSConnectionStatus)
+        Me.Panel1Status.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1Status.Location = New System.Drawing.Point(0, 557)
+        Me.Panel1Status.Name = "Panel1Status"
+        Me.Panel1Status.Size = New System.Drawing.Size(1367, 24)
+        Me.Panel1Status.TabIndex = 353
+        '
+        'lblSMTPConnectionStatus
+        '
+        Me.lblSMTPConnectionStatus.BackColor = System.Drawing.Color.Red
+        Me.lblSMTPConnectionStatus.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lblSMTPConnectionStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSMTPConnectionStatus.ForeColor = System.Drawing.Color.White
+        Me.lblSMTPConnectionStatus.Location = New System.Drawing.Point(695, 0)
+        Me.lblSMTPConnectionStatus.Name = "lblSMTPConnectionStatus"
+        Me.lblSMTPConnectionStatus.Size = New System.Drawing.Size(672, 24)
+        Me.lblSMTPConnectionStatus.TabIndex = 343
+        Me.lblSMTPConnectionStatus.Text = "SMTP Status: Offline"
+        Me.lblSMTPConnectionStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lblSMSConnectionStatus
+        '
+        Me.lblSMSConnectionStatus.BackColor = System.Drawing.Color.Red
+        Me.lblSMSConnectionStatus.Dock = System.Windows.Forms.DockStyle.Left
+        Me.lblSMSConnectionStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSMSConnectionStatus.ForeColor = System.Drawing.Color.White
+        Me.lblSMSConnectionStatus.Location = New System.Drawing.Point(0, 0)
+        Me.lblSMSConnectionStatus.Name = "lblSMSConnectionStatus"
+        Me.lblSMSConnectionStatus.Size = New System.Drawing.Size(700, 24)
+        Me.lblSMSConnectionStatus.TabIndex = 342
+        Me.lblSMSConnectionStatus.Text = "Gateway Status: Offline"
+        Me.lblSMSConnectionStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TimerEmail
-        '
-        '
-        'TimerCheckGateway
         '
         '
         'TableLayoutPanel1
@@ -507,40 +520,39 @@ Partial Class DashBoard
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1367, 391)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1367, 416)
         Me.TableLayoutPanel1.TabIndex = 354
         '
         'PanelSms
         '
-        Me.PanelSms.Controls.Add(Me.progressSMS1)
         Me.PanelSms.Controls.Add(Me.dgvPendingSMS)
         Me.PanelSms.Controls.Add(Me.Panel7)
         Me.PanelSms.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelSms.Location = New System.Drawing.Point(3, 198)
+        Me.PanelSms.Location = New System.Drawing.Point(3, 211)
         Me.PanelSms.Name = "PanelSms"
-        Me.PanelSms.Size = New System.Drawing.Size(1361, 91)
+        Me.PanelSms.Size = New System.Drawing.Size(1361, 98)
         Me.PanelSms.TabIndex = 325
-        '
-        'progressSMS1
-        '
-        Me.progressSMS1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.progressSMS1.Location = New System.Drawing.Point(87, 80)
-        Me.progressSMS1.MarqueeAnimationSpeed = 30
-        Me.progressSMS1.Name = "progressSMS1"
-        Me.progressSMS1.Size = New System.Drawing.Size(92, 5)
-        Me.progressSMS1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
-        Me.progressSMS1.TabIndex = 337
-        Me.progressSMS1.Visible = False
         '
         'Panel7
         '
         Me.Panel7.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.Panel7.Controls.Add(Me.progressSMS1)
         Me.Panel7.Controls.Add(Me.lblProgress)
         Me.Panel7.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel7.Location = New System.Drawing.Point(0, 76)
+        Me.Panel7.Location = New System.Drawing.Point(0, 83)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(1361, 15)
         Me.Panel7.TabIndex = 0
+        '
+        'progressSMS1
+        '
+        Me.progressSMS1.Location = New System.Drawing.Point(122, 5)
+        Me.progressSMS1.MarqueeAnimationSpeed = 30
+        Me.progressSMS1.Name = "progressSMS1"
+        Me.progressSMS1.Size = New System.Drawing.Size(211, 5)
+        Me.progressSMS1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
+        Me.progressSMS1.TabIndex = 339
+        Me.progressSMS1.Visible = False
         '
         'lblProgress
         '
@@ -560,9 +572,9 @@ Partial Class DashBoard
         Me.Panel1Email.Controls.Add(Me.dgvPendingEmail)
         Me.Panel1Email.Controls.Add(Me.Panel13)
         Me.Panel1Email.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1Email.Location = New System.Drawing.Point(3, 295)
+        Me.Panel1Email.Location = New System.Drawing.Point(3, 315)
         Me.Panel1Email.Name = "Panel1Email"
-        Me.Panel1Email.Size = New System.Drawing.Size(1361, 93)
+        Me.Panel1Email.Size = New System.Drawing.Size(1361, 98)
         Me.Panel1Email.TabIndex = 326
         '
         'dgvPendingEmail
@@ -602,7 +614,7 @@ Partial Class DashBoard
         DataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.BlanchedAlmond
         Me.dgvPendingEmail.RowsDefaultCellStyle = DataGridViewCellStyle12
         Me.dgvPendingEmail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvPendingEmail.Size = New System.Drawing.Size(1361, 78)
+        Me.dgvPendingEmail.Size = New System.Drawing.Size(1361, 83)
         Me.dgvPendingEmail.TabIndex = 352
         '
         'Panel13
@@ -611,7 +623,7 @@ Partial Class DashBoard
         Me.Panel13.Controls.Add(Me.progressEmail1)
         Me.Panel13.Controls.Add(Me.lblEmailProgress)
         Me.Panel13.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel13.Location = New System.Drawing.Point(0, 78)
+        Me.Panel13.Location = New System.Drawing.Point(0, 83)
         Me.Panel13.Name = "Panel13"
         Me.Panel13.Size = New System.Drawing.Size(1361, 15)
         Me.Panel13.TabIndex = 1
@@ -646,7 +658,7 @@ Partial Class DashBoard
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(3, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(1361, 189)
+        Me.Panel8.Size = New System.Drawing.Size(1361, 202)
         Me.Panel8.TabIndex = 327
         '
         'Panel10
@@ -654,7 +666,7 @@ Partial Class DashBoard
         Me.Panel10.Controls.Add(Me.Label1)
         Me.Panel10.Controls.Add(Me.chkAllowToNotify)
         Me.Panel10.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel10.Location = New System.Drawing.Point(0, 168)
+        Me.Panel10.Location = New System.Drawing.Point(0, 181)
         Me.Panel10.Name = "Panel10"
         Me.Panel10.Size = New System.Drawing.Size(1361, 21)
         Me.Panel10.TabIndex = 325
@@ -696,8 +708,7 @@ Partial Class DashBoard
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1367, 659)
         Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Controls.Add(Me.Panel12)
-        Me.Controls.Add(Me.lblConnectionStatus)
+        Me.Controls.Add(Me.Panel1Status)
         Me.Controls.Add(Me.Panel9)
         Me.Controls.Add(Me.Panel5)
         Me.Controls.Add(Me.Panel1)
@@ -718,6 +729,7 @@ Partial Class DashBoard
         CType(Me.DataGridView, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel9.ResumeLayout(False)
         CType(Me.dgvPendingSMS, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1Status.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.PanelSms.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
@@ -748,11 +760,10 @@ Partial Class DashBoard
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents TimerSMS As Timer
     Friend WithEvents TimerWoms As Timer
-    Friend WithEvents lblConnectionStatus As Label
     Friend WithEvents BtnSetupAndOption As Button
     Friend WithEvents Panel9 As Panel
     Friend WithEvents dgvPendingSMS As DataGridView
-    Friend WithEvents Panel12 As Panel
+    Friend WithEvents Panel1Status As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents lblEmailStatus As Label
     Friend WithEvents lblEmail As Label
@@ -761,14 +772,12 @@ Partial Class DashBoard
     Friend WithEvents Label3 As Label
     Friend WithEvents Panel6 As Panel
     Friend WithEvents TimerEmail As Timer
-    Friend WithEvents TimerCheckGateway As Timer
     Friend WithEvents progressSMS As ProgressBar
     Friend WithEvents progressEmail As ProgressBar
     Friend WithEvents ProgressBar1 As ProgressBar
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents PanelSms As Panel
     Friend WithEvents Panel7 As Panel
-    Friend WithEvents progressSMS1 As ProgressBar
     Friend WithEvents lblProgress As Label
     Friend WithEvents Panel1Email As Panel
     Friend WithEvents dgvPendingEmail As DataGridView
@@ -781,4 +790,7 @@ Partial Class DashBoard
     Friend WithEvents Interval_for_Sending_Sms_Notification_Close As Timer
     Friend WithEvents Label1 As Label
     Friend WithEvents TimerReminder_insert As Timer
+    Friend WithEvents progressSMS1 As ProgressBar
+    Friend WithEvents lblSMTPConnectionStatus As Label
+    Friend WithEvents lblSMSConnectionStatus As Label
 End Class

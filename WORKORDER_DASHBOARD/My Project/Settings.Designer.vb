@@ -249,54 +249,6 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property GatewayInterval_Hour() As Integer
-            Get
-                Return CType(Me("GatewayInterval_Hour"),Integer)
-            End Get
-            Set
-                Me("GatewayInterval_Hour") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property GatewayInterval_Mins() As Integer
-            Get
-                Return CType(Me("GatewayInterval_Mins"),Integer)
-            End Get
-            Set
-                Me("GatewayInterval_Mins") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property GatewayInterval_Sec() As Integer
-            Get
-                Return CType(Me("GatewayInterval_Sec"),Integer)
-            End Get
-            Set
-                Me("GatewayInterval_Sec") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-        Public Property GatewayInterval_Milli() As Integer
-            Get
-                Return CType(Me("GatewayInterval_Milli"),Integer)
-            End Get
-            Set
-                Me("GatewayInterval_Milli") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
         Public Property EmailInterval_Hour() As Integer
             Get
                 Return CType(Me("EmailInterval_Hour"),Integer)

@@ -14,6 +14,7 @@ Public Class ConfigSms
     Dim milliseconds As Integer
     Private Sub TestSms_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         roundCornes(Me)
+
         TxtGatewayIp.Text = My.Settings.GatewayIp
         TxtGatewayPort.Text = My.Settings.GatewayPort
         TxtGatewayPassword.Text = My.Settings.GatewayPassword
@@ -23,11 +24,6 @@ Public Class ConfigSms
         txtSmsInterval_Sec.Text = My.Settings.SmsInterval_sec
         txtSmsInterval_Mil.Text = My.Settings.SmsInterval_milli
 
-
-        txtGatewayInterval_Hour.Text = My.Settings.GatewayInterval_Hour
-        txtGatewyInterval_Mins.Text = My.Settings.GatewayInterval_Mins
-        txtGatewayInterval_Sec.Text = My.Settings.GatewayInterval_Sec
-        txtGatewayInterval_Milli.Text = My.Settings.GatewayInterval_Milli
 
     End Sub
 
@@ -41,10 +37,10 @@ Public Class ConfigSms
         My.Settings.SmsInterval_sec = txtSmsInterval_Sec.Text
         My.Settings.SmsInterval_milli = txtSmsInterval_Mil.Text
 
-        My.Settings.GatewayInterval_Hour = txtGatewayInterval_Hour.Text
-        My.Settings.GatewayInterval_Mins = txtGatewyInterval_Mins.Text
-        My.Settings.GatewayInterval_Sec = txtGatewayInterval_Sec.Text
-        My.Settings.GatewayInterval_Milli = txtGatewayInterval_Milli.Text
+        'My.Settings.GatewayInterval_Hour = txtGatewayInterval_Hour.Text
+        'My.Settings.GatewayInterval_Mins = txtGatewyInterval_Mins.Text
+        'My.Settings.GatewayInterval_Sec = txtGatewayInterval_Sec.Text
+        'My.Settings.GatewayInterval_Milli = txtGatewayInterval_Milli.Text
 
         My.Settings.Save()
         MsgBox("Your Gateway configuration has saved!", MsgBoxStyle.Information, MsgBoxResult.Ok)
@@ -149,11 +145,6 @@ Public Class ConfigSms
             My.Settings.SmsInterval_sec = ""
             My.Settings.SmsInterval_milli = ""
 
-            My.Settings.GatewayInterval_Hour = ""
-            My.Settings.GatewayInterval_Mins = ""
-            My.Settings.GatewayInterval_Sec = ""
-            My.Settings.GatewayInterval_Milli = ""
-
             TxtGatewayIp.Text = ""
             TxtGatewayPort.Text = ""
             TxtGatewayPassword.Text = ""
@@ -163,10 +154,6 @@ Public Class ConfigSms
             txtSmsInterval_Sec.Text = ""
             txtSmsInterval_Mil.Text = ""
 
-            txtGatewayInterval_Hour.Text = ""
-            txtGatewyInterval_Mins.Text = ""
-            txtGatewayInterval_Sec.Text = ""
-            txtGatewayInterval_Milli.Text = ""
 
             My.Settings.Save()
         End If
@@ -184,17 +171,6 @@ Public Class ConfigSms
         Recalculate_SMS_Milliseconds()
     End Sub
 
-    Private Sub txtGatewayInterval_Hour_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Hour.TextChanged
-        Recalculate_GAteway_Milliseconds()
-    End Sub
-
-    Private Sub txtGatewyInterval_Mins_TextChanged(sender As Object, e As EventArgs) Handles txtGatewyInterval_Mins.TextChanged
-        Recalculate_GAteway_Milliseconds()
-    End Sub
-
-    Private Sub txtGatewayInterval_Sec_TextChanged(sender As Object, e As EventArgs) Handles txtGatewayInterval_Sec.TextChanged
-        Recalculate_GAteway_Milliseconds()
-    End Sub
 
     ' Method to recalculate the SMS milliseconds
     Private Sub Recalculate_SMS_Milliseconds()
@@ -244,52 +220,6 @@ Public Class ConfigSms
 
 
     ' Method to recalculate the Gateway milliseconds
-    Private Sub Recalculate_GAteway_Milliseconds()
-        Dim hours As Integer = 0
-        Dim minutes As Integer = 0
-        Dim seconds As Integer = 0
-        Dim Gateway_milliseconds As Integer
-
-        ' Check if txtSmsInterval_Hour is not empty
-        If Not String.IsNullOrEmpty(txtGatewayInterval_Hour.Text) Then
-            If Integer.TryParse(txtGatewayInterval_Hour.Text, hours) = False Then
-                MessageBox.Show("Invalid input for hours.")
-                Return
-            End If
-        End If
-
-        ' Check if txtSmsInterval_Mins is not empty
-        If Not String.IsNullOrEmpty(txtGatewyInterval_Mins.Text) Then
-            If Integer.TryParse(txtGatewyInterval_Mins.Text, minutes) = False Then
-                MessageBox.Show("Invalid input for minutes.")
-                Return
-            End If
-        End If
-
-        ' Check if txtSmsInterval_Sec is not empty
-        If Not String.IsNullOrEmpty(txtGatewayInterval_Sec.Text) Then
-            If Integer.TryParse(txtGatewayInterval_Sec.Text, seconds) = False Then
-                MessageBox.Show("Invalid input for seconds.")
-                Return
-            End If
-        End If
-
-
-        ' If all fields are empty, show an error message
-        If String.IsNullOrEmpty(txtGatewayInterval_Hour.Text) AndAlso
-           String.IsNullOrEmpty(txtGatewyInterval_Mins.Text) AndAlso
-           String.IsNullOrEmpty(txtGatewayInterval_Sec.Text) Then
-            txtSmsInterval_Mil.Text = "" ' Clear the output if no input
-            Return
-        End If
-
-        ' Calculate the total milliseconds based on the entered values
-        Gateway_milliseconds = (hours * 3600000) + (minutes * 60000) + (seconds * 1000)
-
-        ' Display the result in txtSmsInterval_Mil
-        txtGatewayInterval_Milli.Text = Gateway_milliseconds.ToString()
-    End Sub
-
 
 
 End Class

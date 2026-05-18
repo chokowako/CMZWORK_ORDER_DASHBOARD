@@ -27,11 +27,11 @@ Module CheckAndSendModule
 
     Public Sub UpdatePingStatusIndicator(isOnline As Boolean)
         If isOnline Then
-            DashBoard.lblConnectionStatus.BackColor = Color.Green
-            DashBoard.lblConnectionStatus.Text = "Gateway Status: Online"
+            DashBoard.lblSMSConnectionStatus.BackColor = Color.Green
+            DashBoard.lblSMSConnectionStatus.Text = "Gateway Status: Online"
         Else
-            DashBoard.lblConnectionStatus.BackColor = Color.Red
-            DashBoard.lblConnectionStatus.Text = "Gateway Status: Offline"
+            DashBoard.lblSMSConnectionStatus.BackColor = Color.Red
+            DashBoard.lblSMSConnectionStatus.Text = "Gateway Status: Offline"
         End If
     End Sub
 
