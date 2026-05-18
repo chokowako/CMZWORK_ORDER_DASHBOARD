@@ -94,7 +94,7 @@ Public Class DashBoard
                 ' =========================
                 ' STOP LOAD DATA ON DASHBOARD
                 ' =========================
-                TimerWoms.Start()
+                TimerWoms.Stop()
 
                 ' =========================
                 ' STOP SMS ENGINE
@@ -117,6 +117,10 @@ Public Class DashBoard
 
                 lblEmailProgress.Text = ""
                 lblEmailStatus.Text = ""
+
+
+
+
 
                 ProgressBar1.Hide()
 
@@ -220,76 +224,152 @@ Public Class DashBoard
     ' 2. MAIN PROCESSOR (THIS IS THE ENGINE)
     ' =========================================================
     Private Async Function ProcessPendingSmsAsync() As Task
+        'Try
+
+        '    ShowSMSprogressSMS(True)
+
+        '    Dim dt As New DataTable()
+
+        '    Using conn As New SqlConnection(connStr)
+
+        '        Await conn.OpenAsync()
+
+        '        Dim query As String =
+        '    "SELECT pk, RecPhoneNo, Message, smsflag
+        '     FROM SmsCatcher
+        '     WHERE smsflag IN (1,2)
+        '     ORDER BY pk ASC"
+
+        '        Using cmd As New SqlCommand(query, conn)
+
+        '            Using reader = Await cmd.ExecuteReaderAsync()
+        '                dt.Load(reader)
+        '            End Using
+
+        '        End Using
+
+        '    End Using
+
+        '    If dt.Rows.Count = 0 Then
+
+        '        lblProgress.Text = "📭 No Pending SMS"
+        '        lblStatus.Text = ""
+        '        Exit Function
+
+        '    End If
+
+        '    Dim total As Integer = dt.Rows.Count
+        '    Dim count As Integer = 0
+
+        '    For Each row As DataRow In dt.Rows
+
+        '        Dim pk As Integer = Convert.ToInt32(row("pk"))
+        '        Dim phone As String = row("RecPhoneNo").ToString()
+        '        Dim msg As String = row("Message").ToString()
+        '        Dim status As Integer = Convert.ToInt32(row("smsflag"))
+
+        '        count += 1
+
+        '        lblProgress.Text = $"{count}/{total}"
+
+        '        ' =========================
+        '        ' SEND SMS (NO PRE-STATUS TEXT)
+        '        ' =========================
+        '        Dim success As Boolean = Await SendSmsAsync(phone, msg)
+
+        '        If success Then
+
+        '            Await UpdateSmsStatusAsync(pk, 0)
+        '            lblStatus.Text = $"✅ Sent to {phone}"
+
+        '        Else
+
+        '            Await UpdateSmsStatusAsync(pk, 2)
+        '            lblStatus.Text = $"❌ Failed {phone}"
+
+        '        End If
+
+        '        Await Task.Delay(300)
+
+        '    Next
+
+        '    lblProgress.Text = $"✅ Completed {count}/{total}"
+
+        'Catch ex As Exception
+
+        '    lblStatus.Text = ex.Message
+
+        'Finally
+
+        '    ShowSMSprogressSMS(False)
+
+        'End Try
+
+
+        '' AFTER PROCESS ENDS
+        'Await LoadPendingSmsAsync()
         Try
 
             ShowSMSprogressSMS(True)
 
-            Dim dt As New DataTable()
-
-            Using conn As New SqlConnection(connStr)
-
-                Await conn.OpenAsync()
-
-                Dim query As String =
-            "SELECT pk, RecPhoneNo, Message, smsflag
-             FROM SmsCatcher
-             WHERE smsflag IN (1,2)
-             ORDER BY pk ASC"
-
-                Using cmd As New SqlCommand(query, conn)
-
-                    Using reader = Await cmd.ExecuteReaderAsync()
-                        dt.Load(reader)
-                    End Using
-
-                End Using
-
-            End Using
-
-            If dt.Rows.Count = 0 Then
+            If dgvPendingSMS.Rows.Count = 0 Then
 
                 lblProgress.Text = "📭 No Pending SMS"
                 lblStatus.Text = ""
+
                 Exit Function
 
             End If
 
-            Dim total As Integer = dt.Rows.Count
+            Dim total As Integer = dgvPendingSMS.Rows.Count
             Dim count As Integer = 0
 
-            For Each row As DataRow In dt.Rows
+            For Each row As DataGridViewRow In dgvPendingSMS.Rows
 
-                Dim pk As Integer = Convert.ToInt32(row("pk"))
-                Dim phone As String = row("RecPhoneNo").ToString()
-                Dim msg As String = row("Message").ToString()
-                Dim status As Integer = Convert.ToInt32(row("smsflag"))
+                If row.IsNewRow Then Continue For
+
+                Dim pk As Integer =
+                Convert.ToInt32(row.Cells("pk").Value)
+
+                Dim phone As String =
+                row.Cells("RecPhoneNo").Value.ToString()
+
+                Dim msg As String =
+                row.Cells("Message").Value.ToString()
 
                 count += 1
 
                 lblProgress.Text = $"{count}/{total}"
 
-                ' =========================
-                ' SEND SMS (NO PRE-STATUS TEXT)
-                ' =========================
-                Dim success As Boolean = Await SendSmsAsync(phone, msg)
+                lblStatus.Text = $"📤 Sending to {phone}"
+
+                Dim success As Boolean =
+                Await SendSmsAsync(phone, msg)
 
                 If success Then
 
                     Await UpdateSmsStatusAsync(pk, 0)
-                    lblStatus.Text = $"✅ Sent to {phone}"
+
+                    lblStatus.Text =
+                    $"✅ Sent to {phone}"
 
                 Else
 
                     Await UpdateSmsStatusAsync(pk, 2)
-                    lblStatus.Text = $"❌ Failed {phone}"
+
+                    lblStatus.Text =
+                    $"❌ Failed {phone}"
 
                 End If
+
+                ' 🔥 REFRESH GRID REALTIME
+                Await LoadPendingSmsAsync()
 
                 Await Task.Delay(300)
 
             Next
 
-            lblProgress.Text = $"✅ Completed {count}/{total}"
+            lblProgress.Text = "✅ SMS Queue Completed"
 
         Catch ex As Exception
 
@@ -300,11 +380,6 @@ Public Class DashBoard
             ShowSMSprogressSMS(False)
 
         End Try
-
-
-        ' AFTER PROCESS ENDS
-        Await LoadPendingSmsAsync()
-
 
     End Function
 
