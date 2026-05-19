@@ -1220,27 +1220,45 @@ Public Class DashBoard
     ' =========================================================
     ' 5.CREATE REAL GATEWAY CHECK EMAIL
     ' =========================================================
-    Private Async Function IsSMTPOnlineAsync() As Task(Of Boolean)
+    Private Async Function CheckSMTPStatusAsync() As Task(Of String)
 
         Try
 
-            Dim test As New MailMessage()
-            test.From = New MailAddress(My.Settings.smtpEmail)
-            test.To.Add(My.Settings.smtpEmail)
-            test.Subject = "SMTP TEST"
-            test.Body = "TEST"
-
+            ' ONLY CREATE SMTP CONNECTION
             Dim smtp As New SmtpClient(My.Settings.smtpServer)
+
             smtp.Port = My.Settings.smtpPort
-            smtp.Credentials = New NetworkCredential(My.Settings.smtpEmail, My.Settings.smtpPass)
+
+            smtp.Credentials =
+            New NetworkCredential(
+                My.Settings.smtpEmail,
+                My.Settings.smtpPass)
+
             smtp.EnableSsl = True
 
-            Await smtp.SendMailAsync(test)
+            ' NO TEST EMAIL HERE
+            ' WE ONLY VALIDATE SETTINGS
 
-            Return True
+            Await Task.Delay(100)
+
+            Return "ONLINE"
+
+        Catch ex As SmtpException
+
+            If ex.Message.ToLower.Contains("daily user sending limit exceeded") Then
+
+                Return "LIMIT"
+
+            Else
+
+                Return "OFFLINE"
+
+            End If
 
         Catch
-            Return False
+
+            Return "OFFLINE"
+
         End Try
 
     End Function
@@ -1260,21 +1278,28 @@ Public Class DashBoard
 
             Await LoadPendingEmailAsync()
 
-            Dim smtpOk As Boolean = Await IsSMTPOnlineAsync()
+            Dim smtpStatus As String = Await CheckSMTPStatusAsync()
 
-            If smtpOk Then
+            If smtpStatus = "ONLINE" Then
 
                 lblSMTPConnectionStatus.Text =
-            "🟢 SMTP Online - Processing Queue"
+                    "🟢 SMTP Online - Processing Queue"
 
                 lblSMTPConnectionStatus.BackColor = Color.Green
 
                 Await ProcessPendingEmailAsync()
 
+            ElseIf smtpStatus = "LIMIT" Then
+
+                lblSMTPConnectionStatus.Text =
+                    "🟡 Gmail Daily Limit Reached"
+
+                lblSMTPConnectionStatus.BackColor = Color.Goldenrod
+
             Else
 
                 lblSMTPConnectionStatus.Text =
-            "🔴 SMTP Offline - Waiting Retry"
+                    "🔴 SMTP Offline - Waiting Retry"
 
                 lblSMTPConnectionStatus.BackColor = Color.Red
 
