@@ -151,4 +151,37 @@
   <data name="notification" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\icon\notification.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="avatar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\avatar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="approved__1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\approved -1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="attachFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\attachFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="forApproval" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\forApproval.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\checkmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WO_Close" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\WO_Close.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WO_Complete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\WO_Complete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WO_OnGoing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\WO_OnGoing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WO_OnProcess" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\WO_OnProcess.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WO_RE_Opened" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\WO_RE-Opened.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Print" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\..\CMZWORK_ORDER\CMZWORK_ORDER\Icon\Print.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

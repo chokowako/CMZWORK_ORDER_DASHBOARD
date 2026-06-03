@@ -44,7 +44,11 @@ Public Class DashBoard
                 ' =========================
 
                 TimerWoms.Interval = My.Settings.WomsInterval_Mlli
-                Await Load_Dashboard()
+                Await Task.WhenAll(
+    Load_Dashboard(),
+    Load_Delay_Aging(),
+    Load_Delay_Aging_Chart()
+)
                 TimerWoms.Start()
 
 
@@ -63,7 +67,6 @@ Public Class DashBoard
                 lblSMSConnectionStatus.BackColor = Color.Goldenrod
 
                 Await LoadPendingSmsAsync()
-
                 TimerSMS.Interval = My.Settings.SmsInterval_milli
                 TimerSMS.Start()
 
@@ -147,6 +150,7 @@ Public Class DashBoard
         End If
     End Sub
 
+
     Private Sub BtnSetupAndOption_Click(sender As Object, e As EventArgs) Handles BtnSetupAndOption.Click
         SetupAndOption.ShowDialog()
     End Sub
@@ -194,11 +198,8 @@ Public Class DashBoard
                         dt.Load(reader)
 
                         dgvPendingSMS.DataSource = dt
-
                     End Using
-
                 End Using
-
             End Using
 
             With dgvPendingSMS
@@ -209,6 +210,7 @@ Public Class DashBoard
                 .Columns("Message").FillWeight = 70
                 .Columns("Message").DefaultCellStyle.WrapMode = DataGridViewTriState.True
                 .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+                .CellBorderStyle = DataGridViewCellBorderStyle.None
                 .ClearSelection()
                 .CurrentCell = Nothing
             End With
@@ -224,90 +226,7 @@ Public Class DashBoard
     ' 2. MAIN PROCESSOR (THIS IS THE ENGINE)
     ' =========================================================
     Private Async Function ProcessPendingSmsAsync() As Task
-        'Try
 
-        '    ShowSMSprogressSMS(True)
-
-        '    Dim dt As New DataTable()
-
-        '    Using conn As New SqlConnection(connStr)
-
-        '        Await conn.OpenAsync()
-
-        '        Dim query As String =
-        '    "SELECT pk, RecPhoneNo, Message, smsflag
-        '     FROM SmsCatcher
-        '     WHERE smsflag IN (1,2)
-        '     ORDER BY pk ASC"
-
-        '        Using cmd As New SqlCommand(query, conn)
-
-        '            Using reader = Await cmd.ExecuteReaderAsync()
-        '                dt.Load(reader)
-        '            End Using
-
-        '        End Using
-
-        '    End Using
-
-        '    If dt.Rows.Count = 0 Then
-
-        '        lblProgress.Text = "📭 No Pending SMS"
-        '        lblStatus.Text = ""
-        '        Exit Function
-
-        '    End If
-
-        '    Dim total As Integer = dt.Rows.Count
-        '    Dim count As Integer = 0
-
-        '    For Each row As DataRow In dt.Rows
-
-        '        Dim pk As Integer = Convert.ToInt32(row("pk"))
-        '        Dim phone As String = row("RecPhoneNo").ToString()
-        '        Dim msg As String = row("Message").ToString()
-        '        Dim status As Integer = Convert.ToInt32(row("smsflag"))
-
-        '        count += 1
-
-        '        lblProgress.Text = $"{count}/{total}"
-
-        '        ' =========================
-        '        ' SEND SMS (NO PRE-STATUS TEXT)
-        '        ' =========================
-        '        Dim success As Boolean = Await SendSmsAsync(phone, msg)
-
-        '        If success Then
-
-        '            Await UpdateSmsStatusAsync(pk, 0)
-        '            lblStatus.Text = $"✅ Sent to {phone}"
-
-        '        Else
-
-        '            Await UpdateSmsStatusAsync(pk, 2)
-        '            lblStatus.Text = $"❌ Failed {phone}"
-
-        '        End If
-
-        '        Await Task.Delay(300)
-
-        '    Next
-
-        '    lblProgress.Text = $"✅ Completed {count}/{total}"
-
-        'Catch ex As Exception
-
-        '    lblStatus.Text = ex.Message
-
-        'Finally
-
-        '    ShowSMSprogressSMS(False)
-
-        'End Try
-
-
-        '' AFTER PROCESS ENDS
-        'Await LoadPendingSmsAsync()
         Try
 
             ShowSMSprogressSMS(True)
@@ -805,7 +724,6 @@ Public Class DashBoard
         'THIS Is FOR NOTIFICATION
 
         Try
-            'ShowSMSprogressSMS(True)
 
             ' 🔹 Step 1: Checking gateway
             Label1.Text = "🔄 Checking SMS gateway URL..."
@@ -978,8 +896,6 @@ Public Class DashBoard
     End Sub
 
 
-
-
     Private Sub Panel1Status_Resize(sender As Object, e As EventArgs) Handles Panel1Status.Resize
         ArrangeStatusLabels()
     End Sub
@@ -1003,10 +919,6 @@ Public Class DashBoard
         lblSMTPConnectionStatus.TextAlign = ContentAlignment.MiddleCenter
 
     End Sub
-
-
-
-
 
 
 
@@ -1040,12 +952,11 @@ Public Class DashBoard
 
                         dgvPendingEmail.DataSource = dt
 
+
+
                     End Using
-
                 End Using
-
             End Using
-
             With dgvPendingEmail
                 .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
                 .Columns("pk").FillWeight = 10
@@ -1055,6 +966,7 @@ Public Class DashBoard
                 .Columns("EmailBody").FillWeight = 80
                 .Columns("EmailBody").DefaultCellStyle.WrapMode = DataGridViewTriState.True
                 .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+                .CellBorderStyle = DataGridViewCellBorderStyle.None
                 .ClearSelection()
                 .CurrentCell = Nothing
             End With
@@ -1326,28 +1238,78 @@ Public Class DashBoard
         Try
 
             isLoadingDashboard = True
-
             TimerWoms.Enabled = False
-
             lblStatus.Text = "Refreshing dashboard..."
-
-            Await Load_Dashboard()
-
+            Await Task.WhenAll(
+    Load_Dashboard(),
+    Load_Delay_Aging(),
+    Load_Delay_Aging_Chart()
+)
             lblStatus.Text = "Dashboard updated : " & DateTime.Now.ToString("hh:mm:ss tt")
 
         Catch ex As Exception
-
             MessageBox.Show(ex.Message)
-
         Finally
-
             isLoadingDashboard = False
-
             TimerWoms.Enabled = True
-
         End Try
     End Sub
+
+    Private Sub DataGridView_delayed_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView_delayed.CellClick
+        ' Check if a valid row (not the header) was clicked
+        If e.RowIndex >= 0 Then
+            ' Clear previous selections if you only want the 4th and 5th cells highlighted
+            DataGridView_delayed.ClearSelection()
+
+            ' Highlight Cell 2 (Index 3) a in the clicked row
+            DataGridView_delayed.Rows(e.RowIndex).Cells(0).Selected = True
+            DataGridView_delayed.Rows(e.RowIndex).Cells(1).Selected = True
+        End If
+
+
+        If e.RowIndex < 0 Then Exit Sub
+        If DataGridView_delayed.Columns(e.ColumnIndex).Name = "View" Then
+            Dim delayRange As String =
+                DataGridView_delayed.Rows(e.RowIndex).Cells("DelayRange").Value.ToString()
+            Dim frm As New FrmDelayAgingList
+            frm.SelectedDelayRange = delayRange
+            frm.ShowDialog()
+        End If
+    End Sub
+
+
+    Private Sub DataGridView_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView.CellClick
+        ' Check if a valid row (not the header) was clicked
+        If e.RowIndex >= 0 Then
+            ' Clear previous selections if you only want the 4th and 5th cells highlighted
+            DataGridView.ClearSelection()
+
+            ' Highlight Cell 2 (Index 3) a in the clicked row
+            DataGridView.Rows(e.RowIndex).Cells(3).Selected = True
+            DataGridView.Rows(e.RowIndex).Cells(4).Selected = True
+            DataGridView.Rows(e.RowIndex).Cells(5).Selected = True
+            DataGridView.Rows(e.RowIndex).Cells(6).Selected = True
+            DataGridView.Rows(e.RowIndex).Cells(7).Selected = True
+            DataGridView.Rows(e.RowIndex).Cells(8).Selected = True
+            DataGridView.Rows(e.RowIndex).Cells(9).Selected = True
+        End If
+
+
+        If e.RowIndex < 0 Then Exit Sub
+        If DataGridView.Columns(e.ColumnIndex).Name = "View" Then
+            Dim row As DataGridViewRow = DataGridView.Rows(e.RowIndex)
+            Dim workOrderNo As String = row.Cells("Woms No.").Value.ToString()
+            Dim frm As New Preview
+            frm.TxtWorkOrderNo.Text = workOrderNo
+            frm.ShowDialog(Me)
+        End If
+    End Sub
+
+    Private Sub DataGridView_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView.CellContentClick
+
+    End Sub
 End Class
+
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3
 '"http://" + MobileReader!gateway + ":" & MobileReader!port & "/sendsms?phone=" & RecPhoneNo & "&text=" & Recmessage & "&password=" & MobileReader!password
 

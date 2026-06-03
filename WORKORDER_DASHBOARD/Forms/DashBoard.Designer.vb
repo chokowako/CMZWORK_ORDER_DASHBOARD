@@ -33,6 +33,9 @@ Partial Class DashBoard
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -52,25 +55,23 @@ Partial Class DashBoard
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.BtnSetupAndOption = New System.Windows.Forms.Button()
         Me.btnExit = New System.Windows.Forms.Button()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.lblDateTime = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.lblTitle = New System.Windows.Forms.Label()
         Me.lblConnection = New System.Windows.Forms.Label()
         Me.lblCurrentVersion = New System.Windows.Forms.Label()
-        Me.lblTitle = New System.Windows.Forms.Label()
-        Me.DataGridView = New System.Windows.Forms.DataGridView()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TimerSMS = New System.Windows.Forms.Timer(Me.components)
         Me.TimerWoms = New System.Windows.Forms.Timer(Me.components)
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.dgvPendingSMS = New System.Windows.Forms.DataGridView()
         Me.Panel1Status = New System.Windows.Forms.Panel()
         Me.lblSMTPConnectionStatus = New System.Windows.Forms.Label()
         Me.lblSMSConnectionStatus = New System.Windows.Forms.Label()
         Me.TimerEmail = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.PanelSms = New System.Windows.Forms.Panel()
+        Me.dgvPendingSMS = New System.Windows.Forms.DataGridView()
         Me.Panel7 = New System.Windows.Forms.Panel()
         Me.progressSMS1 = New System.Windows.Forms.ProgressBar()
         Me.lblProgress = New System.Windows.Forms.Label()
@@ -80,6 +81,14 @@ Partial Class DashBoard
         Me.progressEmail1 = New System.Windows.Forms.ProgressBar()
         Me.lblEmailProgress = New System.Windows.Forms.Label()
         Me.Panel8 = New System.Windows.Forms.Panel()
+        Me.DataGridView = New System.Windows.Forms.DataGridView()
+        Me.Panel12 = New System.Windows.Forms.Panel()
+        Me.lblWomstitle = New System.Windows.Forms.Label()
+        Me.PanelRight_Delayed = New System.Windows.Forms.Panel()
+        Me.ChartDelayAging = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.DataGridView_delayed = New System.Windows.Forms.DataGridView()
+        Me.Panel11 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel10 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.chkAllowToNotify = New System.Windows.Forms.CheckBox()
@@ -91,17 +100,22 @@ Partial Class DashBoard
         Me.Panel5.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.DataGridView, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel9.SuspendLayout()
-        CType(Me.dgvPendingSMS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1Status.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.PanelSms.SuspendLayout()
+        CType(Me.dgvPendingSMS, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel7.SuspendLayout()
         Me.Panel1Email.SuspendLayout()
         CType(Me.dgvPendingEmail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel13.SuspendLayout()
         Me.Panel8.SuspendLayout()
+        CType(Me.DataGridView, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel12.SuspendLayout()
+        Me.PanelRight_Delayed.SuspendLayout()
+        CType(Me.ChartDelayAging, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridView_delayed, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel11.SuspendLayout()
         Me.Panel10.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -243,8 +257,6 @@ Partial Class DashBoard
         Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
         Me.Panel5.Controls.Add(Me.BtnSetupAndOption)
         Me.Panel5.Controls.Add(Me.btnExit)
-        Me.Panel5.Controls.Add(Me.Label2)
-        Me.Panel5.Controls.Add(Me.lblDateTime)
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel5.Location = New System.Drawing.Point(0, 100)
         Me.Panel5.Name = "Panel5"
@@ -279,124 +291,76 @@ Partial Class DashBoard
         Me.btnExit.Text = "      Exit Application"
         Me.btnExit.UseVisualStyleBackColor = True
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.White
-        Me.Label2.Location = New System.Drawing.Point(3, 9)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(133, 17)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Reference Datetime :"
-        '
         'lblDateTime
         '
-        Me.lblDateTime.AutoSize = True
+        Me.lblDateTime.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.lblDateTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDateTime.ForeColor = System.Drawing.Color.White
-        Me.lblDateTime.Location = New System.Drawing.Point(142, 9)
+        Me.lblDateTime.ForeColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.lblDateTime.Location = New System.Drawing.Point(100, 66)
         Me.lblDateTime.Name = "lblDateTime"
-        Me.lblDateTime.Size = New System.Drawing.Size(104, 20)
+        Me.lblDateTime.Size = New System.Drawing.Size(1267, 21)
         Me.lblDateTime.TabIndex = 1
         Me.lblDateTime.Text = "lblDateTime"
+        Me.lblDateTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(204, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(223, Byte), Integer))
-        Me.Panel1.Controls.Add(Me.PictureBox1)
+        Me.Panel1.Controls.Add(Me.lblTitle)
+        Me.Panel1.Controls.Add(Me.lblDateTime)
         Me.Panel1.Controls.Add(Me.lblConnection)
         Me.Panel1.Controls.Add(Me.lblCurrentVersion)
-        Me.Panel1.Controls.Add(Me.lblTitle)
+        Me.Panel1.Controls.Add(Me.PictureBox1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1367, 100)
         Me.Panel1.TabIndex = 315
         '
-        'PictureBox1
+        'lblTitle
         '
-        Me.PictureBox1.Image = Global.WORKORDER_DASHBOARD.My.Resources.Resources.setup
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 12)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(100, 82)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 332
-        Me.PictureBox1.TabStop = False
+        Me.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblTitle.Font = New System.Drawing.Font("Arial Rounded MT Bold", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTitle.Location = New System.Drawing.Point(100, 22)
+        Me.lblTitle.Name = "lblTitle"
+        Me.lblTitle.Size = New System.Drawing.Size(1267, 44)
+        Me.lblTitle.TabIndex = 2
+        Me.lblTitle.Text = "WORK ORDER MANAGEMENT SYSTEM  - MAINTENANCE DASHBOARD"
+        Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblConnection
         '
-        Me.lblConnection.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblConnection.Dock = System.Windows.Forms.DockStyle.Top
         Me.lblConnection.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblConnection.Location = New System.Drawing.Point(0, 17)
+        Me.lblConnection.Location = New System.Drawing.Point(100, 0)
         Me.lblConnection.Name = "lblConnection"
-        Me.lblConnection.Size = New System.Drawing.Size(1367, 18)
+        Me.lblConnection.Size = New System.Drawing.Size(1267, 22)
         Me.lblConnection.TabIndex = 330
         Me.lblConnection.Text = "connection"
         Me.lblConnection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblCurrentVersion
         '
-        Me.lblCurrentVersion.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblCurrentVersion.BackColor = System.Drawing.Color.Transparent
+        Me.lblCurrentVersion.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.lblCurrentVersion.Font = New System.Drawing.Font("Segoe UI Semibold", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.lblCurrentVersion.Location = New System.Drawing.Point(3, 68)
+        Me.lblCurrentVersion.Location = New System.Drawing.Point(100, 87)
         Me.lblCurrentVersion.Name = "lblCurrentVersion"
-        Me.lblCurrentVersion.Size = New System.Drawing.Size(1364, 13)
+        Me.lblCurrentVersion.Size = New System.Drawing.Size(1267, 13)
         Me.lblCurrentVersion.TabIndex = 329
         Me.lblCurrentVersion.Text = "Current ver."
         Me.lblCurrentVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lblTitle
+        'PictureBox1
         '
-        Me.lblTitle.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblTitle.Font = New System.Drawing.Font("Arial Rounded MT Bold", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTitle.Location = New System.Drawing.Point(118, 35)
-        Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(1246, 33)
-        Me.lblTitle.TabIndex = 2
-        Me.lblTitle.Text = "WORK ORDER MANAGEMENT SYSTEM  - MAINTENANCE DASHBOARD"
-        Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'DataGridView
-        '
-        Me.DataGridView.AllowUserToAddRows = False
-        Me.DataGridView.AllowUserToDeleteRows = False
-        Me.DataGridView.AllowUserToOrderColumns = True
-        Me.DataGridView.AllowUserToResizeRows = False
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(227, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.DataGridView.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
-        Me.DataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        Me.DataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.DataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(88, Byte), Integer), CType(CType(122, Byte), Integer), CType(CType(178, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
-        Me.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(191, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(234, Byte), Integer))
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(191, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(234, Byte), Integer))
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridView.DefaultCellStyle = DataGridViewCellStyle3
-        Me.DataGridView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView.EnableHeadersVisualStyles = False
-        Me.DataGridView.GridColor = System.Drawing.Color.FromArgb(CType(CType(146, Byte), Integer), CType(CType(164, Byte), Integer), CType(CType(233, Byte), Integer))
-        Me.DataGridView.Location = New System.Drawing.Point(0, 0)
-        Me.DataGridView.Name = "DataGridView"
-        Me.DataGridView.RowHeadersVisible = False
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.BlanchedAlmond
-        Me.DataGridView.RowsDefaultCellStyle = DataGridViewCellStyle4
-        Me.DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView.Size = New System.Drawing.Size(1361, 181)
-        Me.DataGridView.TabIndex = 324
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PictureBox1.Image = Global.WORKORDER_DASHBOARD.My.Resources.Resources.setup
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(100, 100)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 332
+        Me.PictureBox1.TabStop = False
         '
         'TimerSMS
         '
@@ -426,45 +390,6 @@ Partial Class DashBoard
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 337
         Me.ProgressBar1.Visible = False
-        '
-        'dgvPendingSMS
-        '
-        Me.dgvPendingSMS.AllowUserToAddRows = False
-        Me.dgvPendingSMS.AllowUserToDeleteRows = False
-        Me.dgvPendingSMS.AllowUserToOrderColumns = True
-        Me.dgvPendingSMS.AllowUserToResizeRows = False
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(227, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.dgvPendingSMS.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
-        Me.dgvPendingSMS.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.dgvPendingSMS.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(88, Byte), Integer), CType(CType(122, Byte), Integer), CType(CType(178, Byte), Integer))
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPendingSMS.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
-        Me.dgvPendingSMS.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(CType(CType(191, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(234, Byte), Integer))
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(191, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(234, Byte), Integer))
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvPendingSMS.DefaultCellStyle = DataGridViewCellStyle7
-        Me.dgvPendingSMS.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgvPendingSMS.EnableHeadersVisualStyles = False
-        Me.dgvPendingSMS.GridColor = System.Drawing.Color.FromArgb(CType(CType(146, Byte), Integer), CType(CType(164, Byte), Integer), CType(CType(233, Byte), Integer))
-        Me.dgvPendingSMS.Location = New System.Drawing.Point(0, 0)
-        Me.dgvPendingSMS.Name = "dgvPendingSMS"
-        Me.dgvPendingSMS.RowHeadersVisible = False
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.BlanchedAlmond
-        Me.dgvPendingSMS.RowsDefaultCellStyle = DataGridViewCellStyle8
-        Me.dgvPendingSMS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvPendingSMS.Size = New System.Drawing.Size(1361, 83)
-        Me.dgvPendingSMS.TabIndex = 352
         '
         'Panel1Status
         '
@@ -533,6 +458,45 @@ Partial Class DashBoard
         Me.PanelSms.Size = New System.Drawing.Size(1361, 98)
         Me.PanelSms.TabIndex = 325
         '
+        'dgvPendingSMS
+        '
+        Me.dgvPendingSMS.AllowUserToAddRows = False
+        Me.dgvPendingSMS.AllowUserToDeleteRows = False
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        Me.dgvPendingSMS.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        Me.dgvPendingSMS.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.dgvPendingSMS.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dgvPendingSMS.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.dgvPendingSMS.BorderStyle = System.Windows.Forms.BorderStyle.None
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPendingSMS.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        Me.dgvPendingSMS.ColumnHeadersHeight = 45
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.LemonChiffon
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvPendingSMS.DefaultCellStyle = DataGridViewCellStyle3
+        Me.dgvPendingSMS.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgvPendingSMS.EnableHeadersVisualStyles = False
+        Me.dgvPendingSMS.GridColor = System.Drawing.Color.FromArgb(CType(CType(28, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.dgvPendingSMS.Location = New System.Drawing.Point(0, 0)
+        Me.dgvPendingSMS.Name = "dgvPendingSMS"
+        Me.dgvPendingSMS.RowHeadersVisible = False
+        Me.dgvPendingSMS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.dgvPendingSMS.Size = New System.Drawing.Size(1361, 83)
+        Me.dgvPendingSMS.TabIndex = 330
+        '
         'Panel7
         '
         Me.Panel7.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
@@ -546,10 +510,10 @@ Partial Class DashBoard
         '
         'progressSMS1
         '
-        Me.progressSMS1.Location = New System.Drawing.Point(122, 5)
+        Me.progressSMS1.Location = New System.Drawing.Point(90, 6)
         Me.progressSMS1.MarqueeAnimationSpeed = 30
         Me.progressSMS1.Name = "progressSMS1"
-        Me.progressSMS1.Size = New System.Drawing.Size(211, 5)
+        Me.progressSMS1.Size = New System.Drawing.Size(92, 5)
         Me.progressSMS1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.progressSMS1.TabIndex = 339
         Me.progressSMS1.Visible = False
@@ -581,41 +545,40 @@ Partial Class DashBoard
         '
         Me.dgvPendingEmail.AllowUserToAddRows = False
         Me.dgvPendingEmail.AllowUserToDeleteRows = False
-        Me.dgvPendingEmail.AllowUserToOrderColumns = True
-        Me.dgvPendingEmail.AllowUserToResizeRows = False
-        DataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(CType(CType(227, Byte), Integer), CType(CType(239, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.dgvPendingEmail.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
+        Me.dgvPendingEmail.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvPendingEmail.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.dgvPendingEmail.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.dgvPendingEmail.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
         Me.dgvPendingEmail.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.dgvPendingEmail.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(CType(CType(88, Byte), Integer), CType(CType(122, Byte), Integer), CType(CType(178, Byte), Integer))
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle10.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvPendingEmail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle10
-        Me.dgvPendingEmail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(CType(CType(191, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(234, Byte), Integer))
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Segoe UI", 6.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(191, Byte), Integer), CType(CType(210, Byte), Integer), CType(CType(234, Byte), Integer))
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvPendingEmail.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvPendingEmail.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        Me.dgvPendingEmail.ColumnHeadersHeight = 45
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.LemonChiffon
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvPendingEmail.DefaultCellStyle = DataGridViewCellStyle6
         Me.dgvPendingEmail.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvPendingEmail.EnableHeadersVisualStyles = False
-        Me.dgvPendingEmail.GridColor = System.Drawing.Color.FromArgb(CType(CType(146, Byte), Integer), CType(CType(164, Byte), Integer), CType(CType(233, Byte), Integer))
+        Me.dgvPendingEmail.GridColor = System.Drawing.Color.FromArgb(CType(CType(28, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(234, Byte), Integer))
         Me.dgvPendingEmail.Location = New System.Drawing.Point(0, 0)
         Me.dgvPendingEmail.Name = "dgvPendingEmail"
         Me.dgvPendingEmail.RowHeadersVisible = False
-        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.BlanchedAlmond
-        Me.dgvPendingEmail.RowsDefaultCellStyle = DataGridViewCellStyle12
-        Me.dgvPendingEmail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvPendingEmail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.dgvPendingEmail.Size = New System.Drawing.Size(1361, 83)
-        Me.dgvPendingEmail.TabIndex = 352
+        Me.dgvPendingEmail.TabIndex = 331
         '
         'Panel13
         '
@@ -654,12 +617,165 @@ Partial Class DashBoard
         'Panel8
         '
         Me.Panel8.Controls.Add(Me.DataGridView)
+        Me.Panel8.Controls.Add(Me.Panel12)
+        Me.Panel8.Controls.Add(Me.PanelRight_Delayed)
         Me.Panel8.Controls.Add(Me.Panel10)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(3, 3)
         Me.Panel8.Name = "Panel8"
         Me.Panel8.Size = New System.Drawing.Size(1361, 202)
         Me.Panel8.TabIndex = 327
+        '
+        'DataGridView
+        '
+        Me.DataGridView.AllowUserToAddRows = False
+        Me.DataGridView.AllowUserToDeleteRows = False
+        DataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.White
+        Me.DataGridView.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle7
+        Me.DataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.DataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.DataGridView.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.DataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle8.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle8
+        Me.DataGridView.ColumnHeadersHeight = 45
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle9.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.LemonChiffon
+        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView.DefaultCellStyle = DataGridViewCellStyle9
+        Me.DataGridView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridView.EnableHeadersVisualStyles = False
+        Me.DataGridView.GridColor = System.Drawing.Color.FromArgb(CType(CType(28, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.DataGridView.Location = New System.Drawing.Point(0, 29)
+        Me.DataGridView.Name = "DataGridView"
+        Me.DataGridView.RowHeadersVisible = False
+        Me.DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.DataGridView.Size = New System.Drawing.Size(755, 152)
+        Me.DataGridView.TabIndex = 329
+        '
+        'Panel12
+        '
+        Me.Panel12.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.Panel12.Controls.Add(Me.lblWomstitle)
+        Me.Panel12.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel12.Location = New System.Drawing.Point(0, 0)
+        Me.Panel12.Name = "Panel12"
+        Me.Panel12.Size = New System.Drawing.Size(755, 29)
+        Me.Panel12.TabIndex = 330
+        '
+        'lblWomstitle
+        '
+        Me.lblWomstitle.AutoSize = True
+        Me.lblWomstitle.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblWomstitle.ForeColor = System.Drawing.Color.White
+        Me.lblWomstitle.Location = New System.Drawing.Point(6, 6)
+        Me.lblWomstitle.Name = "lblWomstitle"
+        Me.lblWomstitle.Size = New System.Drawing.Size(104, 17)
+        Me.lblWomstitle.TabIndex = 1
+        Me.lblWomstitle.Text = "Work Order List"
+        '
+        'PanelRight_Delayed
+        '
+        Me.PanelRight_Delayed.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.PanelRight_Delayed.Controls.Add(Me.ChartDelayAging)
+        Me.PanelRight_Delayed.Controls.Add(Me.DataGridView_delayed)
+        Me.PanelRight_Delayed.Controls.Add(Me.Panel11)
+        Me.PanelRight_Delayed.Dock = System.Windows.Forms.DockStyle.Right
+        Me.PanelRight_Delayed.Location = New System.Drawing.Point(755, 0)
+        Me.PanelRight_Delayed.Name = "PanelRight_Delayed"
+        Me.PanelRight_Delayed.Size = New System.Drawing.Size(606, 181)
+        Me.PanelRight_Delayed.TabIndex = 327
+        '
+        'ChartDelayAging
+        '
+        Me.ChartDelayAging.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        ChartArea1.BackColor = System.Drawing.Color.Transparent
+        ChartArea1.Name = "ChartArea1"
+        Me.ChartDelayAging.ChartAreas.Add(ChartArea1)
+        Me.ChartDelayAging.Dock = System.Windows.Forms.DockStyle.Fill
+        Legend1.Name = "Legend1"
+        Me.ChartDelayAging.Legends.Add(Legend1)
+        Me.ChartDelayAging.Location = New System.Drawing.Point(303, 29)
+        Me.ChartDelayAging.Name = "ChartDelayAging"
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.ChartDelayAging.Series.Add(Series1)
+        Me.ChartDelayAging.Size = New System.Drawing.Size(303, 152)
+        Me.ChartDelayAging.TabIndex = 328
+        Me.ChartDelayAging.Text = "Chart1"
+        '
+        'DataGridView_delayed
+        '
+        Me.DataGridView_delayed.AllowUserToAddRows = False
+        Me.DataGridView_delayed.AllowUserToDeleteRows = False
+        DataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle10.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle10.ForeColor = System.Drawing.Color.White
+        Me.DataGridView_delayed.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle10
+        Me.DataGridView_delayed.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.DataGridView_delayed.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
+        Me.DataGridView_delayed.BackgroundColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.DataGridView_delayed.BorderStyle = System.Windows.Forms.BorderStyle.None
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView_delayed.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
+        Me.DataGridView_delayed.ColumnHeadersHeight = 45
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        DataGridViewCellStyle12.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle12.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.LemonChiffon
+        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView_delayed.DefaultCellStyle = DataGridViewCellStyle12
+        Me.DataGridView_delayed.Dock = System.Windows.Forms.DockStyle.Left
+        Me.DataGridView_delayed.EnableHeadersVisualStyles = False
+        Me.DataGridView_delayed.GridColor = System.Drawing.Color.FromArgb(CType(CType(28, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.DataGridView_delayed.Location = New System.Drawing.Point(0, 29)
+        Me.DataGridView_delayed.Name = "DataGridView_delayed"
+        Me.DataGridView_delayed.RowHeadersVisible = False
+        Me.DataGridView_delayed.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
+        Me.DataGridView_delayed.Size = New System.Drawing.Size(303, 152)
+        Me.DataGridView_delayed.TabIndex = 330
+        '
+        'Panel11
+        '
+        Me.Panel11.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.Panel11.Controls.Add(Me.Label4)
+        Me.Panel11.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel11.Location = New System.Drawing.Point(0, 0)
+        Me.Panel11.Name = "Panel11"
+        Me.Panel11.Size = New System.Drawing.Size(606, 29)
+        Me.Panel11.TabIndex = 326
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.Color.White
+        Me.Label4.Location = New System.Drawing.Point(6, 6)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(142, 17)
+        Me.Label4.TabIndex = 1
+        Me.Label4.Text = "Overdue Work Orders"
         '
         'Panel10
         '
@@ -723,15 +839,13 @@ Partial Class DashBoard
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
         Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.DataGridView, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel9.ResumeLayout(False)
-        CType(Me.dgvPendingSMS, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1Status.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.PanelSms.ResumeLayout(False)
+        CType(Me.dgvPendingSMS, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel7.ResumeLayout(False)
         Me.Panel7.PerformLayout()
         Me.Panel1Email.ResumeLayout(False)
@@ -739,6 +853,14 @@ Partial Class DashBoard
         Me.Panel13.ResumeLayout(False)
         Me.Panel13.PerformLayout()
         Me.Panel8.ResumeLayout(False)
+        CType(Me.DataGridView, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel12.ResumeLayout(False)
+        Me.Panel12.PerformLayout()
+        Me.PanelRight_Delayed.ResumeLayout(False)
+        CType(Me.ChartDelayAging, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridView_delayed, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel11.ResumeLayout(False)
+        Me.Panel11.PerformLayout()
         Me.Panel10.ResumeLayout(False)
         Me.Panel10.PerformLayout()
         Me.ResumeLayout(False)
@@ -750,19 +872,16 @@ Partial Class DashBoard
     Friend WithEvents DateAndTime As Timer
     Friend WithEvents Panel5 As Panel
     Friend WithEvents btnExit As Button
-    Friend WithEvents Label2 As Label
     Friend WithEvents lblDateTime As Label
     Friend WithEvents Panel1 As Panel
     Friend WithEvents lblConnection As Label
     Friend WithEvents lblCurrentVersion As Label
     Friend WithEvents lblTitle As Label
-    Friend WithEvents DataGridView As DataGridView
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents TimerSMS As Timer
     Friend WithEvents TimerWoms As Timer
     Friend WithEvents BtnSetupAndOption As Button
     Friend WithEvents Panel9 As Panel
-    Friend WithEvents dgvPendingSMS As DataGridView
     Friend WithEvents Panel1Status As Panel
     Friend WithEvents Panel2 As Panel
     Friend WithEvents lblEmailStatus As Label
@@ -780,17 +899,26 @@ Partial Class DashBoard
     Friend WithEvents Panel7 As Panel
     Friend WithEvents lblProgress As Label
     Friend WithEvents Panel1Email As Panel
-    Friend WithEvents dgvPendingEmail As DataGridView
     Friend WithEvents Panel13 As Panel
     Friend WithEvents progressEmail1 As ProgressBar
     Friend WithEvents lblEmailProgress As Label
-    Friend WithEvents Panel8 As Panel
-    Friend WithEvents Panel10 As Panel
-    Friend WithEvents chkAllowToNotify As CheckBox
     Friend WithEvents Interval_for_Sending_Sms_Notification_Close As Timer
-    Friend WithEvents Label1 As Label
     Friend WithEvents TimerReminder_insert As Timer
     Friend WithEvents progressSMS1 As ProgressBar
     Friend WithEvents lblSMTPConnectionStatus As Label
     Friend WithEvents lblSMSConnectionStatus As Label
+    Friend WithEvents Panel8 As Panel
+    Friend WithEvents Panel10 As Panel
+    Friend WithEvents Label1 As Label
+    Friend WithEvents chkAllowToNotify As CheckBox
+    Friend WithEvents Panel11 As Panel
+    Friend WithEvents PanelRight_Delayed As Panel
+    Friend WithEvents Label4 As Label
+    Friend WithEvents ChartDelayAging As DataVisualization.Charting.Chart
+    Friend WithEvents DataGridView As DataGridView
+    Friend WithEvents Panel12 As Panel
+    Friend WithEvents lblWomstitle As Label
+    Friend WithEvents DataGridView_delayed As DataGridView
+    Friend WithEvents dgvPendingSMS As DataGridView
+    Friend WithEvents dgvPendingEmail As DataGridView
 End Class
