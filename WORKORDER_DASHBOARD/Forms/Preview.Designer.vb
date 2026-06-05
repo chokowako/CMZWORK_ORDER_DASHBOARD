@@ -31,6 +31,10 @@ Partial Class Preview
         Me.DataGridView_Mat = New System.Windows.Forms.DataGridView()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.grpWorkOrderDetails = New System.Windows.Forms.GroupBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.CancelledRemarks = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.CancelledBy = New System.Windows.Forms.TextBox()
@@ -64,9 +68,10 @@ Partial Class Preview
         Me.grpAssignedPersonnel = New System.Windows.Forms.GroupBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtPersonAssigned = New System.Windows.Forms.TextBox()
-        Me.btnPrintPreview = New System.Windows.Forms.Button()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.PanelApproval = New System.Windows.Forms.Panel()
+        Me.btnViewDelayedSummary = New System.Windows.Forms.Button()
+        Me.btnPrintPreview = New System.Windows.Forms.Button()
         Me.pnlFinance = New System.Windows.Forms.Panel()
         Me.lblFinanceManager = New System.Windows.Forms.Label()
         Me.lblFinanceDate = New System.Windows.Forms.Label()
@@ -90,15 +95,12 @@ Partial Class Preview
         Me.lblApprovalTitle = New System.Windows.Forms.Label()
         Me.PrintPreviewDialog1 = New System.Windows.Forms.PrintPreviewDialog()
         Me.PrintDocument1 = New System.Drawing.Printing.PrintDocument()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.lblStatus = New System.Windows.Forms.Label()
-        Me.Label18 = New System.Windows.Forms.Label()
         Me.pnlTitle.SuspendLayout()
         Me.pnlDetails.SuspendLayout()
         Me.grpMaterials.SuspendLayout()
         CType(Me.DataGridView_Mat, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpWorkOrderDetails.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.grpAssignedPersonnel.SuspendLayout()
         Me.PanelApproval.SuspendLayout()
         Me.pnlFinance.SuspendLayout()
@@ -106,7 +108,6 @@ Partial Class Preview
         Me.pnlOperationDirector.SuspendLayout()
         Me.pnlChiefEngineer.SuspendLayout()
         Me.pnlHeadSupervisor.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'pnlTitle
@@ -216,6 +217,53 @@ Partial Class Preview
         Me.grpWorkOrderDetails.Size = New System.Drawing.Size(785, 556)
         Me.grpWorkOrderDetails.TabIndex = 369
         Me.grpWorkOrderDetails.TabStop = False
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label18)
+        Me.Panel1.Controls.Add(Me.lblStatus)
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(3, 16)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(779, 17)
+        Me.Panel1.TabIndex = 422
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.Label18.Location = New System.Drawing.Point(689, 0)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(48, 15)
+        Me.Label18.TabIndex = 423
+        Me.Label18.Text = "Status :"
+        Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblStatus
+        '
+        Me.lblStatus.AutoSize = True
+        Me.lblStatus.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblStatus.Location = New System.Drawing.Point(737, 0)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Size = New System.Drawing.Size(42, 15)
+        Me.lblStatus.TabIndex = 422
+        Me.lblStatus.Text = "Status"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label9
+        '
+        Me.Label9.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
+        Me.Label9.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.Label9.ForeColor = System.Drawing.Color.White
+        Me.Label9.Location = New System.Drawing.Point(0, 0)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(362, 17)
+        Me.Label9.TabIndex = 402
+        Me.Label9.Text = "WORK ORDER DETAILS"
         '
         'CancelledRemarks
         '
@@ -615,18 +663,6 @@ Partial Class Preview
         Me.txtPersonAssigned.Size = New System.Drawing.Size(764, 129)
         Me.txtPersonAssigned.TabIndex = 381
         '
-        'btnPrintPreview
-        '
-        Me.btnPrintPreview.ImageKey = "Print.png"
-        Me.btnPrintPreview.ImageList = Me.ImageList1
-        Me.btnPrintPreview.Location = New System.Drawing.Point(12, 605)
-        Me.btnPrintPreview.Name = "btnPrintPreview"
-        Me.btnPrintPreview.Size = New System.Drawing.Size(197, 95)
-        Me.btnPrintPreview.TabIndex = 383
-        Me.btnPrintPreview.Text = "Print Preview"
-        Me.btnPrintPreview.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnPrintPreview.UseVisualStyleBackColor = True
-        '
         'ImageList1
         '
         Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
@@ -636,6 +672,7 @@ Partial Class Preview
         'PanelApproval
         '
         Me.PanelApproval.BackColor = System.Drawing.Color.FromArgb(CType(CType(35, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(63, Byte), Integer))
+        Me.PanelApproval.Controls.Add(Me.btnViewDelayedSummary)
         Me.PanelApproval.Controls.Add(Me.btnPrintPreview)
         Me.PanelApproval.Controls.Add(Me.pnlFinance)
         Me.PanelApproval.Controls.Add(Me.pnlSupplyChain)
@@ -649,6 +686,27 @@ Partial Class Preview
         Me.PanelApproval.Name = "PanelApproval"
         Me.PanelApproval.Size = New System.Drawing.Size(240, 740)
         Me.PanelApproval.TabIndex = 353
+        '
+        'btnViewDelayedSummary
+        '
+        Me.btnViewDelayedSummary.Location = New System.Drawing.Point(12, 545)
+        Me.btnViewDelayedSummary.Name = "btnViewDelayedSummary"
+        Me.btnViewDelayedSummary.Size = New System.Drawing.Size(218, 45)
+        Me.btnViewDelayedSummary.TabIndex = 384
+        Me.btnViewDelayedSummary.Text = "View Aging Summary"
+        Me.btnViewDelayedSummary.UseVisualStyleBackColor = True
+        '
+        'btnPrintPreview
+        '
+        Me.btnPrintPreview.ImageKey = "Print.png"
+        Me.btnPrintPreview.ImageList = Me.ImageList1
+        Me.btnPrintPreview.Location = New System.Drawing.Point(12, 605)
+        Me.btnPrintPreview.Name = "btnPrintPreview"
+        Me.btnPrintPreview.Size = New System.Drawing.Size(218, 95)
+        Me.btnPrintPreview.TabIndex = 383
+        Me.btnPrintPreview.Text = "Print Preview"
+        Me.btnPrintPreview.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnPrintPreview.UseVisualStyleBackColor = True
         '
         'pnlFinance
         '
@@ -890,53 +948,6 @@ Partial Class Preview
         Me.PrintPreviewDialog1.Name = "PrintPreviewDialog1"
         Me.PrintPreviewDialog1.Visible = False
         '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.Label18)
-        Me.Panel1.Controls.Add(Me.lblStatus)
-        Me.Panel1.Controls.Add(Me.Label9)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(3, 16)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(779, 17)
-        Me.Panel1.TabIndex = 422
-        '
-        'Label9
-        '
-        Me.Label9.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
-        Me.Label9.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.Label9.ForeColor = System.Drawing.Color.White
-        Me.Label9.Location = New System.Drawing.Point(0, 0)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(362, 17)
-        Me.Label9.TabIndex = 402
-        Me.Label9.Text = "WORK ORDER DETAILS"
-        '
-        'lblStatus
-        '
-        Me.lblStatus.AutoSize = True
-        Me.lblStatus.Dock = System.Windows.Forms.DockStyle.Right
-        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblStatus.Location = New System.Drawing.Point(737, 0)
-        Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(42, 15)
-        Me.lblStatus.TabIndex = 422
-        Me.lblStatus.Text = "Status"
-        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label18.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.Label18.Location = New System.Drawing.Point(689, 0)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(48, 15)
-        Me.Label18.TabIndex = 423
-        Me.Label18.Text = "Status :"
-        Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'Preview
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -958,6 +969,8 @@ Partial Class Preview
         CType(Me.DataGridView_Mat, System.ComponentModel.ISupportInitialize).EndInit()
         Me.grpWorkOrderDetails.ResumeLayout(False)
         Me.grpWorkOrderDetails.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.grpAssignedPersonnel.ResumeLayout(False)
         Me.grpAssignedPersonnel.PerformLayout()
         Me.PanelApproval.ResumeLayout(False)
@@ -972,8 +985,6 @@ Partial Class Preview
         Me.pnlChiefEngineer.PerformLayout()
         Me.pnlHeadSupervisor.ResumeLayout(False)
         Me.pnlHeadSupervisor.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1047,4 +1058,5 @@ Partial Class Preview
     Friend WithEvents Label18 As Label
     Friend WithEvents lblStatus As Label
     Friend WithEvents Label9 As Label
+    Friend WithEvents btnViewDelayedSummary As Button
 End Class

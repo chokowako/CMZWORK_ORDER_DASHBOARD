@@ -211,6 +211,11 @@ Public Class DashBoard
                 .Columns("Message").DefaultCellStyle.WrapMode = DataGridViewTriState.True
                 .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
                 .CellBorderStyle = DataGridViewCellBorderStyle.None
+
+                ' Header Height
+                .ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                .ColumnHeadersHeight = 30
+
                 .ClearSelection()
                 .CurrentCell = Nothing
             End With
@@ -967,6 +972,11 @@ Public Class DashBoard
                 .Columns("EmailBody").DefaultCellStyle.WrapMode = DataGridViewTriState.True
                 .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
                 .CellBorderStyle = DataGridViewCellBorderStyle.None
+
+                ' Header Height
+                .ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                .ColumnHeadersHeight = 30
+
                 .ClearSelection()
                 .CurrentCell = Nothing
             End With
@@ -1306,6 +1316,10 @@ Public Class DashBoard
     End Sub
 
     Private Sub DataGridView_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridView_delayed_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView_delayed.CellContentClick
 
     End Sub
 End Class

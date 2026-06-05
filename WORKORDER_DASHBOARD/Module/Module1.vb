@@ -116,6 +116,9 @@ Module Module1
                         .RowHeadersVisible = False
                         .RowTemplate.Height = 40
 
+                        ' Header Height
+                        .ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                        .ColumnHeadersHeight = 30
                     End With
 
                     ' =========================
@@ -163,7 +166,9 @@ Module Module1
             MessageBox.Show($"Error: {ex.Message}")
         End Try
 
-
+        ApplyWorkOrderColors()
+        ApplyReColors()
+        'CountAllMaterialColorsFromData()
 
 
 

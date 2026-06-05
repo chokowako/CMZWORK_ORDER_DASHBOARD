@@ -29,6 +29,12 @@ Public Class Preview
     Private FinancePosition As String
     Private FinanceDate As String
 
+    'Private IsMaterialsNeeded As Boolean
+    Private IsPORequired As Boolean
+    Private MaterialsDecision As String = ""
+    Private isMaterialsYes As Boolean = False
+    Private IsSupplyChainRequired As Boolean = False
+
 
     Private Sub Preview_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -36,13 +42,12 @@ Public Class Preview
 
         LoadApprovalStatus(TxtWorkOrderNo.Text)
 
-        UpdateWorkflowStatus()
-
         LoadWorkOrderDetails(TxtWorkOrderNo.Text)
+
+        UpdateWorkflowStatus()
 
         LoadMaterials(TxtWorkOrderNo.Text)
 
-        ' OPTIONAL: show dates under labels (if you have separate labels)
 
         lblHeadDate.Text = HeadDate
         lblcheckedByHeadSupervisor.Text = Headby
@@ -53,12 +58,10 @@ Public Class Preview
         lblApprovedby.Text = Operationby
         lblOperationDate.Text = OperationDate
 
-        lblSupplyChainHead.Text = Supplyby
-        lblSupplyDate.Text = SupplyDate
-
-        lblFinanceManager.Text = Supplyby
+        lblFinanceManager.Text = Financeby
         lblFinanceDate.Text = FinanceDate
     End Sub
+
     Private Sub CenterTitle()
         lblTitle.Left = (Me.ClientSize.Width - lblTitle.Width) \ 2
         lblTitle.Top = 10
@@ -67,15 +70,14 @@ Public Class Preview
         CenterTitle()
     End Sub
     Private Sub ReadOnlyTextBox_Enter(sender As Object, e As EventArgs)
-
-
         Me.ActiveControl = Nothing
     End Sub
 
     Private Sub LoadApprovalStatus(workOrderNo As String)
 
         Dim sql As String = "
-    SELECT
+    SELECT 
+
         HeadSupervisorStatus,
         HeadSupervisor,
         HeadSuperVisorTimeAndDateApprove,
@@ -145,7 +147,6 @@ Public Class Preview
     Private Function GetPosition(fullname As String) As String
 
         Dim position As String = ""
-
         Try
 
             Using conn As New SqlConnection(connStr)
@@ -180,6 +181,14 @@ Public Class Preview
     End Function
     Private Sub UpdateWorkflowStatus()
 
+
+        lblSupplyChainHead.Text = ""
+        lblSupplyDate.Text = ""
+
+        lblFinanceManager.Text = ""
+        lblFinanceDate.Text = ""
+
+
         ' ========================
         ' RESET ALL
         ' ========================
@@ -192,76 +201,89 @@ Public Class Preview
         ' ========================
         ' HEAD SUPERVISOR
         ' ========================
-        If HeadStatus <> "APPROVED" And
-       HeadStatus <> "CHECKED" And
-       HeadStatus <> "1" Then
-
+        If HeadStatus <> "APPROVED" AndAlso HeadStatus <> "CHECKED" AndAlso HeadStatus <> "1" Then
             SetApprovalStatus(lblHeadStatus, HeadPosition, "PENDING")
             Exit Sub
-
         End If
 
         SetApprovalStatus(lblHeadStatus, HeadPosition, "APPROVED")
 
-
-
         ' ========================
         ' CHIEF ENGINEER
         ' ========================
-        If ChiefStatus <> "APPROVED" And
-       ChiefStatus <> "1" Then
-
+        If ChiefStatus <> "APPROVED" AndAlso ChiefStatus <> "1" Then
             SetApprovalStatus(lblChiefStatus, ChiefPosition, "PENDING")
             Exit Sub
-
         End If
 
         SetApprovalStatus(lblChiefStatus, ChiefPosition, "APPROVED")
 
-
-
         ' ========================
         ' OPERATION DIRECTOR
         ' ========================
-        If OperationStatus <> "APPROVED" And
-       OperationStatus <> "1" Then
-
+        If OperationStatus <> "APPROVED" AndAlso OperationStatus <> "1" Then
             SetApprovalStatus(lblOperationStatus, OperationPosition, "PENDING")
             Exit Sub
-
         End If
 
         SetApprovalStatus(lblOperationStatus, OperationPosition, "APPROVED")
 
 
 
+
         ' ========================
         ' SUPPLY CHAIN
         ' ========================
-        If SupplyStatus <> "APPROVED" And
-       SupplyStatus <> "1" Then
 
-            SetApprovalStatus(lblSupplyStatus, SupplyPosition, "PENDING")
+        If Not IsSupplyChainRequired Then
+
+            SetApprovalStatus(lblSupplyStatus, SupplyPosition, "NOT REQUIRED")
+
+            lblSupplyChainHead.Text = "⛔ Supply Chian (No Materials Required)"
+            lblSupplyDate.Text = ""
+
+        Else
+
+            'Always show approver info (even if pending)
+            lblSupplyChainHead.Text = If(String.IsNullOrEmpty(Supplyby), "PENDING", Supplyby)
+            lblSupplyDate.Text = SupplyDate
+
+            'Now handle status display
+            If SupplyStatus = "APPROVED" OrElse SupplyStatus = "1" Then
+
+                SetApprovalStatus(lblSupplyStatus, SupplyPosition, "APPROVED")
+
+            Else
+
+                SetApprovalStatus(lblSupplyStatus, SupplyPosition, "PENDING")
+
+                'IMPORTANT: DO NOT Exit Sub here
+                Exit Sub
+
+            End If
+
+        End If
+
+
+
+        ' ========================
+        ' FINANCE (ONLY IF PO REQUIRED)
+        ' ========================
+        If Not IsPORequired Then
+
+            SetApprovalStatus(lblFinanceStatus, FinancePosition, "NOT REQUIRED")
+            lblFinanceStatus.ForeColor = Color.Gray
+            lblFinanceStatus.Text = "⛔ Finance (No PO Required)"
+
             Exit Sub
 
         End If
 
-        SetApprovalStatus(lblSupplyStatus, SupplyPosition, "APPROVED")
-
-
-
-        ' ========================
-        ' FINANCE
-        ' ========================
-        If FinanceStatus = "1" Or
-       FinanceStatus = "APPROVED" Then
-
+        If FinanceStatus = "1" Or FinanceStatus = "APPROVED" Then
             SetApprovalStatus(lblFinanceStatus, FinancePosition, "APPROVED")
-
         Else
-
             SetApprovalStatus(lblFinanceStatus, FinancePosition, "PENDING")
-
+            Exit Sub
         End If
 
     End Sub
@@ -294,58 +316,61 @@ Public Class Preview
     End Sub
 
 
+
     Private Sub LoadWorkOrderDetails(workOrderNo As String)
         Try
+            Dim sql As String = "
+        SELECT
+            w.RequestedBy,
+            w.RegistryDate,
+            w.Unit_Section,
+            w.HeadSupervisor,
+            w.Work_Description,
+            w.IsMaterialsNeeded,
+            w.PO_Acknowledge_Flag,
 
-            Dim sql As String = "SELECT
-    w.RequestedBy,
-	w.RegistryDate,
-    w.Unit_Section,
-    w.HeadSupervisor,
-    w.Work_Description,
+            CASE
+                WHEN w.isCorrectiveMaintenance = 1 THEN 'Corrective Maintenance'
+                WHEN w.isFacilitiesMaintenance = 1 THEN 'Facilities Maintenance'
+                WHEN w.isPreventiveMaintenance = 1 THEN 'Preventive Maintenance'
+                WHEN w.isProjectManagement = 1 THEN 'Project Management'
+                ELSE 'N/A'
+            END AS WorkOrderType,
 
-	    CASE
-        WHEN w.isCorrectiveMaintenance = 1 THEN 'Corrective Maintenance'
-        WHEN w.isFacilitiesMaintenance = 1 THEN 'Facilities Maintenance'
-        WHEN w.isPreventiveMaintenance = 1 THEN 'Preventive Maintenance'
-        WHEN w.isProjectManagement = 1 THEN 'Project Management'
-        ELSE 'N/A'
-    END AS WorkOrderType,
-    ISNULL(st.SeverityName, 'N/A') AS SeverityType,
+            ISNULL(st.SeverityName, 'N/A') AS SeverityType,
 
-	w.Status,
-	w.CompleteStatusDateAndTime,
-	w.TagAsCompleteBy,
-	w.CloseStatusDateAndTime,
-	w.TagAsCloseBy,
-	w.CancelDate,
-	w.CancelBy,
-	w.CancelRemarks,
+            w.Status,
+            w.CompleteStatusDateAndTime,
+            w.TagAsCompleteBy,
+            w.CloseStatusDateAndTime,
+            w.TagAsCloseBy,
+            w.CancelDate,
+            w.CancelBy,
+            w.CancelRemarks,
 
-    ISNULL(
-        STUFF(
-            (
-                SELECT CHAR(13) + CHAR(10) +
-                       pa.Fullname + ' - ' +
-                       pa.Position + ' - ' +
-                       pa.ContactNo
-                FROM PersonAssigned pa
-                WHERE pa.Pk_WorkOrderNo = w.Pk_WorkOrderNo
-                FOR XML PATH(''), TYPE
-            ).value('.', 'NVARCHAR(MAX)')
-        ,1,2,'')
-    ,'Unassigned') AS AssignedPersonnel
+            ISNULL(
+                STUFF(
+                    (
+                        SELECT CHAR(13) + CHAR(10) +
+                               pa.Fullname + ' - ' +
+                               pa.Position + ' - ' +
+                               pa.ContactNo
+                        FROM PersonAssigned pa
+                        WHERE pa.Pk_WorkOrderNo = w.Pk_WorkOrderNo
+                        FOR XML PATH(''), TYPE
+                    ).value('.', 'NVARCHAR(MAX)')
+                ,1,2,'')
+            ,'Unassigned') AS AssignedPersonnel
 
-FROM WorkOrderForm w
-LEFT JOIN SeverityType st
-    ON w.SeverityType = st.SeverityTypeID
-WHERE w.Pk_WorkOrderNo = @WorkOrderNo"
+        FROM WorkOrderForm w
+        LEFT JOIN SeverityType st
+            ON w.SeverityType = st.SeverityTypeID
+        WHERE w.Pk_WorkOrderNo = @WorkOrderNo"
 
             Using conn As New SqlConnection(connStr)
                 Using cmd As New SqlCommand(sql, conn)
 
                     cmd.Parameters.AddWithValue("@WorkOrderNo", workOrderNo)
-
                     conn.Open()
 
                     Using dr As SqlDataReader = cmd.ExecuteReader()
@@ -368,13 +393,11 @@ WHERE w.Pk_WorkOrderNo = @WorkOrderNo"
                             CompletedBy.Text = If(IsDBNull(dr("TagAsCompleteBy")), "", dr("TagAsCompleteBy").ToString())
                             If CompletedBy.Text.ToUpper() = "PENDING" Then CompletedBy.Text = ""
 
-
                             DateClose.Text = If(IsDBNull(dr("CloseStatusDateAndTime")), "", dr("CloseStatusDateAndTime").ToString())
                             If DateClose.Text.ToUpper() = "PENDING" Then DateClose.Text = ""
 
                             Closeby.Text = If(IsDBNull(dr("TagAsCloseBy")), "", dr("TagAsCloseBy").ToString())
                             If Closeby.Text.ToUpper() = "PENDING" Then Closeby.Text = ""
-
 
                             DateCancelled.Text = If(IsDBNull(dr("CancelDate")), "", dr("CancelDate").ToString())
                             If DateCancelled.Text.ToUpper() = "PENDING" Then DateCancelled.Text = ""
@@ -387,14 +410,48 @@ WHERE w.Pk_WorkOrderNo = @WorkOrderNo"
 
                             txtPersonAssigned.Text = dr("AssignedPersonnel").ToString()
 
+                            '========================
+                            ' MATERIALS DECISION
+                            '========================
+                            Dim rawMat As String = If(IsDBNull(dr("IsMaterialsNeeded")), "", dr("IsMaterialsNeeded").ToString())
+                            MaterialsDecision = rawMat.Trim().ToUpper()
+
+                            isMaterialsYes = (MaterialsDecision = "YES" OrElse MaterialsDecision = "1" OrElse MaterialsDecision = "TRUE")
+
+                            '========================
+                            ' PO FLAG
+                            '========================
+                            Dim poFlag As String = If(IsDBNull(dr("PO_Acknowledge_Flag")), "", dr("PO_Acknowledge_Flag").ToString().Trim().ToUpper())
+                            IsPORequired = (poFlag = "1" OrElse poFlag = "TRUE" OrElse poFlag = "YES" OrElse poFlag = "APPROVED")
+
+                            '========================
+                            ' CHECK SC MATERIALS (SUPPLY CHAIN RULE)
+                            '========================
+                            IsSupplyChainRequired = False
+
+                            Using conn2 As New SqlConnection(connStr)
+
+                                Dim sqlSC As String = "
+                                SELECT COUNT(*)
+                                FROM RequestedMaterials
+                                WHERE Pk_WorkOrderNo = @WorkOrderNo
+                                  AND StockSource = 'SC'"
+
+                                Using cmd2 As New SqlCommand(sqlSC, conn2)
+                                    cmd2.Parameters.AddWithValue("@WorkOrderNo", workOrderNo)
+                                    conn2.Open()
+
+                                    Dim scCount As Integer = Convert.ToInt32(cmd2.ExecuteScalar())
+                                    IsSupplyChainRequired = (scCount > 0)
+
+                                End Using
+                            End Using
+
                         Else
-
                             MessageBox.Show("Work Order not found.", "Preview", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-
                         End If
 
                     End Using
-
                 End Using
             End Using
 
@@ -402,6 +459,7 @@ WHERE w.Pk_WorkOrderNo = @WorkOrderNo"
             MessageBox.Show("Error loading work order details: " & ex.Message)
         End Try
     End Sub
+
 
     Private Sub LoadMaterials(workOrderNo As String)
 
@@ -559,6 +617,13 @@ WHERE w.Pk_WorkOrderNo = @WorkOrderNo"
 
     End Sub
 
+    Private Sub btnViewDelayedSummary_Click(sender As Object, e As EventArgs) Handles btnViewDelayedSummary.Click
+        Dim frm As New FrmDelaySummary
 
+        frm.WorkOrderNo = TxtWorkOrderNo.Text
+
+        frm.ShowDialog(Me)
+
+    End Sub
 End Class
 
