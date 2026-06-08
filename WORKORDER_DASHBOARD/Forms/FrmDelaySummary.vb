@@ -17,6 +17,13 @@ Public Class FrmDelaySummary
 
         LoadPendingMaterials()
 
+        With txtDes
+            .ReadOnly = True
+            .TabStop = False
+            .BackColor = Color.FromArgb(44, 60, 79)
+            .ForeColor = Color.White
+        End With
+
     End Sub
 
     ' ======================================================
@@ -155,7 +162,7 @@ Public Class FrmDelaySummary
         pnlTimeline.SuspendLayout()
         pnlTimeline.Controls.Clear()
         pnlTimeline.AutoScroll = True
-        pnlTimeline.BackColor = Color.FromArgb(25, 25, 25)
+        pnlTimeline.BackColor = Color.FromArgb(44, 60, 79)
 
         TimelineTop = 10
 
@@ -320,10 +327,9 @@ Public Class FrmDelaySummary
         .Height = 55,
         .Left = 30,
         .Top = TimelineTop,
-        .BackColor = Color.FromArgb(40, 40, 40)
+        .BackColor = Color.FromArgb(44, 60, 79) ' UPDATED
     }
 
-        ' colored indicator bar (THIS is what gives visual status)
         Dim colorBar As New Panel With {
         .Width = 8,
         .Height = stepPanel.Height,
@@ -440,13 +446,13 @@ Public Class FrmDelaySummary
                 .RowHeadersVisible = False
                 .SelectionMode = DataGridViewSelectionMode.FullRowSelect
 
-                .BackgroundColor = Color.FromArgb(25, 25, 25)
-                .DefaultCellStyle.BackColor = Color.FromArgb(40, 40, 40)
+                .BackgroundColor = Color.FromArgb(44, 60, 79)
+                .DefaultCellStyle.BackColor = Color.FromArgb(44, 60, 79)
                 .DefaultCellStyle.ForeColor = Color.White
                 .DefaultCellStyle.SelectionBackColor = Color.DarkSlateGray
                 .DefaultCellStyle.SelectionForeColor = Color.White
 
-                .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 30)
+                .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(44, 60, 79)
                 .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
                 .EnableHeadersVisualStyles = False
             End With
@@ -502,12 +508,12 @@ Public Class FrmDelaySummary
             .RowHeadersVisible = False
             .SelectionMode = DataGridViewSelectionMode.FullRowSelect
 
-            .BackgroundColor = Color.FromArgb(25, 25, 25)
-            .DefaultCellStyle.BackColor = Color.FromArgb(40, 40, 40)
+            .BackgroundColor = Color.FromArgb(44, 60, 79)
+            .DefaultCellStyle.BackColor = Color.FromArgb(44, 60, 79)
             .DefaultCellStyle.ForeColor = Color.White
             .DefaultCellStyle.SelectionBackColor = Color.DarkSlateGray
 
-            .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 30)
+            .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(44, 60, 79)
             .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
             .EnableHeadersVisualStyles = False
         End With
