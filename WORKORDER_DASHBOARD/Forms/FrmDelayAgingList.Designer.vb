@@ -40,7 +40,7 @@ Partial Class FrmDelayAgingList
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1273, 100)
+        Me.Panel1.Size = New System.Drawing.Size(1025, 100)
         Me.Panel1.TabIndex = 316
         '
         'PictureBox1
@@ -60,7 +60,7 @@ Partial Class FrmDelayAgingList
         Me.lblTitle.ForeColor = System.Drawing.Color.White
         Me.lblTitle.Location = New System.Drawing.Point(0, 0)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(1273, 100)
+        Me.lblTitle.Size = New System.Drawing.Size(1025, 100)
         Me.lblTitle.TabIndex = 2
         Me.lblTitle.Text = "Delayed Work Orders"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -77,26 +77,30 @@ Partial Class FrmDelayAgingList
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1273, 581)
+        Me.DataGridView1.Size = New System.Drawing.Size(1025, 659)
         Me.DataGridView1.TabIndex = 317
         '
         'Panel2
         '
         Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(60, Byte), Integer), CType(CType(79, Byte), Integer))
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 681)
+        Me.Panel2.Location = New System.Drawing.Point(0, 759)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1273, 32)
+        Me.Panel2.Size = New System.Drawing.Size(1025, 32)
         Me.Panel2.TabIndex = 318
         '
         'FrmDelayAgingList
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1273, 713)
+        Me.ClientSize = New System.Drawing.Size(1025, 791)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
+        Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(1041, 830)
+        Me.MinimizeBox = False
+        Me.MinimumSize = New System.Drawing.Size(1041, 830)
         Me.Name = "FrmDelayAgingList"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "FrmDelayAgingList"

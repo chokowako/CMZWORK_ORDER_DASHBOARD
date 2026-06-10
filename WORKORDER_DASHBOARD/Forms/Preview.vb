@@ -235,34 +235,45 @@ Public Class Preview
         ' SUPPLY CHAIN
         ' ========================
 
+        '1. HARD STOP: NO MATERIALS NEEDED
+        If MaterialsDecision = "NO" OrElse MaterialsDecision = "0" OrElse MaterialsDecision = "" Then
+
+            SetApprovalStatus(lblSupplyStatus, "Supply Chain", "NOT REQUIRED")
+
+            lblSupplyChainHead.Text = "⛔ Supply Chain (No Materials Required)"
+            lblSupplyDate.Text = ""
+
+            Exit Sub
+        End If
+
+        '2. CHECK IF SC IS REQUIRED (based on materials list)
         If Not IsSupplyChainRequired Then
 
-            SetApprovalStatus(lblSupplyStatus, SupplyPosition, "NOT REQUIRED")
+            SetApprovalStatus(lblSupplyStatus, "Supply Chain", "NOT REQUIRED")
 
-            lblSupplyChainHead.Text = "⛔ Supply Chian (No Materials Required)"
+            lblSupplyChainHead.Text = "⛔ Supply Chain (Not Applicable)"
             lblSupplyDate.Text = ""
+
+            Exit Sub
+        End If
+
+
+        '3. VALID SUPPLY CHAIN FLOW
+        lblSupplyChainHead.Text = If(String.IsNullOrEmpty(Supplyby), "PENDING", Supplyby)
+        lblSupplyDate.Text = SupplyDate
+
+        If SupplyStatus = "APPROVED" OrElse SupplyStatus = "1" Then
+
+            SetApprovalStatus(lblSupplyStatus, SupplyPosition, "APPROVED")
 
         Else
 
-            'Always show approver info (even if pending)
-            lblSupplyChainHead.Text = If(String.IsNullOrEmpty(Supplyby), "PENDING", Supplyby)
-            lblSupplyDate.Text = SupplyDate
+            SetApprovalStatus(lblSupplyStatus, SupplyPosition, "PENDING")
 
-            'Now handle status display
-            If SupplyStatus = "APPROVED" OrElse SupplyStatus = "1" Then
-
-                SetApprovalStatus(lblSupplyStatus, SupplyPosition, "APPROVED")
-
-            Else
-
-                SetApprovalStatus(lblSupplyStatus, SupplyPosition, "PENDING")
-
-                'IMPORTANT: DO NOT Exit Sub here
-                Exit Sub
-
-            End If
+            Exit Sub
 
         End If
+
 
 
 

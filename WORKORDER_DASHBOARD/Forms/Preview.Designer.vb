@@ -957,7 +957,9 @@ Partial Class Preview
         Me.Controls.Add(Me.pnlDetails)
         Me.Controls.Add(Me.PanelApproval)
         Me.Controls.Add(Me.pnlTitle)
+        Me.Location = New System.Drawing.Point(1041, 830)
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(1041, 830)
         Me.MinimizeBox = False
         Me.Name = "Preview"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

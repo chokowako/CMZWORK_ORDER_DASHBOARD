@@ -1315,13 +1315,6 @@ Public Class DashBoard
         End If
     End Sub
 
-    Private Sub DataGridView_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView.CellContentClick
-
-    End Sub
-
-    Private Sub DataGridView_delayed_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView_delayed.CellContentClick
-
-    End Sub
 End Class
 
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3

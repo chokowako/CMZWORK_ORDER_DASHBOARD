@@ -136,6 +136,17 @@ Public Class FrmDelayAgingList
 
         End With
 
+
+        ' =========================
+        ' FONTS
+        ' =========================
+        With DataGridView1
+            .DefaultCellStyle.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            .ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+            .RowHeadersDefaultCellStyle.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+        End With
+
+
         ' =========================
         ' FORMAT DATE
         ' =========================
