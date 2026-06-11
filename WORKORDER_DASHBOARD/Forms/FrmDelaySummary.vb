@@ -44,12 +44,22 @@ Public Class FrmDelaySummary
 
             conn.Open()
 
-            Dim sql As String = "
-        SELECT *
-        FROM WorkOrderForm w
-        LEFT JOIN RequestedMaterials rm
-            ON w.Pk_WorkOrderNo = rm.Pk_WorkOrderNo
-        WHERE w.Pk_WorkOrderNo = @WO"
+            Dim sql As String = "SELECT
+                                    w.*,
+                                    rm.*,
+
+                                    CASE
+                                        WHEN w.isCorrectiveMaintenance = 1 THEN 'Corrective Maintenance'
+                                        WHEN w.isFacilitiesMaintenance = 1 THEN 'Facilities Maintenance'
+                                        WHEN w.isPreventiveMaintenance = 1 THEN 'Preventive Maintenance'
+                                        WHEN w.isProjectManagement = 1 THEN 'Project Management'
+                                        ELSE 'N/A'
+                                    END AS MaintenanceType
+
+                                FROM WorkOrderForm w
+                                LEFT JOIN RequestedMaterials rm
+                                    ON w.Pk_WorkOrderNo = rm.Pk_WorkOrderNo
+                                WHERE w.Pk_WorkOrderNo   = @WO"
 
             Using cmd As New SqlCommand(sql, conn)
                 cmd.Parameters.AddWithValue("@WO", workOrderNo)
@@ -71,7 +81,8 @@ Public Class FrmDelaySummary
 
 
                     txtDes.Text = dr("Work_Description").ToString()
-                    lblSeverity.Text = dr("Work_Description").ToString()
+                    LblTypeofProc.Text = dr("MaintenanceType").ToString()
+                    lblSeverity.Text = dr("SeverityType").ToString()
 
                     ' ======================================================
                     ' 1. HEAD SUPERVISOR
@@ -418,16 +429,23 @@ Public Class FrmDelaySummary
 
         Dim days As Integer = DateDiff(DateInterval.Day, startDate, endDate)
 
+        'Dim stepPanel As New Panel With {
+        '.Width = pnlTimeline.ClientSize.Width - 25,
+        '.Height = 40,
+        '.Left = 30,
+        '.Top = TimelineTop,
+        '.BackColor = Color.FromArgb(44, 60, 79) ' UPDATED
+
         Dim stepPanel As New Panel With {
-        .Width = pnlTimeline.ClientSize.Width - 25,
-        .Height = 40,
-        .Left = 30,
+        .Width = pnlTimeline.ClientSize.Width - 10,
+        .Height = 50,
+        .Left = 5,
         .Top = TimelineTop,
-        .BackColor = Color.FromArgb(44, 60, 79) ' UPDATED
+        .BackColor = Color.FromArgb(44, 60, 79)
     }
 
         Dim colorBar As New Panel With {
-        .Width = 8,
+        .Width = 15,
         .Height = stepPanel.Height,
         .Left = 0,
         .Top = 0,
@@ -456,12 +474,19 @@ Public Class FrmDelaySummary
 
     Private Sub AddPendingStep(title As String)
 
+        'Dim stepPanel As New Panel With {
+        '    .Width = pnlTimeline.ClientSize.Width - 25,
+        '    .Height = 40,
+        '    .Left = 30,
+        '    .Top = TimelineTop,
+        '    .BackColor = Color.DarkGoldenrod
+
         Dim stepPanel As New Panel With {
-            .Width = pnlTimeline.ClientSize.Width - 25,
-            .Height = 40,
-            .Left = 30,
+            .Width = pnlTimeline.ClientSize.Width - 10,
+            .Height = 50,
+            .Left = 5,
             .Top = TimelineTop,
-            .BackColor = Color.DarkGoldenrod
+           .BackColor = Color.DarkGoldenrod
         }
 
         Dim lbl As New Label With {

@@ -34,7 +34,11 @@ Partial Class FrmDelaySummary
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.grpDelayInfo = New System.Windows.Forms.GroupBox()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.pnlTimeline = New System.Windows.Forms.Panel()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.lblSeverity = New System.Windows.Forms.Label()
         Me.txtDes = New System.Windows.Forms.TextBox()
@@ -46,17 +50,16 @@ Partial Class FrmDelaySummary
         Me.lblCurrentDelay = New System.Windows.Forms.Label()
         Me.lblDaysDelay = New System.Windows.Forms.Label()
         Me.lblResponsibleArea = New System.Windows.Forms.Label()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.pnlTimeline = New System.Windows.Forms.Panel()
-        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.LblTypeofProc = New System.Windows.Forms.Label()
         Me.pnlTitle.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.lstPendingMaterials_grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.grpDelayInfo.SuspendLayout()
         Me.Panel4.SuspendLayout()
+        Me.Panel5.SuspendLayout()
         Me.SuspendLayout()
         '
         'pnlTitle
@@ -133,6 +136,7 @@ Partial Class FrmDelaySummary
         '
         'Panel3
         '
+        Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(204, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(223, Byte), Integer))
         Me.Panel3.Controls.Add(Me.Label5)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(6, 6)
@@ -155,7 +159,7 @@ Partial Class FrmDelaySummary
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.grpDelayInfo, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel5, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Panel4, 0, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 44)
@@ -166,62 +170,110 @@ Partial Class FrmDelaySummary
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(1025, 465)
         Me.TableLayoutPanel1.TabIndex = 22
         '
-        'grpDelayInfo
+        'Panel4
         '
-        Me.grpDelayInfo.Controls.Add(Me.Label6)
-        Me.grpDelayInfo.Controls.Add(Me.lblSeverity)
-        Me.grpDelayInfo.Controls.Add(Me.txtDes)
-        Me.grpDelayInfo.Controls.Add(Me.Label4)
-        Me.grpDelayInfo.Controls.Add(Me.Label3)
-        Me.grpDelayInfo.Controls.Add(Me.Label2)
-        Me.grpDelayInfo.Controls.Add(Me.Label1)
-        Me.grpDelayInfo.Controls.Add(Me.lblWorkOrderNo)
-        Me.grpDelayInfo.Controls.Add(Me.lblCurrentDelay)
-        Me.grpDelayInfo.Controls.Add(Me.lblDaysDelay)
-        Me.grpDelayInfo.Controls.Add(Me.lblResponsibleArea)
-        Me.grpDelayInfo.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.grpDelayInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.grpDelayInfo.Location = New System.Drawing.Point(515, 3)
-        Me.grpDelayInfo.Name = "grpDelayInfo"
-        Me.grpDelayInfo.Size = New System.Drawing.Size(507, 459)
-        Me.grpDelayInfo.TabIndex = 23
-        Me.grpDelayInfo.TabStop = False
-        Me.grpDelayInfo.Text = "Delay Information"
+        Me.Panel4.BackColor = System.Drawing.Color.FromArgb(CType(CType(204, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(223, Byte), Integer))
+        Me.Panel4.Controls.Add(Me.pnlTimeline)
+        Me.Panel4.Controls.Add(Me.Label7)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel4.Location = New System.Drawing.Point(3, 3)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Padding = New System.Windows.Forms.Padding(5)
+        Me.Panel4.Size = New System.Drawing.Size(506, 459)
+        Me.Panel4.TabIndex = 0
+        '
+        'pnlTimeline
+        '
+        Me.pnlTimeline.AutoScroll = True
+        Me.pnlTimeline.BackColor = System.Drawing.SystemColors.Control
+        Me.pnlTimeline.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnlTimeline.Location = New System.Drawing.Point(5, 23)
+        Me.pnlTimeline.Name = "pnlTimeline"
+        Me.pnlTimeline.Padding = New System.Windows.Forms.Padding(10)
+        Me.pnlTimeline.Size = New System.Drawing.Size(496, 431)
+        Me.pnlTimeline.TabIndex = 17
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!)
+        Me.Label7.Location = New System.Drawing.Point(5, 5)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(131, 18)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "Timeline Summary"
+        '
+        'Panel5
+        '
+        Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(204, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(223, Byte), Integer))
+        Me.Panel5.Controls.Add(Me.LblTypeofProc)
+        Me.Panel5.Controls.Add(Me.Label9)
+        Me.Panel5.Controls.Add(Me.txtDes)
+        Me.Panel5.Controls.Add(Me.Label6)
+        Me.Panel5.Controls.Add(Me.lblSeverity)
+        Me.Panel5.Controls.Add(Me.Label8)
+        Me.Panel5.Controls.Add(Me.Label1)
+        Me.Panel5.Controls.Add(Me.Label4)
+        Me.Panel5.Controls.Add(Me.lblResponsibleArea)
+        Me.Panel5.Controls.Add(Me.Label3)
+        Me.Panel5.Controls.Add(Me.lblDaysDelay)
+        Me.Panel5.Controls.Add(Me.Label2)
+        Me.Panel5.Controls.Add(Me.lblCurrentDelay)
+        Me.Panel5.Controls.Add(Me.lblWorkOrderNo)
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel5.Location = New System.Drawing.Point(515, 3)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Padding = New System.Windows.Forms.Padding(5)
+        Me.Panel5.Size = New System.Drawing.Size(507, 459)
+        Me.Panel5.TabIndex = 19
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!)
+        Me.Label8.Location = New System.Drawing.Point(5, 5)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(123, 18)
+        Me.Label8.TabIndex = 18
+        Me.Label8.Text = "Delay Information"
         '
         'Label6
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Label6.Location = New System.Drawing.Point(15, 366)
+        Me.Label6.Location = New System.Drawing.Point(14, 364)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(178, 21)
+        Me.Label6.Size = New System.Drawing.Size(174, 21)
         Me.Label6.TabIndex = 17
-        Me.Label6.Text = "Severity                         -"
+        Me.Label6.Text = "Severity                        -"
         '
         'lblSeverity
         '
         Me.lblSeverity.AutoSize = True
         Me.lblSeverity.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.lblSeverity.Location = New System.Drawing.Point(213, 366)
+        Me.lblSeverity.Location = New System.Drawing.Point(192, 364)
         Me.lblSeverity.Name = "lblSeverity"
         Me.lblSeverity.Size = New System.Drawing.Size(0, 21)
         Me.lblSeverity.TabIndex = 16
         '
         'txtDes
         '
+        Me.txtDes.BackColor = System.Drawing.Color.DarkGray
         Me.txtDes.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDes.Location = New System.Drawing.Point(18, 222)
+        Me.txtDes.Location = New System.Drawing.Point(12, 200)
         Me.txtDes.Multiline = True
         Me.txtDes.Name = "txtDes"
         Me.txtDes.ReadOnly = True
-        Me.txtDes.Size = New System.Drawing.Size(465, 119)
+        Me.txtDes.Size = New System.Drawing.Size(486, 119)
         Me.txtDes.TabIndex = 15
         '
         'Label4
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Label4.Location = New System.Drawing.Point(14, 156)
+        Me.Label4.Location = New System.Drawing.Point(8, 144)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(176, 21)
         Me.Label4.TabIndex = 14
@@ -231,7 +283,7 @@ Partial Class FrmDelaySummary
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Label3.Location = New System.Drawing.Point(14, 122)
+        Me.Label3.Location = New System.Drawing.Point(8, 110)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(177, 21)
         Me.Label3.TabIndex = 13
@@ -241,7 +293,7 @@ Partial Class FrmDelaySummary
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
-        Me.Label2.Location = New System.Drawing.Point(14, 84)
+        Me.Label2.Location = New System.Drawing.Point(8, 72)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(177, 21)
         Me.Label2.TabIndex = 12
@@ -251,7 +303,7 @@ Partial Class FrmDelaySummary
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(14, 48)
+        Me.Label1.Location = New System.Drawing.Point(8, 36)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(179, 21)
         Me.Label1.TabIndex = 11
@@ -261,7 +313,7 @@ Partial Class FrmDelaySummary
         '
         Me.lblWorkOrderNo.AutoSize = True
         Me.lblWorkOrderNo.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblWorkOrderNo.Location = New System.Drawing.Point(198, 52)
+        Me.lblWorkOrderNo.Location = New System.Drawing.Point(192, 40)
         Me.lblWorkOrderNo.Name = "lblWorkOrderNo"
         Me.lblWorkOrderNo.Size = New System.Drawing.Size(0, 21)
         Me.lblWorkOrderNo.TabIndex = 3
@@ -270,7 +322,7 @@ Partial Class FrmDelaySummary
         '
         Me.lblCurrentDelay.AutoSize = True
         Me.lblCurrentDelay.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentDelay.Location = New System.Drawing.Point(198, 88)
+        Me.lblCurrentDelay.Location = New System.Drawing.Point(192, 76)
         Me.lblCurrentDelay.Name = "lblCurrentDelay"
         Me.lblCurrentDelay.Size = New System.Drawing.Size(0, 21)
         Me.lblCurrentDelay.TabIndex = 4
@@ -279,7 +331,7 @@ Partial Class FrmDelaySummary
         '
         Me.lblDaysDelay.AutoSize = True
         Me.lblDaysDelay.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDaysDelay.Location = New System.Drawing.Point(198, 126)
+        Me.lblDaysDelay.Location = New System.Drawing.Point(192, 114)
         Me.lblDaysDelay.Name = "lblDaysDelay"
         Me.lblDaysDelay.Size = New System.Drawing.Size(0, 21)
         Me.lblDaysDelay.TabIndex = 5
@@ -288,41 +340,29 @@ Partial Class FrmDelaySummary
         '
         Me.lblResponsibleArea.AutoSize = True
         Me.lblResponsibleArea.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblResponsibleArea.Location = New System.Drawing.Point(198, 160)
+        Me.lblResponsibleArea.Location = New System.Drawing.Point(192, 148)
         Me.lblResponsibleArea.Name = "lblResponsibleArea"
         Me.lblResponsibleArea.Size = New System.Drawing.Size(0, 21)
         Me.lblResponsibleArea.TabIndex = 6
         '
-        'Panel4
+        'Label9
         '
-        Me.Panel4.Controls.Add(Me.pnlTimeline)
-        Me.Panel4.Controls.Add(Me.Label7)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel4.Location = New System.Drawing.Point(3, 3)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(506, 459)
-        Me.Panel4.TabIndex = 0
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.Label9.Location = New System.Drawing.Point(14, 331)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(174, 21)
+        Me.Label9.TabIndex = 19
+        Me.Label9.Text = "Type of Procedure     -"
         '
-        'pnlTimeline
+        'LblTypeofProc
         '
-        Me.pnlTimeline.AutoScroll = True
-        Me.pnlTimeline.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnlTimeline.Location = New System.Drawing.Point(0, 18)
-        Me.pnlTimeline.Name = "pnlTimeline"
-        Me.pnlTimeline.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlTimeline.Size = New System.Drawing.Size(506, 441)
-        Me.pnlTimeline.TabIndex = 17
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!)
-        Me.Label7.Location = New System.Drawing.Point(0, 0)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(131, 18)
-        Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Timeline Summary"
+        Me.LblTypeofProc.AutoSize = True
+        Me.LblTypeofProc.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.LblTypeofProc.Location = New System.Drawing.Point(192, 331)
+        Me.LblTypeofProc.Name = "LblTypeofProc"
+        Me.LblTypeofProc.Size = New System.Drawing.Size(0, 21)
+        Me.LblTypeofProc.TabIndex = 20
         '
         'FrmDelaySummary
         '
@@ -347,10 +387,10 @@ Partial Class FrmDelaySummary
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.grpDelayInfo.ResumeLayout(False)
-        Me.grpDelayInfo.PerformLayout()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -365,19 +405,22 @@ Partial Class FrmDelaySummary
     Friend WithEvents Label5 As Label
     Friend WithEvents ImageList1 As ImageList
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents grpDelayInfo As GroupBox
-    Friend WithEvents Label6 As Label
-    Friend WithEvents lblSeverity As Label
-    Friend WithEvents txtDes As TextBox
-    Friend WithEvents Label4 As Label
-    Friend WithEvents Label3 As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents Label1 As Label
-    Friend WithEvents lblWorkOrderNo As Label
-    Friend WithEvents lblCurrentDelay As Label
-    Friend WithEvents lblDaysDelay As Label
-    Friend WithEvents lblResponsibleArea As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents pnlTimeline As Panel
     Friend WithEvents Label7 As Label
+    Friend WithEvents Panel5 As Panel
+    Friend WithEvents txtDes As TextBox
+    Friend WithEvents Label6 As Label
+    Friend WithEvents lblSeverity As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents lblResponsibleArea As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents lblDaysDelay As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents lblCurrentDelay As Label
+    Friend WithEvents lblWorkOrderNo As Label
+    Friend WithEvents LblTypeofProc As Label
+    Friend WithEvents Label9 As Label
 End Class
