@@ -321,9 +321,9 @@ Partial Class DashBoard
         '
         Me.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lblTitle.Font = New System.Drawing.Font("Arial Rounded MT Bold", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTitle.Location = New System.Drawing.Point(100, 22)
+        Me.lblTitle.Location = New System.Drawing.Point(100, 29)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(1267, 44)
+        Me.lblTitle.Size = New System.Drawing.Size(1267, 37)
         Me.lblTitle.TabIndex = 2
         Me.lblTitle.Text = "WORK ORDER MANAGEMENT SYSTEM  - MAINTENANCE DASHBOARD"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -334,7 +334,7 @@ Partial Class DashBoard
         Me.lblConnection.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblConnection.Location = New System.Drawing.Point(100, 0)
         Me.lblConnection.Name = "lblConnection"
-        Me.lblConnection.Size = New System.Drawing.Size(1267, 22)
+        Me.lblConnection.Size = New System.Drawing.Size(1267, 29)
         Me.lblConnection.TabIndex = 330
         Me.lblConnection.Text = "connection"
         Me.lblConnection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
