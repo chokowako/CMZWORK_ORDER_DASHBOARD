@@ -456,7 +456,7 @@ Public Class FrmDelaySummary
         .AutoSize = False,
         .Width = stepPanel.Width - 10,
         .Height = 40,
-        .Left = 12,
+        .Left = 20,
         .Font = New Font("Segoe UI Semibold", 11.5F, FontStyle.Bold),
         .ForeColor = Color.White,
         .Text = $"{title} | {days} day(s)",
@@ -517,8 +517,17 @@ Public Class FrmDelaySummary
         End If
     End Function
 
+    Private Function GetStatus(isDone As Boolean, isCurrent As Boolean) As String
 
+        If isCurrent Then
+            Return "🔴 CURRENT DELAY"
+        ElseIf isDone Then
+            Return "✔ DONE"
+        Else
+            Return "⏳ PENDING"
+        End If
 
+    End Function
 
 
 
@@ -669,7 +678,5 @@ Public Class FrmDelaySummary
 
     End Sub
 
-    Private Sub pnlTimeline_Paint(sender As Object, e As PaintEventArgs)
 
-    End Sub
 End Class

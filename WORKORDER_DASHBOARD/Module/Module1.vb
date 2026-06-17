@@ -1,5 +1,4 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Data
 
 Module Module1
     Dim result As String
@@ -11,6 +10,174 @@ Module Module1
         User Id='" & My.Settings.DBUsername & "';
         Password='" & My.Settings.DBPassword & "';
         MultipleActiveResultSets=true;Integrated Security=True;Persist Security Info=False;Trusted_Connection=false;Encrypt=False;TrustServerCertificate=True;"
+
+    Public pageSize As Integer = 100
+    Public currentPage As Integer = 1
+    Public totalRecords As Integer = 0
+
+    Public Async Function Load_Dashboard_Pagination() As Task
+
+        Dim dt As New DataTable()
+        Dim offset As Integer = (currentPage - 1) * pageSize
+
+        Try
+            ' =========================
+            ' GET DATA (PAGINATION)
+            ' =========================
+            Using con As New SqlConnection(connStr)
+                Await con.OpenAsync()
+
+                Dim sql As String =
+            "SELECT 
+                PK_WorkOrderNo as [Woms No.],
+                Work_Description as [Work Description],
+                Status,
+                RegistryDate as [Registry Date],
+                RequestedBy as [Requested By],
+                Unit_Section as [Unit Section],
+                HeadSupervisor as [Head Supervisor]
+            FROM WorkOrderForm
+            ORDER BY PK_WorkOrderNo
+            OFFSET @Offset ROWS
+            FETCH NEXT @PageSize ROWS ONLY;
+
+            SELECT COUNT(*) FROM WorkOrderForm;"
+
+                Using cmd As New SqlCommand(sql, con)
+                    cmd.Parameters.AddWithValue("@Offset", offset)
+                    cmd.Parameters.AddWithValue("@PageSize", pageSize)
+
+                    Using da As New SqlDataAdapter(cmd)
+                        Dim ds As New DataSet()
+                        da.Fill(ds)
+
+                        dt = ds.Tables(0)
+                        totalRecords = Convert.ToInt32(ds.Tables(1).Rows(0)(0))
+                    End Using
+                End Using
+            End Using
+
+            ' =========================
+            ' GRID REFERENCE
+            ' =========================
+            Dim grid As DataGridView = DashBoard.DataGridView
+
+            ' =========================
+            ' RESET GRID
+            ' =========================
+            grid.DataSource = Nothing
+            grid.Columns.Clear()
+
+            ' =========================
+            ' LEGEND COLUMN 1
+            ' =========================
+            Dim legend1 As New DataGridViewTextBoxColumn With {
+            .HeaderText = "",
+            .Name = "Legend1",
+            .Width = 20,
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+            .ReadOnly = True
+        }
+
+            ' =========================
+            ' LEGEND COLUMN 2
+            ' =========================
+            Dim legend2 As New DataGridViewTextBoxColumn With {
+            .HeaderText = "",
+            .Name = "Legend2",
+            .Width = 20,
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+            .ReadOnly = True
+        }
+
+            grid.Columns.Add(legend1)
+            grid.Columns.Add(legend2)
+
+            ' =========================
+            ' BUTTON COLUMN
+            ' =========================
+            Dim btnView As New DataGridViewButtonColumn With {
+            .HeaderText = "Detail",
+            .Name = "View",
+            .Text = "View",
+            .UseColumnTextForButtonValue = True,
+            .Width = 70,
+            .AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+        }
+
+            grid.Columns.Add(btnView)
+
+            ' =========================
+            ' BIND DATA
+            ' =========================
+            grid.DataSource = dt
+
+            ' =========================
+            ' GRID SETTINGS (STABLE)
+            ' =========================
+            With grid
+                .AllowUserToAddRows = False
+                .AllowUserToResizeColumns = False
+                .AllowUserToResizeRows = False
+                .ReadOnly = True
+                .MultiSelect = True
+                .RowHeadersVisible = False
+                .RowTemplate.Height = 40
+
+                .ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+                .ColumnHeadersHeight = 30
+
+                .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
+                .CellBorderStyle = DataGridViewCellBorderStyle.None
+            End With
+
+            ' =========================
+            ' FORCE COLUMN WIDTHS (IMPORTANT)
+            ' =========================
+            If grid.Columns.Contains("Woms No.") Then grid.Columns("Woms No.").Width = 120
+            If grid.Columns.Contains("Work Description") Then grid.Columns("Work Description").Width = 450
+            If grid.Columns.Contains("Status") Then grid.Columns("Status").Width = 100
+            If grid.Columns.Contains("Registry Date") Then grid.Columns("Registry Date").Width = 120
+            If grid.Columns.Contains("Requested By") Then grid.Columns("Requested By").Width = 120
+            If grid.Columns.Contains("Unit Section") Then grid.Columns("Unit Section").Width = 120
+            If grid.Columns.Contains("Head Supervisor") Then grid.Columns("Head Supervisor").Width = 120
+
+            ' Wrap description
+            If grid.Columns.Contains("Work Description") Then
+                grid.Columns("Work Description").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+            End If
+
+            ' Date format
+            If grid.Columns.Contains("Registry Date") Then
+                grid.Columns("Registry Date").DefaultCellStyle.Format = "MMM dd, yyyy"
+            End If
+
+            ' =========================
+            ' MOVE BUTTON AFTER LEGENDS
+            ' =========================
+            grid.Columns("View").DisplayIndex = 2
+
+            ' =========================
+            ' PAGINATION LABEL
+            ' =========================
+            Dim maxPage As Integer = CInt(Math.Ceiling(totalRecords / CDbl(pageSize)))
+
+            DashBoard.lblWomstitle.Text =
+            $"Page {currentPage} / {maxPage} | Total Records: {totalRecords:N0}"
+
+            ' =========================
+            ' CLEAN SELECTION
+            ' =========================
+            grid.ClearSelection()
+            grid.CurrentCell = Nothing
+
+        Catch ex As Exception
+            MessageBox.Show("Pagination Error: " & ex.Message)
+        End Try
+
+        ApplyWorkOrderColors()
+        ApplyReColors()
+    End Function
 
 
 
@@ -168,395 +335,11 @@ Module Module1
 
         ApplyWorkOrderColors()
         ApplyReColors()
+
         'CountAllMaterialColorsFromData()
 
 
 
-
-        '############ WOF COLOR STATUS #####################################################################################
-        'For i As Integer = 0 To DashBoard.DataGridView.Rows.Count - 1
-        '    Using mycommandHead As New SqlCommand("select HeadSupervisorStatus,Notedby1Status,ApprovedByStatus,Materials_Availability_Post_Flag,ProceedWO_Flag,TagAsClose,Pk_WorkOrderNo,IsMaterialsNeeded from WorkOrderForm where Pk_WorkOrderNo = @Pk_WorkOrderNo", myConnection)
-        '        mycommandHead.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '        Using myreaderHead As SqlDataReader = mycommandHead.ExecuteReader
-        '            If myreaderHead.Read = True Then
-        '                ' MessageBox.Show(DASHBOARD.DataGridView.Rows(i).Cells(3).Value)
-        '                If myreaderHead!IsMaterialsNeeded.ToString = "Yes" Then
-
-        '                    If myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "PENDING" And myreaderHead!ApprovedByStatus = "PENDING" And myreaderHead!Materials_Availability_Post_Flag = 0 And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Yellow
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "New"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "PENDING" And myreaderHead!Materials_Availability_Post_Flag = 0 And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Green
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Acknowledged"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag = 0 And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Pink
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Pending Materials"
-
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag = 0 And myreaderHead!proceedWO_flag = 1 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag = 1 And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Pink
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Pending Materials"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag = 0 And myreaderHead!proceedWO_flag = 1 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag = 1 And myreaderHead!proceedWO_flag = 1 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag = 1 And myreaderHead!proceedWO_flag = 2 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!Materials_Availability_Post_Flag <> 0 And myreaderHead!proceedWO_flag = 1 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-        '                        'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                        'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-        '                    End If
-
-
-
-
-
-
-        '                ElseIf Convert.IsDBNull(myreaderHead!IsMaterialsNeeded) Then
-        '                    If myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "PENDING" And myreaderHead!ApprovedByStatus = "PENDING" And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Yellow
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "New"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "PENDING" And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Green
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Acknowledged"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Blue
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Approved"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 1 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 2 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 2 And myreaderHead!TagAsClose = "CLOSED" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-        '                    End If
-
-
-
-        '                ElseIf myreaderHead!IsMaterialsNeeded.ToString = "No" Then
-
-        '                    If myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "PENDING" And myreaderHead!ApprovedByStatus = "PENDING" And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Yellow
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "New"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "PENDING" And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Green
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Acknowledged"
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 0 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Blue
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Approved"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 1 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 2 And myreaderHead!TagAsClose = "PENDING" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.Orange
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "In-Process"
-
-
-        '                    ElseIf myreaderHead!HeadSupervisorStatus = "CHECKED" And myreaderHead!Notedby1Status = "APPROVED" And myreaderHead!ApprovedByStatus = "APPROVED" And myreaderHead!proceedWO_flag = 2 And myreaderHead!TagAsClose = "CLOSE" And myreaderHead!Pk_WorkOrderNo = DashBoard.DataGridView.Rows(i).Cells(3).Value Then
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).Style.BackColor = Color.DarkBlue
-        '                        DashBoard.DataGridView.Rows(i).Cells(0).ToolTipText = "Complete"
-        '                    End If
-        '                End If
-        '            End If
-        '        End Using
-        '    End Using
-        'Next
-        ''##################################################################################################################
-
-
-
-        ''############ FOR MATERIALS ######################################################################################
-
-        'For i As Integer = 0 To DashBoard.DataGridView.Rows.Count - 1
-        '    Using Mycommand As New SqlCommand("select a.Pk_WorkOrderNo,b.ApprovedForReleaseByStatus from RequestedMaterials a 
-        '                                        INNER JOIN WorkOrderForm b on b.Pk_WorkOrderNo = a.Pk_WorkOrderNo where  a.Pk_WorkOrderNo = @Pk_WorkOrderNo", myConnection)
-        '        Mycommand.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '        Using myreader = Mycommand.ExecuteReader()
-        '            If myreader.Read = True Then
-        '                ' MessageBox.Show("meron")
-
-        '                Dim StockSource_EM As Integer
-        '                Using MycommandStockeSourceEM As New SqlCommand("select Pk_WorkOrderNo,StockSource from RequestedMaterials  where  Pk_WorkOrderNo =@Pk_WorkOrderNo and StockSource=@StockSource", myConnection)
-        '                    MycommandStockeSourceEM.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '                    MycommandStockeSourceEM.Parameters.AddWithValue("@StockSource", "EM")
-        '                    Using myreaderyStockSourceEM = MycommandStockeSourceEM.ExecuteReader()
-        '                        If myreaderyStockSourceEM.Read = True Then
-        '                            StockSource_EM = StockSource_EM + 1
-        '                        End If
-        '                    End Using
-        '                End Using
-
-        '                Dim StockSource_SC As Integer
-        '                Using MycommandStockSourceSC As New SqlCommand("select Pk_WorkOrderNo,StockSource from RequestedMaterials  where  Pk_WorkOrderNo =@Pk_WorkOrderNo and StockSource=@StockSource", myConnection)
-        '                    MycommandStockSourceSC.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '                    MycommandStockSourceSC.Parameters.AddWithValue("@StockSource", "SC")
-        '                    Using myreaderStockSourceSC = MycommandStockSourceSC.ExecuteReader()
-        '                        If myreaderStockSourceSC.Read = True Then
-        '                            StockSource_SC = StockSource_SC + 1
-        '                        End If
-        '                    End Using
-        '                End Using
-
-        '                Dim Matvalidatedby As Integer
-        '                Using MycommandMatAvailable As New SqlCommand("select Pk_WorkOrderNo,Materials_Availability_ValidateBy from RequestedMaterials  where Materials_Availability_ValidateBy ='PENDING' and Pk_WorkOrderNo =@Pk_WorkOrderNo", myConnection)
-        '                    MycommandMatAvailable.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '                    Using myreaderMatvalidatedby = MycommandMatAvailable.ExecuteReader()
-        '                        If myreaderMatvalidatedby.Read = True Then
-        '                            Matvalidatedby = Matvalidatedby + 1
-        '                        End If
-        '                    End Using
-        '                End Using
-
-
-
-        '                Dim QTY_Available_SC_Post_Flag_1 As Integer
-        '                Using MycommandQty_PostFlag_1 As New SqlCommand("select Pk_WorkOrderNo,QTY_Available_SC_Post_Flag from RequestedMaterials  where Materials_Availability_Post_Flag =1 and Pk_WorkOrderNo =@Pk_WorkOrderNo", myConnection)
-        '                    MycommandQty_PostFlag_1.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '                    Using myreaderQty_PostFlag_1 = MycommandQty_PostFlag_1.ExecuteReader()
-        '                        If myreaderQty_PostFlag_1.Read = True Then
-        '                            QTY_Available_SC_Post_Flag_1 = QTY_Available_SC_Post_Flag_1 + 1
-        '                        End If
-        '                    End Using
-        '                End Using
-
-        '                Dim QTY_Available_SC_Post_Flag_2 As Integer
-        '                Using MycommandQty_PostFlag_2 As New SqlCommand("select Pk_WorkOrderNo,Materials_Availability_Post_Flag from RequestedMaterials  where Materials_Availability_Post_Flag = 2 and Pk_WorkOrderNo =@Pk_WorkOrderNo", myConnection)
-        '                    MycommandQty_PostFlag_2.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '                    Using myreaderQty_PostFlag_2 = MycommandQty_PostFlag_2.ExecuteReader()
-        '                        If myreaderQty_PostFlag_2.Read = True Then
-        '                            QTY_Available_SC_Post_Flag_2 = QTY_Available_SC_Post_Flag_2 + 1
-        '                        End If
-        '                    End Using
-        '                End Using
-
-
-        '                Using MycommandQty As New SqlCommand("select sum(total_Qty) as Sum_Total_Qty,sum(QTY_Recieve) as Sum_Total_Qty_Receive from RequestedMaterials  where Pk_WorkOrderNo =@Pk_WorkOrderNo", myConnection)
-        '                    MycommandQty.Parameters.AddWithValue("@Pk_WorkOrderNo", DashBoard.DataGridView.Rows(i).Cells(3).Value)
-        '                    Using myreaderQty = MycommandQty.ExecuteReader()
-        '                        If myreaderQty.Read = True Then
-
-        '                            Dim temp_Sum_Total_Qty = myreaderQty!Sum_Total_Qty
-        '                            Dim temp_Sum_Total_Qty_Receive = myreaderQty!Sum_Total_Qty_Receive
-
-        '                            If StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-        '                            ElseIf StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-        '                            ElseIf StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-
-
-        '                                '----
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "With SC"
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 1 And myreader!ApprovedForReleaseByStatus = "APPROVED" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "for purchase"
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And myreader!ApprovedForReleaseByStatus = "APPROVED" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                ' DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-
-
-
-
-        '                                '----
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "APPROVED" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 1 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 1 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 1 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And myreader!ApprovedForReleaseByStatus = "PENDING" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 1 And myreader!ApprovedForReleaseByStatus = "APPROVED" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And myreader!ApprovedForReleaseByStatus = "APPROVED" And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-
-
-
-        '                            ElseIf StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-        '                            ElseIf StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-        '                            ElseIf StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-        '                            ElseIf StockSource_EM > 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive = 0 Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC > 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Yellow
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "For Release"
-
-
-
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-
-
-        '                            ElseIf StockSource_EM <> 0 And StockSource_SC <> 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 1 And QTY_Available_SC_Post_Flag_2 = 1 And temp_Sum_Total_Qty = temp_Sum_Total_Qty_Receive Then
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.Pink
-        '                                DashBoard.DataGridView.Rows(i).Cells(1).ToolTipText = "with SC"
-
-
-        '                            ElseIf StockSource_EM = 0 And StockSource_SC = 0 And Matvalidatedby = 0 And QTY_Available_SC_Post_Flag_1 = 0 And QTY_Available_SC_Post_Flag_2 = 0 And temp_Sum_Total_Qty <> temp_Sum_Total_Qty_Receive Then
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).Style.BackColor = Color.DarkBlue
-        '                                'DASHBOARD.DataGridView.Rows(i).Cells(1).ToolTipText = "Complete"
-        '                            End If
-
-
-        '                            DashBoard.DataGridView.Rows(i).Cells(3).ReadOnly = True
-
-        '                        End If
-        '                    End Using
-        '                End Using
-        '                StockSource_EM = 0
-        '                StockSource_SC = 0
-        '                Matvalidatedby = 0
-        '                QTY_Available_SC_Post_Flag_1 = 0
-        '                QTY_Available_SC_Post_Flag_2 = 0
-        '            ElseIf myreader.Read = False Then
-        '                ' MessageBox.Show("wala")
-
-        '            End If
-        '        End Using
-        '    End Using
-        'Next i
-        '##################################################################################################################
 
     End Function
 

@@ -25,116 +25,17 @@ Public Class DashBoard
     Private isProcessingSms As Boolean = False
     Private isProcessingEmail As Boolean = False
 
+
+
+
+
+
     Private Sub DateAndTime_Tick(sender As Object, e As EventArgs) Handles DateAndTime.Tick
         lblDateTime.Text = Format(Now, "Long Date") & "," & " " & TimeOfDay.ToString("h:mm:ss tt")
     End Sub
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
         End
     End Sub
-    Private Async Sub BtsStart_Click(sender As Object, e As EventArgs) Handles BtsStart.Click
-        Try
-
-            If BtsStart.ImageIndex = 0 Then
-                BtsStart.ImageIndex = 3
-
-
-
-                ' =========================
-                ' LOAD DATA ON DASHBOARD
-                ' =========================
-
-                TimerWoms.Interval = My.Settings.WomsInterval_Mlli
-                Await Task.WhenAll(
-    Load_Dashboard(),
-    Load_Delay_Aging(),
-    Load_Delay_Aging_Chart()
-)
-                TimerWoms.Start()
-
-
-
-                ' =========================
-                ' SWITCH TO STOP ICON
-                ' =========================
-                BtsStart.ImageIndex = 3
-                ProgressBar1.Show()
-
-
-                ' =========================
-                ' SMS ENGINE START
-                ' =========================
-                lblSMSConnectionStatus.Text = "🟡 SMS Engine Starting..."
-                lblSMSConnectionStatus.BackColor = Color.Goldenrod
-
-                Await LoadPendingSmsAsync()
-                TimerSMS.Interval = My.Settings.SmsInterval_milli
-                TimerSMS.Start()
-
-                lblStatus.Text = "SMS Auto Sender Running..."
-
-
-
-                ' =========================
-                ' EMAIL ENGINE START (NEW)
-                ' =========================
-                lblSMTPConnectionStatus.Text = "🟡 Email Engine Starting..."
-                lblSMTPConnectionStatus.BackColor = Color.Goldenrod
-
-                Await LoadPendingEmailAsync()
-
-                TimerEmail.Interval = My.Settings.EmailInterval_Milli
-                TimerEmail.Start()
-
-                lblEmailStatus.Text = "Email Auto Sender Running..."
-
-
-
-            ElseIf BtsStart.ImageIndex = 3 Then
-                BtsStart.ImageIndex = 0
-
-
-
-                ' =========================
-                ' STOP LOAD DATA ON DASHBOARD
-                ' =========================
-                TimerWoms.Stop()
-
-                ' =========================
-                ' STOP SMS ENGINE
-                ' =========================
-                TimerSMS.Stop()
-
-                lblSMSConnectionStatus.Text = "🔴 SMS Engine Stopped"
-                lblSMSConnectionStatus.BackColor = Color.Red
-
-                lblProgress.Text = ""
-                lblStatus.Text = ""
-
-                ' =========================
-                ' STOP EMAIL ENGINE (NEW)
-                ' =========================
-                TimerEmail.Stop()
-
-                lblSMTPConnectionStatus.Text = "🔴 Email Engine Stopped"
-                lblSMTPConnectionStatus.BackColor = Color.Red
-
-                lblEmailProgress.Text = ""
-                lblEmailStatus.Text = ""
-
-
-
-
-
-                ProgressBar1.Hide()
-
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        End Try
-
-    End Sub
-
     Private Sub DashBoard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ArrangeStatusLabels()
 
@@ -149,8 +50,6 @@ Public Class DashBoard
             lblConnection.ForeColor = Color.Black
         End If
     End Sub
-
-
     Private Sub BtnSetupAndOption_Click(sender As Object, e As EventArgs) Handles BtnSetupAndOption.Click
         SetupAndOption.ShowDialog()
     End Sub
@@ -901,13 +800,13 @@ Public Class DashBoard
     End Sub
 
 
-    Private Sub Panel1Status_Resize(sender As Object, e As EventArgs) Handles Panel1Status.Resize
+    Private Sub Panel1Status_Resize(sender As Object, e As EventArgs)
         ArrangeStatusLabels()
     End Sub
     Private Sub ArrangeStatusLabels()
 
-        Dim halfWidth As Integer = Panel1Status.Width \ 2
-        Dim panelHeight As Integer = Panel1Status.Height
+        Dim halfWidth As Integer = Panel1RedBar.Width \ 2
+        Dim panelHeight As Integer = Panel1RedBar.Height
 
         ' LEFT LABEL (50%)
         lblSMSConnectionStatus.Width = halfWidth
@@ -1251,7 +1150,7 @@ Public Class DashBoard
             TimerWoms.Enabled = False
             lblStatus.Text = "Refreshing dashboard..."
             Await Task.WhenAll(
-    Load_Dashboard(),
+    Load_Dashboard_Pagination(),
     Load_Delay_Aging(),
     Load_Delay_Aging_Chart()
 )
@@ -1315,6 +1214,121 @@ Public Class DashBoard
         End If
     End Sub
 
+    Private Async Sub btnNext_Click(sender As Object, e As EventArgs)
+        Dim maxPage As Integer = Math.Ceiling(totalRecords / pageSize)
+
+        If currentPage < maxPage Then
+            currentPage += 1
+            Await Load_Dashboard_Pagination()
+        End If
+
+    End Sub
+
+    Private Async Sub btnPrev_Click(sender As Object, e As EventArgs)
+        If currentPage > 1 Then
+            currentPage -= 1
+            Await Load_Dashboard_Pagination()
+        End If
+    End Sub
+
+    Private Async Sub BtsStart_Click_1(sender As Object, e As EventArgs) Handles BtsStart.Click
+        Try
+
+            If BtsStart.ImageIndex = 0 Then
+                BtsStart.ImageIndex = 3
+
+
+
+                ' =========================
+                ' LOAD DATA ON DASHBOARD
+                ' =========================
+
+                TimerWoms.Interval = My.Settings.WomsInterval_Mlli
+                Await Task.WhenAll(
+    Load_Dashboard_Pagination(),
+    Load_Delay_Aging(),
+    Load_Delay_Aging_Chart()
+)
+                TimerWoms.Start()
+
+
+
+                ' =========================
+                ' SWITCH TO STOP ICON
+                ' =========================
+                BtsStart.ImageIndex = 3
+                ProgressBar1.Show()
+
+
+                ' =========================
+                ' SMS ENGINE START
+                ' =========================
+                lblSMSConnectionStatus.Text = "🟡 SMS Engine Starting..."
+                lblSMSConnectionStatus.BackColor = Color.Goldenrod
+
+                Await LoadPendingSmsAsync()
+                TimerSMS.Interval = My.Settings.SmsInterval_milli
+                TimerSMS.Start()
+
+                lblStatus.Text = "SMS Auto Sender Running..."
+
+
+
+                ' =========================
+                ' EMAIL ENGINE START (NEW)
+                ' =========================
+                lblSMTPConnectionStatus.Text = "🟡 Email Engine Starting..."
+                lblSMTPConnectionStatus.BackColor = Color.Goldenrod
+
+                Await LoadPendingEmailAsync()
+
+                TimerEmail.Interval = My.Settings.EmailInterval_Milli
+                TimerEmail.Start()
+
+                lblEmailStatus.Text = "Email Auto Sender Running..."
+
+
+
+            ElseIf BtsStart.ImageIndex = 3 Then
+                BtsStart.ImageIndex = 0
+
+
+                ' =========================
+                ' STOP LOAD DATA ON DASHBOARD
+                ' =========================
+                TimerWoms.Stop()
+
+                ' =========================
+                ' STOP SMS ENGINE
+                ' =========================
+                TimerSMS.Stop()
+
+                lblSMSConnectionStatus.Text = "🔴 SMS Engine Stopped"
+                lblSMSConnectionStatus.BackColor = Color.Red
+
+                lblProgress.Text = ""
+                lblStatus.Text = ""
+
+                ' =========================
+                ' STOP EMAIL ENGINE (NEW)
+                ' =========================
+                TimerEmail.Stop()
+
+                lblSMTPConnectionStatus.Text = "🔴 Email Engine Stopped"
+                lblSMTPConnectionStatus.BackColor = Color.Red
+
+                lblEmailProgress.Text = ""
+                lblEmailStatus.Text = ""
+
+
+                ProgressBar1.Hide()
+
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+    End Sub
 End Class
 
 'http://192.168.60.153:8080/sendsms?phone=09950482881&text=ttt&password=m0b1l3
